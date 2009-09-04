@@ -70,6 +70,7 @@ class AutoTimestampBehavior extends CActiveRecordBehavior {
 			'timestamp'=>'getDate_Datetime',
 			'date'=>'getDate_Datetime',
 			'int'=>'getDate_unix',
+			'year'=>'getDate_year',
 		);
 		return isset($map[$columnType]) ? $map[$columnType] : 'getDate_unix';
 	}
@@ -78,8 +79,10 @@ class AutoTimestampBehavior extends CActiveRecordBehavior {
 	protected function getDate_Datetime() {
 		return new CDbExpression('NOW()');
 	}
-	
 	protected function getDate_unix() {
 		return new CDbExpression('UNIX_TIMESTAMP()');
+	}
+	protected function getDate_year() {
+		return new CDbExpression('YEAR(NOW())');
 	}
 }
