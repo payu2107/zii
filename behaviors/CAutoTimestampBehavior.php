@@ -1,6 +1,6 @@
 <?php
 /**
- * CController class file.
+ * CAutoTimestampBehavior class file.
  *
  * @author Jonah Turnquist <poppitypop@gmail.com>
  * @link http://www.yiiframework.com/
@@ -9,14 +9,14 @@
  */
  
  /**
- * AutoTimestampBehavior is a work in the makings :)
+ * CAutoTimestampBehavior is a work in the makings :)
  * 
  * Localization?
  * 
  * Supports multiple column types (datetime, date, timestamp, int).
  */
 
-class AutoTimestampBehavior extends CActiveRecordBehavior {
+class CAutoTimestampBehavior extends CActiveRecordBehavior {
 	/**
 	* The field that stores the creation time
 	*/
@@ -27,7 +27,8 @@ class AutoTimestampBehavior extends CActiveRecordBehavior {
 	public $modifiedField = 'modified';
 	
 	/**
-	* Potentially sets the values of the creation and/or modified database fields as configured
+	* Sets the values of the creation or modified attributes (configured via $this->createdField
+	* and $this->modifiedField)
 	* 
 	* @param mixed $on
 	*/
