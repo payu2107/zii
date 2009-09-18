@@ -9,7 +9,30 @@
  */
  
  /**
- * documentation here todo
+ * CTimestampBehavior will automatically fill date and time related atributes when an active record
+ * is created and upadated.
+ * You may specify an active record model to use this behavior like so:
+ * <pre>
+ * 	public function behaviors(){
+ *		return array(
+ *			'CTimestampBehavior' => array(
+ *				'class' => 'CTimestampBehavior',
+ *				'createAttribute' => 'create_time_attribute',
+ * 				'updateAttribute' => 'update_time_attribute',
+ *			)
+ *		);
+ *	}
+ * </pre>
+ * The {@link createAttribute} and {@link updateAttribute} options actually default to 'create_time' and 'update_time'
+ * respectively, so it is not required that you configure them.  If you do not wish CTimestampBehavior
+ * to set a timestamp for record update or creation, set the corrisponding attribute option to null.
+ * 
+ * By default, the update attribute is only set on record update.  If you also wish it to be set on record creation,
+ * set the {@link setUpdateOnCreate} option to true.
+ * 
+ * Although CTimestampBehavior attempts to figure out on it's own what value to inject into the timestamp attribute,
+ * you may specify a custom value to use instead via {@link timestampExpression}
+ * 
  * @author Jonah Turnquist <poppitypop@gmail.com>
  * @version $Id$
  * @package zii.behaviors
@@ -19,14 +42,14 @@
 class CTimestampBehavior extends CActiveRecordBehavior {
 	/**
 	* @var mixed The name of the attribute to store the creation time.  Set to null to not
-	* use a timstamp for the creation attribute.
+	* use a timstamp for the creation attribute.  Defaults to 'create_time'
 	*/
-	public $createAttribute = null;
+	public $createAttribute = 'create_time';
 	/**
 	* @var mixed The name of the attribute to store the modification time  Set to null to not
-	* use a timstamp for the update attribute.
+	* use a timstamp for the update attribute.  Defaults to 'update_time'
 	*/
-	public $updateAttribute = null;
+	public $updateAttribute = 'update_time';
 	
 	/**
 	* @var bool whether to set the update attribute to the creation timestamp upon creation.
@@ -43,20 +66,27 @@ class CTimestampBehavior extends CActiveRecordBehavior {
 	public $timestampExpression=null;
 	
 	/**
-	* Responds to {@link CModel::onBeforeValidate} event.
+	* @var array maps column types to database method
+	*/
+	protected static $map = array(
+			'datetime'=>'NOW()',
+			'timestamp'=>'NOW()',
+			'date'=>'NOW()',
+	);
+	
+	/**
+	* Responds to {@link CModel::onBeforeSave} event.
 	* Sets the values of the creation or modified attributes as configured
 	* 
 	* @param CModelEvent event parameter
 	*/
-	public function beforeValidate($event) {
+	public function beforeSave($event) {
 		if ($this->getOwner()->getIsNewRecord() && ($this->createAttribute !== null)) {
 			$this->getOwner()->{$this->createAttribute} = $this->getTimestampByAttribute($this->createAttribute);
 		}
 		if ((!$this->getOwner()->getIsNewRecord() || $this->setUpdateOnCreate) && ($this->updateAttribute !== null)) {
 			$this->getOwner()->{$this->updateAttribute} = $this->getTimestampByAttribute($this->updateAttribute);
 		}
-			
-		return true;	
 	}
 	
 	/**
@@ -80,11 +110,6 @@ class CTimestampBehavior extends CActiveRecordBehavior {
 	* @return mixed timestamp (eg unix timestamp or a mysql function)
 	*/
 	protected function getTimestampByColumnType($columnType) {
-		$map = array(
-			'datetime'=>'NOW()',
-			'timestamp'=>'NOW()',
-			'date'=>'NOW()',
-		);
-		return isset($map[$columnType]) ? new CDbExpression($map[$columnType]) : time();
+		return isset(self::$map[$columnType]) ? new CDbExpression(self::$map[$columnType]) : time();
 	}
 }
