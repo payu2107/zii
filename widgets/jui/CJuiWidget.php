@@ -83,7 +83,8 @@ abstract class CJuiWidget extends CWidget
 	{
 		$cs=Yii::app()->getClientScript();
 		$cs->registerCoreScript('jquery');
-		$this->registerScriptFile($this->juiFile);
+		if($this->juiFile!==false)
+			$this->registerScriptFile($this->juiFile);
 		$cs->registerCssFile($this->themeUrl.'/'.$this->theme.'/'.$this->themeFile);
 	}
 
@@ -100,6 +101,7 @@ abstract class CJuiWidget extends CWidget
 	 */
 	protected function registerScriptFile($fileName,$position=CClientScript::POS_END)
 	{
-		Yii::app()->getClientScript()->registerScriptFile($this->scriptUrl.'/'.$fileName,$position);
+		if($this->juiFile===false)
+			Yii::app()->getClientScript()->registerScriptFile($this->scriptUrl.'/'.$fileName,$position);
 	}
 }
