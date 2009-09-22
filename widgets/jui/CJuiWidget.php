@@ -83,7 +83,23 @@ abstract class CJuiWidget extends CWidget
 	{
 		$cs=Yii::app()->getClientScript();
 		$cs->registerCoreScript('jquery');
-		$cs->registerScriptFile($this->scriptUrl.'/'.$this->juiFile);
+		$this->registerScriptFile($this->juiFile);
 		$cs->registerCssFile($this->themeUrl.'/'.$this->theme.'/'.$this->themeFile);
+	}
+
+	/**
+	 * Registers a JavaScript file under {@link scriptUrl}.
+	 * Note that by default, the script file will be rendered at the end of a page to improve page loading speed.
+	 * @param string JavaScript file name
+	 * @param integer the position of the JavaScript file. Valid values include the following:
+	 * <ul>
+	 * <li>CClientScript::POS_HEAD : the script is inserted in the head section right before the title element.</li>
+	 * <li>CClientScript::POS_BEGIN : the script is inserted at the beginning of the body section.</li>
+	 * <li>CClientScript::POS_END : the script is inserted at the end of the body section.</li>
+	 * </ul>
+	 */
+	protected function registerScriptFile($fileName,$position=CClientScript::POS_END)
+	{
+		Yii::app()->getClientScript()->registerScriptFile($this->scriptUrl.'/'.$fileName,$position);
 	}
 }
