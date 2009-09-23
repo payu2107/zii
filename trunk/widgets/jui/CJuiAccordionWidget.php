@@ -11,7 +11,7 @@
  /**
  * This is the base class for
  * @author Sebastian Thierer <sebathi@gmail.com>
- * @version $Id: CJuiWidget.php 13 2009-09-22 16:37:45Z qiang.xue $
+ * @version $Id$
  * @package zii.widgets.jui
  * @since 1.1
  */
@@ -94,24 +94,28 @@ class CJuiAccordionWidget extends CJuiWidget {
 	
 	/**
 	 * This event is triggered every time the accordion changes. If the accordion is animated, the event will be triggered upon completion of the animation; otherwise, it is triggered immediately.
+	 * <pre>
 	 * $('.ui-accordion').bind('accordionchange', function(event, ui) {
 	 *   ui.newHeader // jQuery object, activated header
 	 *   ui.oldHeader // jQuery object, previous header
 	 *   ui.newContent // jQuery object, activated content
 	 *   ui.oldContent // jQuery object, previous content
 	 * });
+	 * </pre>
 	 * @var string
 	 */
 	public $change = null;
 	
 	/**
-	 * This event is triggered every time the accordion starts to change. 
+	 * This event is triggered every time the accordion starts to change.
+	 * <pre>
 	 * $('.ui-accordion').bind('accordionchangestart', function(event, ui) {
 	 *   ui.newHeader // jQuery object, activated header
 	 *   ui.oldHeader // jQuery object, previous header
 	 *   ui.newContent // jQuery object, activated content
 	 *   ui.oldContent // jQuery object, previous content
 	 * });
+	 * </pre>
 	 * @var string
 	 */
 	public $changeStart = null;
@@ -120,11 +124,13 @@ class CJuiAccordionWidget extends CJuiWidget {
 	/**
 	 * An array with accordion titles and items:
 	 * example:
+	 * <pre>
 	 * array(
-	 *   'header 1'=>'<B>HTML Content 1</b>',
-	 *   'header 2'=>'<B>HTML Content 2</b>',
-	 *   'header 3'=>'<B>HTML Content 3</b>',
+	 *   'header 1'=>'<p>HTML Content 1</p>',
+	 *   'header 2'=>'<p>HTML Content 2</p>',
+	 *   'header 3'=>'<p>HTML Content 3</p>',
 	 * )
+	 * </pre>
 	 * @var array
 	 */
 	public $items = null;
@@ -192,31 +198,3 @@ class CJuiAccordionWidget extends CJuiWidget {
 	}
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
