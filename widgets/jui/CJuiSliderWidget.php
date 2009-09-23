@@ -11,7 +11,7 @@
  /**
  * This is the base class for
  * @author Sebastian Thierer <sebathi@gmail.com>
- * @version $Id: CJuiWidget.php 13 2009-09-22 16:37:45Z qiang.xue $
+ * @version $Id$
  * @package zii.widgets.jui
  * @since 1.1
  */
