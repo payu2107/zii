@@ -2,7 +2,7 @@
 /**
  * CJuiWidget class file.
  *
- * @author Sebastian Thierer <sebas@artfos.com>
+ * @author Sebastian Thierer <sebathi@gmail.com>
  * @link http://www.yiiframework.com/
  * @copyright Copyright &copy; 2008-2009 Yii Software LLC
  * @license http://www.yiiframework.com/license/
@@ -10,7 +10,7 @@
 
  /**
  * This is the base class for
- * @author Sebastian Thierer <sebas@artfos.com>
+ * @author Sebastian Thierer <sebathi@gmail.com>
  * @version $Id$
  * @package zii.widgets.jui
  * @since 1.1
@@ -101,7 +101,7 @@ abstract class CJuiWidget extends CWidget
 	 */
 	protected function registerScriptFile($fileName,$position=CClientScript::POS_END)
 	{
-		if($this->juiFile===false)
+		if($this->juiFile!==false)
 			Yii::app()->getClientScript()->registerScriptFile($this->scriptUrl.'/'.$fileName,$position);
 	}
 }
