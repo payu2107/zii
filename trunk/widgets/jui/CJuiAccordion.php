@@ -18,7 +18,7 @@
 
 Yii::import('zii.widgets.jui.CJuiWidget');
 
-class CJuiAccordionWidget extends CJuiWidget {
+class CJuiAccordion extends CJuiWidget {
 	
 	/**
 	 * Selector for the active element. Set to false to display none at start. Needs collapsible: true.
@@ -173,7 +173,7 @@ class CJuiAccordionWidget extends CJuiWidget {
 	 */
 	private function generateHtml($id){
 		if (is_null($this->items) || !is_array($this->items)){
-			throw new CException(Yii::t('zii', 'Property {property} could not be null', array('property'=>'items')));
+			throw new CException(Yii::t('zii', '{attribute} must be a number.', array('{attribute}'=>'items')));
 		}
 		$html = '<div id="'.$id.'">';
 		foreach ($this->items as $title=>$content){
@@ -189,7 +189,7 @@ class CJuiAccordionWidget extends CJuiWidget {
 	 * @see web/widgets/CWidget#run()
 	 */
 	public function run(){
-		$id = 'zii_widgets_jui_accordion_'.$this->getId();
+		$id = $this->getId();
 
 		echo $this->generateHtml($id);
 		
