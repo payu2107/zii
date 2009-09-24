@@ -18,39 +18,53 @@
 abstract class CJuiWidget extends CWidget
 {
 	/**
-	 * @var string the root URL that contains all JUI-related assets.
-	 * This is mainly used to determine {@link scriptUrl} and {@link themeUrl} if they are not explicitly specified.
-	 * If this property is not set, it means that the JUI package in the zii release will be published and used.
-	 */
-	public $baseUrl;
-	/**
 	 * @var string the root URL that contains all JUI JavaScript files.
-	 * If this property is not set, it will default to "{@link baseUrl}/js".
+	 * If this property is not set (default), Yii will publish the JUI package included in the zii release and use
+	 * that to infer the root script URL. You should set this property if you intend to use
+	 * a JUI package whose version is different from the one included in zii.
+	 * Note that under this URL, there must be a file whose name is specified by {@link scriptFile}.
+	 * Do not append any slash character to the URL.
 	 */
 	public $scriptUrl;
 	/**
-	 * @var string the main JUI JavaScript file. Defaults to 'jquery-ui-1.7.1.custom.min.js'.
-	 */
-	public $juiFile='jquery-ui-1.7.1.custom.min.js';
-	/**
 	 * @var string the root URL that contains all JUI theme folders.
-	 * If this property is not set, it will default to "{@link baseUrl}/css".
+	 * If this property is not set (default), Yii will publish the JUI package included in the zii release and use
+	 * that to infer the root theme URL. You should set this property if you intend to use
+	 * a theme that is not found in the JUI package included in zii.
+	 * Note that under this URL, there must be a directory whose name is specified by {@link theme}.
+	 * Do not append any slash character to the URL.
 	 */
 	public $themeUrl;
 	/**
-	 * @var string the JUI theme name. Defaults to 'redmond'.
+	 * @var string the JUI theme name. Defaults to 'smoothness'. Make sure that under {@link themeUrl} there
+	 * is a directory whose name is the same as this property value (case-sensitive).
 	 */
-	public $theme='redmond';
+	public $theme='smoothness';
 	/**
-	 * @var string the theme CSS file name. Defaults to 'jquery-ui-1.7.1.custom.css'.
+	 * @var mixed the main JUI JavaScript file. Defaults to 'jquery-ui-1.7.2.custom.min.js'.
+	 * Note the file must exist under the URL specified by {@link scriptUrl}.
+	 * If you need to include multiple script files (e.g. during development, you want to include individual
+	 * plugin script files rather than the minized JUI script file), you may set this property
+	 * as an array of the script file names.
+	 * This property can also be set as false, which means the widget will not include any script file,
+	 * and it is your responsibility to explicitly include it somewhere else.
 	 */
-	public $themeFile='jquery-ui-1.7.1.custom.css';
+	public $scriptFile='jquery-ui-1.7.2.custom.min.js';
+	/**
+	 * @var mixed the theme CSS file name. Defaults to 'jquery-ui-1.7.2.custom.css'.
+	 * Note the file must exist under the URL specified by {@link themeUrl}/{@link theme}.
+	 * If you need to include multiple theme CSS files (e.g. during development, you want to include individual
+	 * plugin CSS files), you may set this property as an array of the CSS file names.
+	 * This property can also be set as false, which means the widget will not include any theme CSS file,
+	 * and it is your responsibility to explicitly include it somewhere else.
+	 */
+	public $cssFile='jquery-ui-1.7.2.custom.css';
 	/**
 	 * @var array the JavaScript options that should be passed to the JUI widget.
 	 */
 	public $options=array();
 	/**
-	 * @var array the HTML attributes that should be rendered for the HTML tag representing the JUI widget.
+	 * @var array the HTML attributes that should be rendered in the HTML tag representing the JUI widget.
 	 */
 	public $htmlOptions=array();
 
@@ -62,17 +76,17 @@ abstract class CJuiWidget extends CWidget
 	 */
 	public function init()
 	{
-		parent::init();
-		if($this->baseUrl===null)
+		if($this->scriptUrl===null || $this->themeUrl===null)
 		{
 			$basePath=Yii::getPathOfAlias('zii.widgets.jui.assets');
-			$this->baseUrl=Yii::app()->getAssetManager()->publish($basePath);
+			$baseUrl=Yii::app()->getAssetManager()->publish($basePath);
+			if($this->scriptUrl===null)
+				$this->scriptUrl=$baseUrl.'/js';
+			if($this->themeUrl===null)
+				$this->themeUrl=$baseUrl.'/css';
 		}
-		if($this->scriptUrl===null)
-			$this->scriptUrl=$this->baseUrl.'/js';
-		if($this->themeUrl===null)
-			$this->themeUrl=$this->baseUrl.'/css';
 		$this->registerCoreScripts();
+		parent::init();
 	}
 
 	/**
@@ -83,9 +97,22 @@ abstract class CJuiWidget extends CWidget
 	{
 		$cs=Yii::app()->getClientScript();
 		$cs->registerCoreScript('jquery');
-		if($this->juiFile!==false)
-			$this->registerScriptFile($this->juiFile);
-		$cs->registerCssFile($this->themeUrl.'/'.$this->theme.'/'.$this->themeFile);
+
+		if(is_string($this->scriptFile))
+			$this->registerScriptFile($this->scriptFile);
+		else if(is_array($this->scriptFile))
+		{
+			foreach($this->scriptFile as $scriptFile)
+				$this->registerScriptFile($scriptFile);
+		}
+
+		if(is_string($this->cssFile))
+			$this->registerCssFile($this->themeUrl.'/'.$this->theme.'/'.$$this->cssFile);
+		else if(is_array($this->cssFile))
+		{
+			foreach($this->cssFile as $cssFile)
+				$this->registerCssFile($this->themeUrl.'/'.$this->theme.'/'.$$cssFile);
+		}
 	}
 
 	/**
@@ -101,7 +128,6 @@ abstract class CJuiWidget extends CWidget
 	 */
 	protected function registerScriptFile($fileName,$position=CClientScript::POS_END)
 	{
-		if($this->juiFile!==false)
-			Yii::app()->getClientScript()->registerScriptFile($this->scriptUrl.'/'.$fileName,$position);
+		Yii::app()->getClientScript()->registerScriptFile($this->scriptUrl.'/'.$fileName,$position);
 	}
 }
