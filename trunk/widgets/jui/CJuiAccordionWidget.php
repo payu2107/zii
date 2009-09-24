@@ -173,7 +173,7 @@ class CJuiAccordionWidget extends CJuiWidget {
 	 */
 	private function generateHtml($id){
 		if (is_null($this->items) || !is_array($this->items)){
-			throw new CException('zii', 'Property {property} could not be null', array('property'=>'items'));
+			throw new CException(Yii::t('zii', 'Property {property} could not be null', array('property'=>'items')));
 		}
 		$html = '<div id="'.$id.'">';
 		foreach ($this->items as $title=>$content){
