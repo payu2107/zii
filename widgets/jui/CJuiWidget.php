@@ -110,22 +110,21 @@ abstract class CJuiWidget extends CWidget
 	protected function registerCoreScripts()
 	{
 		$cs=Yii::app()->getClientScript();
-		$cs->registerCoreScript('jquery');
+		if(is_string($this->cssFile))
+			$cs->registerCssFile($this->themeUrl.'/'.$this->theme.'/'.$this->cssFile);
+		else if(is_array($this->cssFile))
+		{
+			foreach($this->cssFile as $cssFile)
+				$cs->registerCssFile($this->themeUrl.'/'.$this->theme.'/'.$cssFile);
+		}
 
+		$cs->registerCoreScript('jquery');
 		if(is_string($this->scriptFile))
 			$this->registerScriptFile($this->scriptFile);
 		else if(is_array($this->scriptFile))
 		{
 			foreach($this->scriptFile as $scriptFile)
 				$this->registerScriptFile($scriptFile);
-		}
-
-		if(is_string($this->cssFile))
-			$this->registerCssFile($this->themeUrl.'/'.$this->theme.'/'.$$this->cssFile);
-		else if(is_array($this->cssFile))
-		{
-			foreach($this->cssFile as $cssFile)
-				$this->registerCssFile($this->themeUrl.'/'.$this->theme.'/'.$$cssFile);
 		}
 	}
 
