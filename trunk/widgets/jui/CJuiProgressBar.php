@@ -13,7 +13,7 @@ Yii::import('zii.widgets.jui.CJuiWidget');
 /**
  * CJuiProgressbar displays a progress bar widget.
  *
- * CJuiProgressbar encapsulates the {@link http://jqueryui.com/demos/progressbar/ JUI 
+ * CJuiProgressbar encapsulates the {@link http://jqueryui.com/demos/progressbar/ JUI
  * Progressbar} plugin.
  *
  * To use this widget, you may insert the following code in a view:
@@ -39,15 +39,13 @@ Yii::import('zii.widgets.jui.CJuiWidget');
  * @package zii.widgets.jui
  * @since 1.1
  */
-
-
 class CJuiProgressBar extends CJuiWidget {
 
 	/**
 	 * @var string the name of the container element that contains the progress bar. Defaults to 'div'.
 	 */
 	public $tagName = 'div';
-	
+
 	/**
 	 * Run this widget.
 	 * This method registers necessary javascript and renders the needed HTML code.
@@ -63,5 +61,5 @@ class CJuiProgressBar extends CJuiWidget {
 		$options=empty($this->options) ? '' : CJavaScript::encode($this->options);
 		Yii::app()->getClientScript()->registerScript(__CLASS__.'#'.$id,"jQuery('#{$id}').progressbar($options);");
 	}
-	
+
 }
