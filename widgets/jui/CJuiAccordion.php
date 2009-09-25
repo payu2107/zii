@@ -61,7 +61,7 @@ class CJuiAccordion extends CJuiWidget
 	 * Note that if you make change to this template, you may also need to adjust
 	 * the 'header' setting in {@link options}.
 	 */
-	public $headerTemplate='<h3><a href="#">{title}</a><h3>';
+	public $headerTemplate='<h3><a href="#">{title}</a></h3>';
 	/**
 	 * @var string the template that is used to generated every panel content.
 	 * The token "{content}" in the template will be replaced with the panel content.
