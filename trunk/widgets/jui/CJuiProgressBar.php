@@ -1,6 +1,6 @@
 <?php
 /**
- * CJuiProgressBar class file.
+ * CJuiProgressbar class file.
  *
  * @author Sebastian Thierer <sebas@artfos.com>
  * @link http://www.yiiframework.com/
@@ -11,14 +11,14 @@
 Yii::import('zii.widgets.jui.CJuiWidget');
 
 /**
- * CJuiProgressBar displays a progress bar widget.
+ * CJuiProgressbar displays a progress bar widget.
  *
- * CJuiProgressBar encapsulates the {@link http://jqueryui.com/demos/progressbar/ JUI
+ * CJuiProgressbar encapsulates the {@link http://jqueryui.com/demos/progressbar/ JUI 
  * Progressbar} plugin.
  *
  * To use this widget, you may insert the following code in a view:
  * <pre>
- * $this->widget('zii.widgets.jui.CJuiProgressBar', array(
+ * $this->widget('zii.widgets.jui.CJuiProgressbar', array(
  *     // additional javascript options for the accordion plugin
  *     'options'=>array(
  *         'value'=>27,
@@ -35,17 +35,19 @@ Yii::import('zii.widgets.jui.CJuiWidget');
  * for possible options (name-value pairs).
  *
  * @author Sebastian Thierer <sebathi@gmail.com>
- * @version $Id$
+ * @version $Id: CJuiAccordion.php 20 2009-09-24 20:40:26Z qiang.xue $
  * @package zii.widgets.jui
  * @since 1.1
  */
+
+
 class CJuiProgressBar extends CJuiWidget {
 
 	/**
-	 * @var string the tag name for the element representing the progress bar. Defaults to 'div'.
+	 * @var string the name of the container element that contains the progress bar. Defaults to 'div'.
 	 */
 	public $tagName = 'div';
-
+	
 	/**
 	 * Run this widget.
 	 * This method registers necessary javascript and renders the needed HTML code.
@@ -61,4 +63,5 @@ class CJuiProgressBar extends CJuiWidget {
 		$options=empty($this->options) ? '' : CJavaScript::encode($this->options);
 		Yii::app()->getClientScript()->registerScript(__CLASS__.'#'.$id,"jQuery('#{$id}').progressbar($options);");
 	}
+	
 }
