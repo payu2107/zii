@@ -19,9 +19,10 @@ Yii::import('zii.widgets.jui.CJuiWidget');
  * To use this widget, you may insert the following code in a view:
  * <pre>
  * $this->widget('zii.widgets.jui.CJuiProgressbar', array(
- *     // additional javascript options for the accordion plugin
+ *     'value'=>75,
+ *     // additional javascript options for the progress bar plugin
  *     'options'=>array(
- *         'value'=>27,
+ *         'change'=>'js:function(event, ui) {...}',
  *     ),
  *     'htmlOptions'=>array(
  *         'style'=>'height:20px;'
