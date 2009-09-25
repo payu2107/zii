@@ -8,26 +8,25 @@
  * @license http://www.yiiframework.com/license/
  */
 
+Yii::import('zii.widgets.jui.CJuiWidget');
+
 /**
- * This is the base class for
+ * CJuiInputWidget is the base class for JUI widgets that can collect user input.
+ *
  * @author Sebastian Thierer <sebathi@gmail.com>
- * @version $Id: CJuiWidget.php 14 2009-09-23 21:39:43Z sebathi $
+ * @version $Id$
  * @package zii.widgets.jui
  * @since 1.1
  */
-
-Yii::import('zii.widgets.jui.CJuiInputWidgets');
-
 abstract class CJuiInputWidget extends CJuiWidget
 {
-
 	/**
 	 * @var CModel the data model associated with this widget.
 	 */
 	public $model;
 	/**
-	 * @var string the attribute associated with this widget. Starting from version 1.0.9,
-	 * the name can contain square brackets (e.g. 'name[1]') which is used to collect tabular data input.
+	 * @var string the attribute associated with this widget.
+	 * The name can contain square brackets (e.g. 'name[1]') which is used to collect tabular data input.
 	 */
 	public $attribute;
 	/**
@@ -38,10 +37,6 @@ abstract class CJuiInputWidget extends CJuiWidget
 	 * @var string the input value
 	 */
 	public $value;
-	/**
-	 * @var array additional HTML options to be rendered in the input tag
-	 */
-	public $htmlOptions=array();
 
 
 	/**
@@ -76,5 +71,4 @@ abstract class CJuiInputWidget extends CJuiWidget
 	{
 		return $this->model instanceof CModel && $this->attribute!==null;
 	}
-
 }
