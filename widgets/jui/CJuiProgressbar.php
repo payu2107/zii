@@ -1,6 +1,6 @@
 <?php
 /**
- * CJuiProgressbarWidget class file.
+ * CJuiProgressbar class file.
  *
  * @author Sebastian Thierer <sebas@artfos.com>
  * @link http://www.yiiframework.com/
@@ -8,10 +8,34 @@
  * @license http://www.yiiframework.com/license/
  */
 
- /**
- * This is the base class for
+Yii::import('zii.widgets.jui.CJuiWidget');
+
+/**
+ * CJuiProgressbar displays a progress bar widget.
+ *
+ * CJuiProgressbar encapsulates the {@link http://jqueryui.com/demos/progressbar/ JUI 
+ * Progressbar} plugin.
+ *
+ * To use this widget, you may insert the following code in a view:
+ * <pre>
+ * $this->widget('zii.widgets.jui.CJuiProgressbar', array(
+ *     // additional javascript options for the accordion plugin
+ *     'options'=>array(
+ *         'value'=>27,
+ *     ),
+ *     'htmlOptions'=>array(
+ *         'style'=>'height:20px;'
+ *     ),
+ * ));
+ * </pre>
+ *
+ * By configuring the {@link options} property, you may specify the options
+ * that need to be passed to the JUI progressbar plugin. Please refer to
+ * the {@link http://jqueryui.com/demos/progressbar/ JUI Progressbar} documentation
+ * for possible options (name-value pairs).
+ *
  * @author Sebastian Thierer <sebathi@gmail.com>
- * @version $Id: CJuiAccordionWidget.php 16 2009-09-24 12:43:38Z sebathi $
+ * @version $Id: CJuiAccordion.php 20 2009-09-24 20:40:26Z qiang.xue $
  * @package zii.widgets.jui
  * @since 1.1
  */
@@ -19,61 +43,26 @@
 Yii::import('zii.widgets.jui.CJuiWidget');
 
 class CJuiProgressbar extends CJuiWidget {
-	
-	/**
-	 * The value of the progressbar.
-	 * @var boolean
-	 */
-	public $value = false;
-	
-	/**
-	 * This event is triggered when the value of the progressbar changes.
-	 * @var string
-	 */
-	public $change = null;
 
 	/**
-	 * Sets the progressBar height
-	 * @var unknown_type
+	 * @var string the name of the container element that contains all panels. Defaults to 'div'.
 	 */
-	public $height = '20px';
-	/**
-	 * Gets the JavaScript to be called at page start
-	 * @return string 
-	 */
-	private function getJSCommand($id){
-		$params = array();
-		if ($this->value!==null)
-			$params['value'] = $this->value;
-		if ($this->change!==null)
-			$params['change'] = $this->change;
-
-		return "$('#$id').progressbar(".CJavaScript::encode($params).");";
-	}
-	/**
-	 * Generates the HTML to display this widget
-	 * @param $id
-	 * @return unknown_type
-	 */
-	private function generateHtml($id){
-		if (!is_numeric($this->value)){
-			throw new CException(Yii::t('zii','{attribute} must be a number.', array('{attribute}'=>'value')));
-		}
-		$html = '<div id="'.$id.'"' . ($this->height!==null?' style="height:' . $this->height.';"':'').'></div>';
-		return $html;
-	}
+	public $tagName = 'div';
 	
 	/**
-	 * (non-PHPdoc)
-	 * @see web/widgets/CWidget#run()
+	 * Run this widget.
+	 * This method registers necessary javascript and renders the needed HTML code.
 	 */
 	public function run(){
-		$id = $this->getId();
+		$id=$this->getId();
+		if(!isset($this->htmlOptions['id']))
+			$this->htmlOptions['id']=$id;
 
-		echo $this->generateHtml($id);
-		
-		Yii::app()->getClientScript()->registerScript($id.'_js', $this->getJSCommand($id));
-		
+		echo CHtml::openTag($this->tagName,$this->htmlOptions);
+		echo CHtml::closeTag($this->tagName);
+
+		$options=empty($this->options) ? '' : CJavaScript::encode($this->options);
+		Yii::app()->getClientScript()->registerScript(__CLASS__.'#'.$id,"jQuery('#{$id}').progressbar($options);");
 	}
 	
 }
