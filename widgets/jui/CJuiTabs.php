@@ -13,7 +13,7 @@ Yii::import('zii.widgets.jui.CJuiWidget');
 /**
  * CJuiTabs displays a tabs widget.
  *
- * CJuiTabs encapsulates the {@link http://jqueryui.com/demos/tabs/ JUI Accordion}
+ * CJuiTabs encapsulates the {@link http://jqueryui.com/demos/tabs/ JUI tabs}
  * plugin.
  *
  * To use this widget, you may insert the following code in a view:
@@ -21,11 +21,11 @@ Yii::import('zii.widgets.jui.CJuiWidget');
  * $this->widget('zii.widgets.jui.CJuiTabs', array(
  *     'tabs'=>array(
  *         'StaticTab 1'=>'Content for tab 1',
- *         'StaticTab 2'=>array('content'=>'Content for tab 2', 'idtab'=>'tab2'),
+ *         'StaticTab 2'=>array('content'=>'Content for tab 2', 'id'=>'tab2'),
  *         // panel 3 contains the content rendered by a partial view
  *         'AjaxTab'=>array('ajax'=>$ajaxUrl),
  *     ),
- *     // additional javascript options for the accordion plugin
+ *     // additional javascript options for the tabs plugin
  *     'options'=>array(
  *         'collapsible'=>true,
  *     ),
@@ -34,7 +34,7 @@ Yii::import('zii.widgets.jui.CJuiWidget');
  *
  * By configuring the {@link options} property, you may specify the options
  * that need to be passed to the JUI tabs plugin. Please refer to
- * the {@link http://jqueryui.com/demos/tabs/ JUI Accordion} documentation
+ * the {@link http://jqueryui.com/demos/tabs/ JUI tabs} documentation
  * for possible options (name-value pairs).
  *
  * @author Sebastian Thierer <sebathi@gmail.com>
@@ -45,10 +45,17 @@ Yii::import('zii.widgets.jui.CJuiWidget');
 class CJuiTabs extends CJuiWidget
 {
 	/**
-	 * @var array list of tabs (panel title=>tab content). 
-	 * tab content is a string or an array with two possible subitems 'ajax' or 'content' 
-	 * (if 'content' is present 'ajax' will be ignored).
-	 * Note that neither tab title nor tab content will be HTML-encoded.
+	 * @var array list of tabs (tab title=>tab content).
+	 * Note that the tab title will not be HTML-encoded.
+	 * The tab content can be either a string or an array. When it is an array, it can
+	 * be in one of the following two formats:
+	 * <pre>
+	 * array('id'=>'myTabID', 'content'=>'tab content')
+	 * array('id'=>'myTabID', 'ajax'=>URL)
+	 * </pre>
+	 * where the 'id' element is optional. The second format allows the tab content
+	 * to be dynamically fetched from the specified URL via AJAX. The URL can be either
+	 * a string or an array. If an array, it will be normalized into a URL using {@link CHtml::normalizeUrl}.
 	 */
 	public $tabs=array();
 	/**
@@ -57,18 +64,16 @@ class CJuiTabs extends CJuiWidget
 	public $tagName='div';
 	/**
 	 * @var string the template that is used to generated every panel title.
-	 * The token "{title}" in the template will be replaced with the panel title and 
-	 * the token "{url}" will be replaced with "#{tabId}" or with the url of the ajax request.
-	 * Note that if you make change to this template, you may also need to adjust
-	 * the 'header' setting in {@link options}.
+	 * The token "{title}" in the template will be replaced with the panel title and
+	 * the token "{url}" will be replaced with "#TabID" or with the url of the ajax request.
 	 */
 	public $headerTemplate='<li><a href="{url}">{title}</a></li>';
 	/**
 	 * @var string the template that is used to generated every tab content.
 	 * The token "{content}" in the template will be replaced with the panel content
-	 * and the token "{tabId}" with the tab id.
+	 * and the token "{id}" with the tab ID.
 	 */
-	public $contentTemplate='<div id="{tabId}">{content}</div>';
+	public $contentTemplate='<div id="{id}">{content}</div>';
 
 	/**
 	 * Run this widget.
@@ -81,25 +86,25 @@ class CJuiTabs extends CJuiWidget
 			$this->htmlOptions['id']=$id;
 
 		echo CHtml::openTag($this->tagName,$this->htmlOptions)."\n";
-		
+
 		$tabsOut = "";
 		$contentOut = "";
 		$tabCount = 0;
-		
+
 		foreach($this->tabs as $title=>$content)
 		{
-			$tabId = (is_array($content) && isset($content['idtab']))?$content['idtab']:$id.'_tab_'.$tabCount++;
-			
+			$tabId = (is_array($content) && isset($content['id']))?$content['id']:$id.'_tab_'.$tabCount++;
+
 			if (!is_array($content)){
 				$tabsOut .= strtr($this->headerTemplate, array('{title}'=>$title, '{url}'=>'#'.$tabId))."\n";
-				$contentOut .= strtr($this->contentTemplate, array('{content}'=>$content,'{tabId}'=>$tabId))."\n";
+				$contentOut .= strtr($this->contentTemplate, array('{content}'=>$content,'{id}'=>$tabId))."\n";
 
 			}elseif (isset($content['content'])){
 				$tabsOut .= strtr($this->headerTemplate, array('{title}'=>$title, '{url}'=>'#'.$tabId))."\n";
-				$contentOut .= strtr($this->contentTemplate, array('{content}'=>$content['content'],'{tabId}'=>$tabId))."\n";
-			
+				$contentOut .= strtr($this->contentTemplate, array('{content}'=>$content['content'],'{id}'=>$tabId))."\n";
+
 			}elseif (isset($content['ajax'])){
-				$tabsOut .= strtr($this->headerTemplate,array('{title}'=>$title, '{url}'=>$content['ajax']))."\n";
+				$tabsOut .= strtr($this->headerTemplate,array('{title}'=>$title, '{url}'=>CHtml::normalizeUrl($content['ajax'])))."\n";
 			}
 		}
 		echo "<ul>\n" . $tabsOut . "</ul>\n";
