@@ -56,7 +56,7 @@ class CJuiSliderInput extends CJuiInputWidget
 	/**
 	 * @var string the name of the event where the input will be attached to the slider
 	 */
-	public $attachedTo = 'slide';
+	public $event = 'slide';
 
 	/**
 	 * Run this widget.
@@ -92,7 +92,7 @@ class CJuiSliderInput extends CJuiInputWidget
 
 
 		//TODO: We have to check if the user has attached an event to onStop
-		$this->options['slide']= 'js:function(event, ui) { jQuery(\'#'. $idHidden .'\').val(ui.value); }';
+		$this->options[$this->event]= 'js:function(event, ui) { jQuery(\'#'. $idHidden .'\').val(ui.value); }';
 		
 		
 		$options=empty($this->options) ? '' : CJavaScript::encode($this->options);
