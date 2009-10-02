@@ -16,14 +16,14 @@
  * You may specify an active record model to use this behavior like so:
  * <pre>
  * public function behaviors(){
- * 		return array(
- * 			'CTimestampBehavior' => array(
- * 				'class' => 'CTimestampBehavior',
- * 				'createAttribute' => 'create_time_attribute',
- * 				'updateAttribute' => 'update_time_attribute',
- * 			)
- * 		);
- * 	}
+ * 	return array(
+ * 		'CTimestampBehavior' => array(
+ * 			'class' => 'CTimestampBehavior',
+ * 			'createAttribute' => 'create_time_attribute',
+ * 			'updateAttribute' => 'update_time_attribute',
+ * 		)
+ * 	);
+ * }
  * </pre>
  * The {@link createAttribute} and {@link updateAttribute} options actually default to 'create_time' and 'update_time'
  * respectively, so it is not required that you configure them.  If you do not wish CTimestampBehavior
