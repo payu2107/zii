@@ -1,3 +1,24 @@
 Zii Extension Library for Yii
 =============================
 
+Zii is the official extension library for Yii.
+
+USING ZII EXTENSIONS
+--------------------
+
+Zii extensions are not auto contained in the PHP include path by default, so 
+you must call them using their full path if you wish to use them.  For example,
+to use CTimestampBehavior you may use the following in your model:
+~~~
+[php]
+	    public function behaviors()
+	    {
+	            return array(
+	                    'CTimestampbehavior' => array(
+	                            'class' => 'zii.behaviors.CTimestampbehavior',
+	                    )
+	            );
+	    }
+~~~
+
+
