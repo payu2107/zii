@@ -9,11 +9,13 @@
  */
  
  /**
- * CTimestampBehavior will automatically fill date and time related atributes when an active record
- * is created and upadated.
+ * CTimestampBehavior will automatically fill date and time related atributes.
+ * 
+ * CTimestampBehavior will automatically fill date and time related atributes when the active record
+ * is created and/or upadated.
  * You may specify an active record model to use this behavior like so:
  * <pre>
- * 	public function behaviors(){
+ * public function behaviors(){
  *		return array(
  *			'CTimestampBehavior' => array(
  *				'class' => 'CTimestampBehavior',
@@ -46,13 +48,13 @@ class CTimestampBehavior extends CActiveRecordBehavior {
 	*/
 	public $createAttribute = 'create_time';
 	/**
-	* @var mixed The name of the attribute to store the modification time  Set to null to not
+	* @var mixed The name of the attribute to store the modification time.  Set to null to not
 	* use a timstamp for the update attribute.  Defaults to 'update_time'
 	*/
 	public $updateAttribute = 'update_time';
 	
 	/**
-	* @var bool whether to set the update attribute to the creation timestamp upon creation.
+	* @var bool Whether to set the update attribute to the creation timestamp upon creation.
 	* Otherwise it will be left alone.  Defaults to false.
 	*/
 	public $setUpdateOnCreate = false;
@@ -66,7 +68,7 @@ class CTimestampBehavior extends CActiveRecordBehavior {
 	public $timestampExpression=null;
 	
 	/**
-	* @var array maps column types to database method
+	* @var array Maps column types to database method
 	*/
 	protected static $map = array(
 			'datetime'=>'NOW()',
