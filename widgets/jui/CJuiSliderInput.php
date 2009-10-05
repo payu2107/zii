@@ -40,7 +40,7 @@ Yii::import('zii.widgets.jui.CJuiInputWidget');
  * for possible options (name-value pairs).
  *
  * @author Sebastian Thierer <sebathi@gmail.com>
- * @version $Id: CJuiSliderInput 30 2009-09-25 19:22:50Z qiang.xue $
+ * @version $Id$
  * @package zii.widgets.jui
  * @since 1.1
  */
