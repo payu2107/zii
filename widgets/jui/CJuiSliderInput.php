@@ -2,7 +2,7 @@
 /**
  * CJuiSliderInput class file.
  *
- * @author Qiang Xue <qiang.xue@gmail.com>
+ * @author Sebastian Thiere <sebathi@gmail.com>
  * @link http://www.yiiframework.com/
  * @copyright Copyright &copy; 2008-2009 Yii Software LLC
  * @license http://www.yiiframework.com/license/
@@ -11,7 +11,7 @@
 Yii::import('zii.widgets.jui.CJuiInputWidget');
 
 /**
- * CJuiSliderInput displays a slider.
+ * CJuiSliderInput displays a slider. It can be used in forms and post its value.
  *
  * CJuiSlider encapsulates the {@link http://jqueryui.com/demos/slider/ JUI
  * slider} plugin.
@@ -31,13 +31,15 @@ Yii::import('zii.widgets.jui.CJuiInputWidget');
  *     ),
  * ));
  * </pre>
+ * 
+ * If you need to use the slider event, please change the event value for 'stop' or 'change'.
  *
  * By configuring the {@link options} property, you may specify the options
  * that need to be passed to the JUI slider plugin. Please refer to
  * the {@link http://jqueryui.com/demos/slider/ JUI slider} documentation
  * for possible options (name-value pairs).
  *
- * @author Qiang Xue <qiang.xue@gmail.com>
+ * @author Sebastian Thierer <sebathi@gmail.com>
  * @version $Id: CJuiSliderInput 30 2009-09-25 19:22:50Z qiang.xue $
  * @package zii.widgets.jui
  * @since 1.1
@@ -54,7 +56,8 @@ class CJuiSliderInput extends CJuiInputWidget
 	public $value;
 	
 	/**
-	 * @var string the name of the event where the input will be attached to the slider
+	 * @var string the name of the event where the input will be attached to the slider. It
+	 * can be 'slide', 'stop' or 'change'. If you change it programmatically use 'change'
 	 */
 	public $event = 'slide';
 
@@ -91,7 +94,6 @@ class CJuiSliderInput extends CJuiInputWidget
 		echo CHtml::closeTag($this->tagName);
 
 
-		//TODO: We have to check if the user has attached an event to onStop
 		$this->options[$this->event]= 'js:function(event, ui) { jQuery(\'#'. $idHidden .'\').val(ui.value); }';
 		
 		
