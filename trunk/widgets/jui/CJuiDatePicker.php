@@ -63,15 +63,23 @@ class CJuiDatePicker extends CJuiInputWidget
 	public $showButton = true;
 	
 	/**
-	 * @var boolean If imageButton is true, an imagebutton is showed. Show button must be true also. Default: true
-	 */
-	public $buttonImage = true;
-	
-	/**
 	 * @var string The image for the button URL. If it's null, the default image is shown.
+	 * To disable buttonImage set it to false.
 	 */
 	public $buttonImageUrl = null;
-
+	
+	/**
+	 * @var string current regional language and settings (i18n compatible). 
+	 * If this property is not set, no i18n should be involved. Look than only
+	 * one language will be available in the whole page.
+	 */
+	public $language = null;
+	
+	/**
+	 * @var string The i18n Jquery UI script file. It uses scriptUrl property as base url.
+	 */
+	public $i18nScriptFile = 'jquery-ui-i18n.js';
+	
 	/**
 	 * Run this widget.
 	 * This method registers necessary javascript and renders the needed HTML code.
@@ -99,19 +107,29 @@ class CJuiDatePicker extends CJuiInputWidget
 		}
 
 		if ($this->showButton===true){
-			$this->options['showOn'] = 'true';
-			if ($this->imageButton===true){
-				$this->options['buttonImageOnly'] = 'true';
-				if ($this->buttonImageUrl===null){
-					$this->options['buttonImage'] = '';// Where to add this asset? in zii
-				}else{
-					$this->options['buttonImage'] = $this->buttonImageUrl;
-				}
+			if (!isset($this->options['showOn'])){
+				$this->options['showOn'] = 'both';
+			}
+			if ($this->buttonImageUrl===null){ // show the default image
+				$imagePath=Yii::getPathOfAlias('zii.widgets.jui.images');
+				$this->options['buttonImageOnly']=true;
+				$this->options['buttonImage'] = Yii::app()->getAssetManager()->publish($imagePath.'/calendar.gif');
+			}elseif ($this->buttonImageUrl!==false){ // show external button image
+				$this->options['buttonImageOnly']=true;
+				$this->options['buttonImage'] = $this->buttonImageUrl;
 			}
 		}
+
 		$options=empty($this->options) ? '' : CJavaScript::encode($this->options);
 
 		$js = "jQuery('#{$id}').datepicker($options);\n";
+		
+		if (isset($this->language)){
+			$this->registerScriptFile($this->i18nScriptFile);
+			$js .= "jQuery('#{$id}').datepicker('option', jQuery.extend({showMonthAfterYear: false}, jQuery.datepicker.regional['{$this->language}']));";
+			//$js .= "$.datepicker.regional['". $this->language ."']();";
+		}
+
 		Yii::app()->getClientScript()->registerScript(__CLASS__.'#'.$id, $js);
 	}
 	
