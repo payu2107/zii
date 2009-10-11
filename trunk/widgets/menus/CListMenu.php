@@ -19,18 +19,21 @@
 class CListMenu extends CBaseMenu
 {
 	/**
-	* @var string The CSS class to have on the active item.  Defaults to 'active'
+	* @var string CSS class that should be automatically added to the active item.
+	* If false, CSS class will not be appended to the active item.  Defaults to 'active'
 	*/
 	public $activeClass='active';
 	
-	 /**
-	 * Executes the widget.
-	 * This overrides the parent implementation.
-	 */
-	public function run() {
-		$items = $this->parseItems($this->items);
-		$this->renderMenu($items);
-	}
+	/**
+	* @var array HTML attributes for the menu's containing <ul> tag.
+	*/
+	public $htmlOptions=array();
+	
+	/**
+	* @var array HTML attributes to be applied to item labels that are not linked.
+	* These HTML options are applied to a <span> tag that wraps the item labels.
+	*/
+	public $labelOptions=array();
 	
 	/**
 	* Renders the menu.
@@ -38,21 +41,39 @@ class CListMenu extends CBaseMenu
 	* @param mixed $items normalized list of items
 	*/
 	protected function renderMenu($items) {
-		echo '<ul>';
+		$htmlOptions = $this->htmlOptions;
+		if (!isset($htmlOptions['id']))
+			$htmlOptions['id']=$this->getId();
+		if(!isset($htmlOptions['class']))
+			$htmlOptions['class']='yiiListMenu';
+			
+		echo '<ul'.CHtml::renderAttributes($htmlOptions).'>';
+		$this->renderMenuRecurse($items);
+		echo '</ul>';
+	}
+	
+	/**
+	* Recurses through the menu and displays it
+	* 
+	* @param mixed $items normalized list of items
+	*/
+	protected function renderMenuRecurse($items) {
 		foreach($items as $item) {
 			echo '<li>';
 			
 			if ($item['url']!==false)
 				echo CHtml::link($item['label'], $item['url'], $item['htmlOptions']);
 			else
-				echo CHtml::encode($item['label']);
+				echo CHtml::tag('span', $this->labelOptions, $item['label']);
 				
-			if (isset($item['subMenu']))
-				$this->renderMenu($item['subMenu']);
+			if (isset($item['items'])) {
+				echo '<ul>';
+				$this->renderMenu($item['items']);
+				echo '</ul>';
+			}
 			
 			echo '</li>';
 		}
-		echo '</ul>';
 	}
 
 }

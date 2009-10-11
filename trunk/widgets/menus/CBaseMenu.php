@@ -24,8 +24,8 @@ abstract class CBaseMenu extends CWidget
 	* Format:
 	* <pre>
 	* 	array(
-	* 		array('label', 'url', additional options..), //format
-	* 		array('Posts', array('/post/list')), //example
+	* 		array('label', 'url', additional options..),
+	* 		array('Posts', array('/post/list')),
 	* 		//.. more items
 	* 	)
 	* </pre>
@@ -37,8 +37,9 @@ abstract class CBaseMenu extends CWidget
 	* <ul>
 	* <li>'items': a nested set of items.  Should be in the same format as the parent items.</li>
 	* <li>'visible': whether or not the item is rendered.  Useful for access control</li>
-	* <li>'pattern': pattern used to check if this item matches the current page.  Otherwise the url 
-	* 		option is used</li>
+	* <li>'pattern': pattern used to check if this item matches the current page.  If it is a string and it
+	* 		begins with a slash, it is considered as a regular expression.  If set to false, the url 
+	* 		option is used as the pattern.  Defualts to false.</li>
 	* <li>'params': GET paramaters that must match in the current request and the pattern for the item
 	* 		to be considered active.  Defaults to true, meaning all params in the request must match the params
 	* 		in the pattern.  Set to false if none of the params need to match the pattern for the item to be 
@@ -48,34 +49,68 @@ abstract class CBaseMenu extends CWidget
 	* 
 	* Nested menus are also supported.
 	*/
-	public $items=array();
+	public $items = array();
 	
 	/**
-	* @var mixed string CSS class that should be automatically added to the active item.  Leave
-	* as null if you do not want a CSS class added to the active item.
+	* @var string CSS class that should be automatically added to the active item.
+	* If false, CSS class will not be appended to the active item (default)
 	*/
-	public $activeClass;
+	public $activeClass = false;
+	
+	/**
+	* @var bool Whether to encode the item labels.  Defaults to true.
+	*/
+	public $encodeLabels = true;
+	
+	/**
+	* @var array The items for this menu parsed by {@link parseItems()}
+	*/
+	protected $parsedItems;
 
+	
+	/**
+	* Parses the menu items so they are ready to be used
+	*/
+	public function init() {
+	   $this->parsedItems = $this->parseItems($this->items);
+	}
+
+	/**
+	* Executes the widget.
+	* This overrides the parent implementation.
+	*/
+	public function run() {
+		$this->renderMenu($this->parsedItems);
+	}
+	
+	/**
+	* Renders the menu.
+	* 
+	* @param mixed $items parsed and normalized list of items
+	* @see parseItems()
+	*/
+	abstract protected function renderMenu($items);
+	
 	/**
 	* Parses items as inputted by user and returns it in a normalized way.
 	* Handles nested items.  Output will look like something like this:
-	* 
+	* <pre>
+	* array(
 	* 	array(
-	* 		array(
-	* 			'label'=>'Yii',
-	* 			'url'=>'http://www.yiiframework.com'
-	* 		),
-	* 		array(
-	* 			'label'=>'Posts',
-	* 			'url'=>array('/post/list'), // can be false
-	* 			'htmlOptions'=>array()
-	* 			'active'=>false
-	* 			'items'=>array(
-	* 				//nested item set in the same format as parent item sets.
-	* 			)
-	* 		),
-	* 	)
-	* 
+	* 		'label'=>'Yii',
+	* 		'url'=>'http://www.yiiframework.com'
+	* 	),
+	* 	array(
+	* 		'label'=>'Posts',
+	* 		'url'=>array('/post/list'), // can be false
+	* 		'htmlOptions'=>array()
+	* 		'active'=>false
+	* 		'items'=>array(
+	* 			//nested item set in the same format as parent item sets.
+	* 		)
+	* 	),
+	* )
+	* </pre>
 	* Non-visible items are not included in the returned result.  The 'url' option will be false
 	* if the item is not meant to be clickable.
 	* 
@@ -88,24 +123,18 @@ abstract class CBaseMenu extends CWidget
 			if (isset($rawItem['visible']) && !$rawItem['visible'])
 				continue;
 			
-			//supports short hand way of defining nested set where parent is non-linked.
-			if (!is_numeric($key)) {
-				$items[] = array('label'=>$key, 'url'=>false, 'items'=>$this->parseItems($rawItem));
-				continue;	
-			}
-			
 			if (isset($rawItem['items']))
 				$item['items'] = $this->parseItems($rawItem['items']);
 				
-			$item['label'] = $rawItem[0];
+			$item['label'] = $this->encodeLabels ? CHtml::encode($rawItem[0]) : $rawItem[0];
 			$item['url'] = isset($rawItem[1]) ? $rawItem[1] : false;
 			$item['htmlOptions'] = isset($rawItem['htmlOptions']) ? $rawItem['htmlOptions'] : array();
 			
-			$pattern = isset($rawItem['pattern']) ? $rawItem['pattern'] : $item['url'];
+			$pattern = isset($rawItem['pattern'])&&($rawItem['pattern']!==false) ? $rawItem['pattern'] : $item['url'];
 			$params = isset($rawItem['params']) ? $rawItem['params'] : true;
 			$item['active'] = $this->isActive($pattern, $params);
 			
-			if ($item['active'] && ($this->activeClass !== null)) {
+			if ($item['active'] && ($this->activeClass !== false)) {
 				//append CSS class
 				if (isset($item['htmlOptions']['class']))
 					$item['htmlOptions']['class'] .= ' '.$this->activeClass;
@@ -121,7 +150,7 @@ abstract class CBaseMenu extends CWidget
 	/**
 	* Decides if $pattern matches the current request.
 	* 
-	* @param string $pattern the pattern to compare with the given request.
+	* @param mixed $pattern the pattern to compare with the given request.
 	* @param array $params GET paramaters that must match in the $pattern and the current request
 	* for $pattern to be considered active.  If true, all params must be matched and
 	* present in the given request.  If false, none have to match.  Defaults to true.
@@ -141,9 +170,9 @@ abstract class CBaseMenu extends CWidget
 		
 		$pattern[0] = trim($pattern[0],'/'); //normalize the pattern a bit
 		if (strpos($pattern[0], '/') !== false)
-			$matched = $pattern[0]===$controllerID.'/'.$actionID;
+			$matched = $pattern[0]===$controllerID.'/'.$actionID; // controller/action specified in url
 		else
-			$matched = $pattern[0]===$controllerID;
+			$matched = $pattern[0]===$controllerID; // only controller specified in url
 			
 		if ($params===false)
 			return $matched;
