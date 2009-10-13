@@ -57,7 +57,7 @@ class CJuiSliderInput extends CJuiInputWidget
 	
 	/**
 	 * @var string the name of the event where the input will be attached to the slider. It
-	 * can be 'slide', 'stop' or 'change'. If you change it programmatically use 'change'
+	 * can be 'slide', 'stop' or 'change'. If you want to use 'slide' event change $event property to 'change'
 	 */
 	public $event = 'slide';
 
