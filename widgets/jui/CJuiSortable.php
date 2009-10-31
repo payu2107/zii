@@ -44,8 +44,8 @@ Yii::import('zii.widgets.jui.CJuiWidget');
 class CJuiSortable extends CJuiWidget
 {
 	/**
-	 * @var array list of panels (panel title=>panel content).
-	 * Note that neither panel title nor panel content will be HTML-encoded.
+	 * @var array list of sortable items (id=>item content).
+	 * Note that the item contents will not be HTML-encoded.
 	 */
 	public $items=array();
 	/**
@@ -53,10 +53,11 @@ class CJuiSortable extends CJuiWidget
 	 */
 	public $tagName='ul';
 	/**
-	 * @var string the template that is used to generated every panel content.
-	 * The token "{content}" in the template will be replaced with the panel content.
+	 * @var string the template that is used to generated every sortable item.
+	 * The token "{content}" in the template will be replaced with the item content,
+	 * while "{id}" be replaced with the item ID.
 	 */
-	public $contentTemplate='<li id="{id}">{content}</li>';
+	public $itemTemplate='<li id="{id}">{content}</li>';
 
 	/**
 	 * Run this widget.
@@ -65,18 +66,16 @@ class CJuiSortable extends CJuiWidget
 	public function run()
 	{
 		$id=$this->getId();
-		if(!isset($this->htmlOptions['id']))
-			$this->htmlOptions['id']=$id;
-
-		echo CHtml::openTag($this->tagName,$this->htmlOptions)."\n";
-		foreach($this->items as $iditem=>$content)
-		{
-			echo strtr($this->contentTemplate,array('{id}'=>$iditem,'{content}'=>$content))."\n";
-		}
-		echo CHtml::closeTag($this->tagName);
-
+		$this->htmlOptions['id']=$id;
 		$options=empty($this->options) ? '' : CJavaScript::encode($this->options);
 		Yii::app()->getClientScript()->registerScript(__CLASS__.'#'.$id,"jQuery('#{$id}').sortable({$options});");
+
+		echo CHtml::openTag($this->tagName,$this->htmlOptions)."\n";
+		foreach($this->items as $id=>$content)
+		{
+			echo strtr($this->itemTemplate,array('{id}'=>$id,'{content}'=>$content))."\n";
+		}
+		echo CHtml::closeTag($this->tagName);
 	}
 }
 
