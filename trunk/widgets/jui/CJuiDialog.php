@@ -18,16 +18,20 @@ Yii::import('zii.widgets.jui.CJuiWidget');
  *
  * To use this widget, you may insert the following code in a view:
  * <pre>
- * $widget = $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
- *     // additional javascript options for the accordion plugin
+ * $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
+ *     'id'=>'mydialog',
+ *     // additional javascript options for the dialog plugin
  *     'options'=>array(
  *         'title'=>'Dialog box 1',
  *     ),
  * ));
- *     echo 'Your content here';
+ *
+ *     echo 'dialog content here';
+ *
  * $this->endWidget('zii.widgets.jui.CJuiDialog');
- * 
- * echo CHtml::link('open link', '#', array('onclick'=>$widget->getOpenScript());
+ *
+ * // the link that may open the dialog
+ * echo CHtml::link('open dialog', '#', array('onclick'=>'$("#mydialog").dialog("open");'));
  * </pre>
  *
  * By configuring the {@link options} property, you may specify the options
@@ -36,44 +40,36 @@ Yii::import('zii.widgets.jui.CJuiWidget');
  * for possible options (name-value pairs).
  *
  * @author Sebastian Thierer <sebathi@gmail.com>
- * @version $Id: CJuiAccordion.php 31 2009-09-25 19:25:06Z qiang.xue $
+ * @version $Id$
  * @package zii.widgets.jui
  * @since 1.1
  */
-
-class CJuiDialog extends CJuiWidget{
-
+class CJuiDialog extends CJuiWidget
+{
 	/**
 	 * @var string the name of the container element that contains all panels. Defaults to 'div'.
 	 */
 	public $tagName='div';
 
-
-	public function init(){
+	/**
+	 * Renders the open tag of the dialog.
+	 * This method also registers the necessary javascript code.
+	 */
+	public function init()
+	{
 		parent::init();
-		ob_start();
-	}
-
-	public function run(){
-		$aux = ob_get_clean();
-
 		$id=$this->getId();
-		if(!isset($this->htmlOptions['id']))
-			$this->htmlOptions['id']=$id;
-
-		echo CHtml::openTag($this->tagName,$this->htmlOptions)."\n";
-		echo $aux;
-		echo CHtml::closeTag($this->tagName)."\n";
-
+		$this->htmlOptions['id']=$id;
 		$options=empty($this->options) ? '' : CJavaScript::encode($this->options);
 		Yii::app()->getClientScript()->registerScript(__CLASS__.'#'.$id,"jQuery('#{$id}').dialog($options);");
+		echo CHtml::openTag($this->tagName,$this->htmlOptions)."\n";
 	}
+
 	/**
-	 * This function returns the open script for this dialog.
-	 * @return string
+	 * Renders the close tag of the dialog.
 	 */
-	public function getOpenScript($options = null){
-		$id=$this->getId();
-		return "jQuery('#{$id}').open($options);";
+	public function run()
+	{
+		echo CHtml::closeTag($this->tagName);
 	}
 }
