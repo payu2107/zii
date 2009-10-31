@@ -1,6 +1,6 @@
 <?php
 /**
- * CJuiProgressbar class file.
+ * CJuiProgressBar class file.
  *
  * @author Sebastian Thierer <sebas@artfos.com>
  * @link http://www.yiiframework.com/
@@ -11,14 +11,14 @@
 Yii::import('zii.widgets.jui.CJuiWidget');
 
 /**
- * CJuiProgressbar displays a progress bar widget.
+ * CJuiProgressBar displays a progress bar widget.
  *
- * CJuiProgressbar encapsulates the {@link http://jqueryui.com/demos/progressbar/ JUI
+ * CJuiProgressBar encapsulates the {@link http://jqueryui.com/demos/progressbar/ JUI
  * Progressbar} plugin.
  *
  * To use this widget, you may insert the following code in a view:
  * <pre>
- * $this->widget('zii.widgets.jui.CJuiProgressbar', array(
+ * $this->widget('zii.widgets.jui.CJuiProgressBar', array(
  *     'value'=>75,
  *     // additional javascript options for the progress bar plugin
  *     'options'=>array(

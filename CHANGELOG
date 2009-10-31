@@ -17,3 +17,7 @@ Version 1.1.0 to be released
 - New: Added CJuiDatePicker (sebas, Qiang)
 - New: Added CJuiSortable (sebas)
 - New: Added CJuiDialog (sebas)
+- New: Added CJuiSelectable (sebas)
+- New: Added CJuiDroppable (sebas)
+- New: Added CJuiResizable (sebas)
+- New: Added CJuiDraggable (sebas)
