@@ -40,8 +40,8 @@ Yii::import('zii.widgets.jui.CJuiWidget');
  * @package zii.widgets.jui
  * @since 1.1
  */
-class CJuiProgressBar extends CJuiWidget {
-
+class CJuiProgressBar extends CJuiWidget
+{
 	/**
 	 * @var string the name of the container element that contains the progress bar. Defaults to 'div'.
 	 */
@@ -55,10 +55,10 @@ class CJuiProgressBar extends CJuiWidget {
 	 * Run this widget.
 	 * This method registers necessary javascript and renders the needed HTML code.
 	 */
-	public function run(){
+	public function run()
+	{
 		$id=$this->getId();
-		if(!isset($this->htmlOptions['id']))
-			$this->htmlOptions['id']=$id;
+		$this->htmlOptions['id']=$id;
 
 		echo CHtml::openTag($this->tagName,$this->htmlOptions);
 		echo CHtml::closeTag($this->tagName);
