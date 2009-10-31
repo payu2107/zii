@@ -23,6 +23,7 @@ Yii::import('zii.widgets.jui.CJuiWidget');
  *     // additional javascript options for the dialog plugin
  *     'options'=>array(
  *         'title'=>'Dialog box 1',
+ *         'autoOpen'=>false,
  *     ),
  * ));
  *
@@ -31,7 +32,9 @@ Yii::import('zii.widgets.jui.CJuiWidget');
  * $this->endWidget('zii.widgets.jui.CJuiDialog');
  *
  * // the link that may open the dialog
- * echo CHtml::link('open dialog', '#', array('onclick'=>'$("#mydialog").dialog("open");'));
+ * echo CHtml::link('open dialog', '#', array(
+ *    'onclick'=>'$("#mydialog").dialog("open"); return false;',
+ * ));
  * </pre>
  *
  * By configuring the {@link options} property, you may specify the options
