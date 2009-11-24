@@ -18,7 +18,7 @@
  * public function behaviors(){
  * 	return array(
  * 		'CTimestampBehavior' => array(
- * 			'class' => 'CTimestampBehavior',
+ * 			'class' => 'zii.behaviors.CTimestampBehavior',
  * 			'createAttribute' => 'create_time_attribute',
  * 			'updateAttribute' => 'update_time_attribute',
  * 		)
