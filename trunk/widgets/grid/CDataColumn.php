@@ -89,7 +89,7 @@ class CDataColumn extends CGridColumn
 			echo $this->evaluateExpression($this->dataExpression,array('data'=>$data,'grid'=>$grid,'row'=>$row));
 		else if($this->dataField!==null)
 		{
-			$value=$data->{$this->dataField};
+			$value=CHtml::value($data,$this->dataField);
 			if($this->encodeData===true)
 				$value=CHtml::encode($value);
 			echo $value;

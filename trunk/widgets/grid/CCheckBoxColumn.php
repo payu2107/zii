@@ -110,7 +110,7 @@ EOD;
 		if($this->dataExpression!==null)
 			$value=$this->evaluateExpression($this->dataExpression,array('data'=>$data,'grid'=>$grid,'row'=>$row));
 		else if($this->dataField!==null)
-			$value=$data->{$this->dataField};
+			$value=CHtml::value($data,$this->dataField);
 		else
 			$value=$grid->dataProvider->keys[$row];
 		$options=$this->checkBoxHtmlOptions;
