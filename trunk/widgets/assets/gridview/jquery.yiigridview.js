@@ -5,11 +5,21 @@
  * @link http://www.yiiframework.com/
  * @copyright Copyright &copy; 2008-2009 Yii Software LLC
  * @license http://www.yiiframework.com/license/
- * @version $Id: jquery.yiitab.js 1474 2009-10-18 21:13:52Z qiang.xue $
+ * @version $Id$
  */
 
 ;(function($) {
-
+	/**
+	 * yiiGridView set function.
+	 * @param map settings for the grid view. Availablel options are as follows:
+	 * - ajaxUpdate: array, IDs of the containers whose content may be updated by ajax response
+	 * - pagerClass: string, the CSS class for the pager container
+	 * - tableClass: string, the CSS class for the table
+	 * - selectableRows: integer, the number of rows that can be selected
+	 * - updateSelector: string, the selector for choosing which elements can trigger ajax requests
+	 * - beforeUpdate: function, the function to be called before ajax request is sent
+	 * - afterUpdate: function, the function to be called after ajax response is received
+	 */
 	$.fn.yiiGridView = function(settings) {
 		var settings = $.extend({}, $.fn.yiiGridView.defaults, settings || {});
 		return this.each(function(){
@@ -43,35 +53,64 @@
 		tableClass: 'table',
 		selectableRows: 1,
 		// updateSelector: '#id .pager a, '#id .table thead th a',
-		// updateTargets: [id],
 		// beforeUpdate: function(id) {},
 		// afterUpdate: function(id, data) {},
 	};
 
 	$.fn.yiiGridView.settings = {};
 
+	/**
+	 * Returns the key value for the specified row
+	 * @param string the ID of the grid view container
+	 * @param integer the row number (zero-based index)
+	 * @return string the key value
+	 */
 	$.fn.yiiGridView.getKey = function(id, row) {
 		return $('#'+id+' > div.keys > span:eq('+row+')').text();
 	};
 
+	/**
+	 * Returns the URL that generates the grid view content.
+	 * @param string the ID of the grid view container
+	 * @return string the URL that generates the grid view content.
+	 */
 	$.fn.yiiGridView.getUrl = function(id) {
 		return $('#'+id+' > div.keys').attr('title');
 	};
 
+	/**
+	 * Returns the jQuery collection of the cells in the specified row.
+	 * @param string the ID of the grid view container
+	 * @param integer the row number (zero-based index)
+	 * @return jQuery the jQuery collection of the cells in the specified row.
+	 */
 	$.fn.yiiGridView.getRow = function(id, row) {
 		var settings = $.fn.yiiGridView.settings[id];
 		return $('#'+id+' .'+settings.tableClass+' > tbody > tr:eq('+row+') > td');
 	};
 
+	/**
+	 * Returns the jQuery collection of the cells in the specified column.
+	 * @param string the ID of the grid view container
+	 * @param integer the column number (zero-based index)
+	 * @return jQuery the jQuery collection of the cells in the specified column.
+	 */
 	$.fn.yiiGridView.getColumn = function(id, column) {
 		var settings = $.fn.yiiGridView.settings[id];
 		return $('#'+id+' .'+settings.tableClass+' > tbody > tr > td:nth-child('+(column+1)+')');
 	};
 
+	/**
+	 * Performs an AJAX-based update of the grid view contents.
+	 * @param string the ID of the grid view container
+	 * @param map the AJAX request options (see jQuery.ajax API manual). By default,
+	 * the URL to be requested is the one that generates the current content of the grid view.
+	 * @return jQuery the jQuery collection of the cells in the specified column.
+	 */
 	$.fn.yiiGridView.update = function(id, options) {
 		var settings = $.fn.yiiGridView.settings[id];
 		options = $.extend({
-			url: $('#'+id+' div.keys').attr('title'),
+			url: $.fn.yiiGridView.getUrl(id),
 			success: function(data,status) {
 				$.each(settings.ajaxUpdate, function() {
 					$('#'+this).html($(data).find('#'+this));
@@ -89,6 +128,11 @@
 		$.ajax(options);
 	};
 
+	/**
+	 * Returns the key values of the currently selected rows.
+	 * @param string the ID of the grid view container
+	 * @return array the key values of the currently selected rows.
+	 */
 	$.fn.yiiGridView.getSelection = function(id) {
 		var settings = $.fn.yiiGridView.settings[id];
 		var keys = $('#'+id+' > div.keys > span');
