@@ -225,8 +225,11 @@ class CDetailView extends CWidget
 			{
 				$value=CHtml::value($this->model,$attribute['name']);
 				$method='format'.$attribute['type'];
-				if($value!==null && method_exists($this,$method))
-					$tr['{value}']=$this->$method($value);
+				if(method_exists($this,$method))
+				{
+					if($value!==null)
+						$tr['{value}']=$this->$method($value);
+				}
 				else
 					throw new CException(Yii::t('yii','Unknown type "{type}".',array('{type}'=>$attribute['type'])));
 			}
