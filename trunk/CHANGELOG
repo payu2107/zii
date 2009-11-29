@@ -22,3 +22,4 @@ Version 1.1.0 to be released
 - New: Added CJuiResizable (sebas)
 - New: Added CJuiDraggable (sebas)
 - New: Added CGridView (Qiang)
+- New: Added CDetailView (Qiang)
