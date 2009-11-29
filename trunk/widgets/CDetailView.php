@@ -109,7 +109,7 @@ class CDetailView extends CWidget
 	 * correspond to the number of digits after the decimal point, the character displayed as the decimal point,
 	 * and the thousands separator character.
 	 */
-	public $numberFormat=array('decimals'=>null, 'decimalSeparator'=>null, 'thousandSeparator'=>null),
+	public $numberFormat=array('decimals'=>null, 'decimalSeparator'=>null, 'thousandSeparator'=>null);
 	/**
 	 * @var string the text to be displayed when formatting a boolean value which is true. Defaults to 'Yes'.
 	 */
