@@ -31,6 +31,10 @@ abstract class CGridColumn extends CComponent
 	 */
 	public $id;
 	/**
+	 * @var CGridView the grid view object that owns this column.
+	 */
+	public $grid;
+	/**
 	 * @var string the header cell text. Note that it will not be HTML-encoded.
 	 */
 	public $header;
@@ -41,8 +45,7 @@ abstract class CGridColumn extends CComponent
 	/**
 	 * @var string a PHP expression that is evaluated for every data cell and whose result
 	 * is used as the CSS class name for the data cell. In this expression, the variable
-	 * <code>$grid</code> stands for the grid view instance; <code>$row</code>
-	 * the row number (zero-based); <code>$data</code> the data model for the row;
+	 * <code>$row</code> the row number (zero-based); <code>$data</code> the data model for the row;
 	 * and <code>$this</code> the column object.
 	 */
 	public $cssClassExpression;
@@ -60,11 +63,20 @@ abstract class CGridColumn extends CComponent
 	public $footerHtmlOptions=array();
 
 	/**
+	 * Constructor.
+	 * @param CGridView the grid view that owns this column.
+	 */
+	public function __construct($grid)
+	{
+		$this->grid=$grid;
+	}
+
+	/**
 	 * Initializes the column.
 	 * This method is invoked by the grid view when it initializes itself before rendering.
 	 * You may override this method to prepare the column for rendering.
 	 */
-	public function init($grid)
+	public function init()
 	{
 	}
 
@@ -79,46 +91,43 @@ abstract class CGridColumn extends CComponent
 
 	/**
 	 * Renders the header cell.
-	 * @param CGridView the grid view instance
 	 */
-	public function renderHeaderCell($grid)
+	public function renderHeaderCell()
 	{
 		$this->headerHtmlOptions['id']=$this->id;
 		echo CHtml::openTag('th',$this->headerHtmlOptions);
-		$this->renderHeaderCellContent($grid);
+		$this->renderHeaderCellContent();
 		echo "</th>";
 	}
 
 	/**
 	 * Renders a data cell.
-	 * @param CGridView the grid view instance
 	 * @param integer the row number (zero-based)
 	 */
-	public function renderDataCell($grid,$row)
+	public function renderDataCell($row)
 	{
-		$data=$grid->dataProvider->data[$row];
+		$data=$this->grid->dataProvider->data[$row];
 		$options=$this->htmlOptions;
 		if($this->cssClassExpression!==null)
 		{
-			$class=$this->evaluateExpression($this->cssClassExpression,array('grid'=>$grid,'row'=>$row,'data'=>$data));
+			$class=$this->evaluateExpression($this->cssClassExpression,array('row'=>$row,'data'=>$data));
 			if(isset($options['class']))
 				$options['class'].=' '.$class;
 			else
 				$options['class']=$class;
 		}
 		echo CHtml::openTag('td',$options);
-		$this->renderDataCellContent($grid,$row,$data);
+		$this->renderDataCellContent($row,$data);
 		echo '</td>';
 	}
 
 	/**
 	 * Renders the footer cell.
-	 * @param CGridView the grid view instance
 	 */
-	public function renderFooterCell($grid)
+	public function renderFooterCell()
 	{
 		echo CHtml::openTag('th',$this->footerHtmlOptions);
-		$this->renderFooterCellContent($grid);
+		$this->renderFooterCellContent();
 		echo '</td>';
 	}
 
@@ -126,9 +135,8 @@ abstract class CGridColumn extends CComponent
 	 * Renders the header cell content.
 	 * The default implementation simply renders {@link header}.
 	 * This method may be overridden to customize the rendering of the header cell.
-	 * @param CGridView the grid view instance
 	 */
-	protected function renderHeaderCellContent($grid)
+	protected function renderHeaderCellContent()
 	{
 		echo trim($this->header)!=='' ? $this->header : '&nbsp;';
 	}
@@ -137,9 +145,8 @@ abstract class CGridColumn extends CComponent
 	 * Renders the footer cell content.
 	 * The default implementation simply renders {@link footer}.
 	 * This method may be overridden to customize the rendering of the footer cell.
-	 * @param CGridView the grid view instance
 	 */
-	protected function renderFooterCellContent($grid)
+	protected function renderFooterCellContent()
 	{
 		echo trim($this->footer)!=='' ? $this->footer : '&nbsp;';
 	}
@@ -147,11 +154,10 @@ abstract class CGridColumn extends CComponent
 	/**
 	 * Renders the data cell content.
 	 * This method SHOULD be overridden to customize the rendering of the data cell.
-	 * @param CGridView the grid view instance
 	 * @param integer the row number (zero-based)
 	 * @param mixed the data associated with the row
 	 */
-	protected function renderDataCellContent($grid,$row,$data)
+	protected function renderDataCellContent($row,$data)
 	{
 		echo '&nbsp;';
 	}

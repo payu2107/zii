@@ -37,8 +37,7 @@ class CCheckBoxColumn extends CGridColumn
 	/**
 	 * @var string a PHP expression that will be evaluated for every data cell and whose result will be rendered
 	 * in each data cell as the checkbox value. In this expression, the variable
-	 * <code>$grid</code> stands for the grid view instance; <code>$row</code>
-	 * the row number (zero-based); <code>$data</code> the data model for the row;
+	 * <code>$row</code> the row number (zero-based); <code>$data</code> the data model for the row;
 	 * and <code>$this</code> the column object.
 	 */
 	public $dataExpression;
@@ -62,12 +61,11 @@ class CCheckBoxColumn extends CGridColumn
 	/**
 	 * Initializes the column.
 	 * This method registers necessary client script for the checkbox column.
-	 * @param CGridView the grid view instance
 	 */
-	public function init($grid)
+	public function init()
 	{
 		$name="{$this->id}\\[\\]";
-		if($grid->selectableRows==1)
+		if($this->grid->selectableRows==1)
 			$one="\n\tjQuery(\"input:not(#\"+$(this).attr('id')+\")[name='$name']\").attr('checked',false);";
 		else
 			$one='';
@@ -88,31 +86,29 @@ EOD;
 	/**
 	 * Renders the header cell content.
 	 * This method will render a checkbox in the header when {@link CGridView::selectableRows} is greater than 1.
-	 * @param CGridView the grid view instance
 	 */
-	protected function renderHeaderCellContent($grid)
+	protected function renderHeaderCellContent()
 	{
-		if($grid->selectableRows>1)
+		if($this->grid->selectableRows>1)
 			echo CHtml::checkBox($this->id.'_all',false);
 		else
-			parent::renderHeaderCellContent($grid);
+			parent::renderHeaderCellContent();
 	}
 
 	/**
 	 * Renders the data cell content.
 	 * This method renders a checkbox in the data cell.
-	 * @param CGridView the grid view instance
 	 * @param integer the row number (zero-based)
 	 * @param mixed the data associated with the row
 	 */
-	protected function renderDataCellContent($grid,$row,$data)
+	protected function renderDataCellContent($row,$data)
 	{
 		if($this->dataExpression!==null)
-			$value=$this->evaluateExpression($this->dataExpression,array('data'=>$data,'grid'=>$grid,'row'=>$row));
+			$value=$this->evaluateExpression($this->dataExpression,array('data'=>$data,'row'=>$row));
 		else if($this->dataField!==null)
 			$value=CHtml::value($data,$this->dataField);
 		else
-			$value=$grid->dataProvider->keys[$row];
+			$value=$this->grid->dataProvider->keys[$row];
 		$options=$this->checkBoxHtmlOptions;
 		$options['value']=$value;
 		$options['id']=$this->id.'_'.$row;

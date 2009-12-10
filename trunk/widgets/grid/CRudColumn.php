@@ -61,8 +61,7 @@ class CRudColumn extends CGridColumn
 	/**
 	 * @var string a PHP expression that is evaluated for every view button and whose result is used
 	 * as the URL for the view button. In this expression, the variable
-	 * <code>$grid</code> stands for the grid view instance; <code>$row</code>
-	 * the row number (zero-based); <code>$data</code> the data model for the row;
+	 * <code>$row</code> the row number (zero-based); <code>$data</code> the data model for the row;
 	 * and <code>$this</code> the column object.
 	 */
 	public $viewButtonUrl='Yii::app()->controller->createUrl("view",array("id"=>$data->primaryKey))';
@@ -84,8 +83,7 @@ class CRudColumn extends CGridColumn
 	/**
 	 * @var string a PHP expression that is evaluated for every update button and whose result is used
 	 * as the URL for the update button. In this expression, the variable
-	 * <code>$grid</code> stands for the grid view instance; <code>$row</code>
-	 * the row number (zero-based); <code>$data</code> the data model for the row;
+	 * <code>$row</code> the row number (zero-based); <code>$data</code> the data model for the row;
 	 * and <code>$this</code> the column object.
 	 */
 	public $updateButtonUrl='Yii::app()->controller->createUrl("update",array("id"=>$data->primaryKey))';
@@ -107,8 +105,7 @@ class CRudColumn extends CGridColumn
 	/**
 	 * @var string a PHP expression that is evaluated for every delete button and whose result is used
 	 * as the URL for the delete button. In this expression, the variable
-	 * <code>$grid</code> stands for the grid view instance; <code>$row</code>
-	 * the row number (zero-based); <code>$data</code> the data model for the row;
+	 * <code>$row</code> the row number (zero-based); <code>$data</code> the data model for the row;
 	 * and <code>$this</code> the column object.
 	 */
 	public $deleteButtonUrl='Yii::app()->controller->createUrl("delete",array("id"=>$data->primaryKey))';
@@ -127,7 +124,7 @@ class CRudColumn extends CGridColumn
 	 * This method registers necessary client script for the RUD column.
 	 * @param CGridView the grid view instance
 	 */
-	public function init($grid)
+	public function init()
 	{
 		if($this->viewButtonLabel===null)
 			$this->viewButtonLabel=Yii::t('yii','View');
@@ -136,22 +133,21 @@ class CRudColumn extends CGridColumn
 		if($this->deleteButtonLabel===null)
 			$this->deleteButtonLabel=Yii::t('yii','Delete');
 		if($this->viewButtonImageUrl===null)
-			$this->viewButtonImageUrl=$grid->baseScriptUrl.'/view.png';
+			$this->viewButtonImageUrl=$this->grid->baseScriptUrl.'/view.png';
 		if($this->updateButtonImageUrl===null)
-			$this->updateButtonImageUrl=$grid->baseScriptUrl.'/update.png';
+			$this->updateButtonImageUrl=$this->grid->baseScriptUrl.'/update.png';
 		if($this->deleteButtonImageUrl===null)
-			$this->deleteButtonImageUrl=$grid->baseScriptUrl.'/delete.png';
+			$this->deleteButtonImageUrl=$this->grid->baseScriptUrl.'/delete.png';
 		if($this->deleteConfirmation===null)
 			$this->deleteConfirmation=Yii::t('yii','Are you sure to delete this item?');
 
-		$this->registerClientScript($grid);
+		$this->registerClientScript();
 	}
 
 	/**
 	 * Registers the client scripts for the RUD column.
-	 * @param CGridView the grid view instance
 	 */
-	protected function registerClientScript($grid)
+	protected function registerClientScript()
 	{
 		if(is_string($this->deleteConfirmation))
 			$confirmation="if(!confirm(".CJavaScript::encode($this->deleteConfirmation).")) return false;";
@@ -164,7 +160,7 @@ jQuery('a.{$this->deleteButtonHtmlOptions['class']}').live('click',function(){
 		type: 'POST',
 		url: $(this).attr('href'),
 		success: function() {
-			$.fn.yiiGridView.update('{$grid->id}');
+			$.fn.yiiGridView.update('{$this->grid->id}');
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown) {
 			alert(XMLHttpRequest.responseText);
@@ -178,11 +174,10 @@ jQuery('a.{$this->deleteButtonHtmlOptions['class']}').live('click',function(){
 	/**
 	 * Renders the data cell content.
 	 * This method renders the view, update and delete buttons in the data cell.
-	 * @param CGridView the grid view instance
 	 * @param integer the row number (zero-based)
 	 * @param mixed the data associated with the row
 	 */
-	protected function renderDataCellContent($grid,$row,$data)
+	protected function renderDataCellContent($row,$data)
 	{
 		$tr=array();
 		ob_start();
@@ -191,7 +186,7 @@ jQuery('a.{$this->deleteButtonHtmlOptions['class']}').live('click',function(){
 			if(strpos($this->template,'{'.$button.'}')!==false)
 			{
 				$method='render'.$button.'Button';
-				$this->$method($grid,$row,$data);
+				$this->$method($this->grid,$row,$data);
 				$tr['{'.$button.'}']=ob_get_contents();
 				ob_clean();
 			}
@@ -219,37 +214,34 @@ jQuery('a.{$this->deleteButtonHtmlOptions['class']}').live('click',function(){
 
 	/**
 	 * Renders the "view" button.
-	 * @param CGridView the grid view instance
 	 * @param integer the row number (zero-based)
 	 * @param mixed the data object associated with the row
 	 */
-	protected function renderViewButton($grid,$row,$data)
+	protected function renderViewButton($row,$data)
 	{
-		$url=$this->evaluateExpression($this->viewButtonUrl,array('data'=>$data,'grid'=>$grid,'row'=>$row));
+		$url=$this->evaluateExpression($this->viewButtonUrl,array('data'=>$data,'row'=>$row));
 		$this->renderButton($this->viewButtonLabel,$url,$this->viewButtonImageUrl,$this->viewButtonHtmlOptions);
 	}
 
 	/**
 	 * Renders the "update" button.
-	 * @param CGridView the grid view instance
 	 * @param integer the row number (zero-based)
 	 * @param mixed the data object associated with the row
 	 */
-	protected function renderUpdateButton($grid,$row,$data)
+	protected function renderUpdateButton($row,$data)
 	{
-		$url=$this->evaluateExpression($this->updateButtonUrl,array('data'=>$data,'grid'=>$grid,'row'=>$row));
+		$url=$this->evaluateExpression($this->updateButtonUrl,array('data'=>$data,'row'=>$row));
 		$this->renderButton($this->updateButtonLabel,$url,$this->updateButtonImageUrl,$this->updateButtonHtmlOptions);
 	}
 
 	/**
 	 * Renders the "delete" button.
-	 * @param CGridView the grid view instance
 	 * @param integer the row number (zero-based)
 	 * @param mixed the data object associated with the row
 	 */
-	protected function renderDeleteButton($grid,$row,$data)
+	protected function renderDeleteButton($row,$data)
 	{
-		$url=$this->evaluateExpression($this->deleteButtonUrl,array('data'=>$data,'grid'=>$grid,'row'=>$row));
+		$url=$this->evaluateExpression($this->deleteButtonUrl,array('data'=>$data,'row'=>$row));
 		$this->renderButton($this->deleteButtonLabel,$url,$this->deleteButtonImageUrl,$this->deleteButtonHtmlOptions);
 	}
 }

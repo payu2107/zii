@@ -142,9 +142,9 @@ class CGridView extends CWidget
 	 */
 	public $summaryCssClass='summary';
 	/**
-	 * @var string the CSS class name for the table. Defaults to 'table'.
+	 * @var string the CSS class name for the table. Defaults to 'grid'.
 	 */
-	public $tableCssClass='table';
+	public $tableCssClass='grid';
 	/**
 	 * @var string the CSS class name for the pager container. Defaults to 'pager'.
 	 */
@@ -230,13 +230,13 @@ class CGridView extends CWidget
 				$column=array('class'=>'CDataColumn','dataField'=>$column);
 			else if(!isset($column['class']))
 				$column['class']='CDataColumn';
-			$this->columns[$i]=$column=Yii::createComponent($column);
+			$this->columns[$i]=$column=Yii::createComponent($column, $this);
 			if($column->id===null)
 				$column->id=$id.'_c'.$i;
 		}
 
 		foreach($this->columns as $column)
-			$column->init($this);
+			$column->init();
 	}
 
 	/**

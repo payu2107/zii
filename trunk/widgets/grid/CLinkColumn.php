@@ -33,8 +33,7 @@ class CLinkColumn extends CGridColumn
 	/**
 	 * @var string a PHP expression that will be evaluated for every data cell and whose result will be rendered
 	 * as the label of the hyperlink of the data cells. In this expression, the variable
-	 * <code>$grid</code> stands for the grid view instance; <code>$row</code>
-	 * the row number (zero-based); <code>$data</code> the data model for the row;
+	 * <code>$row</code> the row number (zero-based); <code>$data</code> the data model for the row;
 	 * and <code>$this</code> the column object.
 	 */
 	public $labelExpression;
@@ -51,8 +50,7 @@ class CLinkColumn extends CGridColumn
 	/**
 	 * @var string a PHP expression that will be evaluated for every data cell and whose result will be rendered
 	 * as the URL of the hyperlink of the data cells. In this expression, the variable
-	 * <code>$grid</code> stands for the grid view instance; <code>$row</code>
-	 * the row number (zero-based); <code>$data</code> the data model for the row;
+	 * <code>$row</code> the row number (zero-based); <code>$data</code> the data model for the row;
 	 * and <code>$this</code> the column object.
 	 */
 	public $urlExpression;
@@ -76,18 +74,17 @@ class CLinkColumn extends CGridColumn
 	/**
 	 * Renders the data cell content.
 	 * This method renders a hyperlink in the data cell.
-	 * @param CGridView the grid view instance
 	 * @param integer the row number (zero-based)
 	 * @param mixed the data associated with the row
 	 */
-	protected function renderDataCellContent($grid,$row,$data)
+	protected function renderDataCellContent($row,$data)
 	{
 		if($this->urlExpression!==null)
-			$url=$this->evaluateExpression($this->urlExpression,array('data'=>$data,'grid'=>$grid,'row'=>$row));
+			$url=$this->evaluateExpression($this->urlExpression,array('data'=>$data,'row'=>$row));
 		else
 			$url=$this->url;
 		if($this->labelExpression!==null)
-			$label=$this->evaluateExpression($this->labelExpression,array('data'=>$data,'grid'=>$grid,'row'=>$row));
+			$label=$this->evaluateExpression($this->labelExpression,array('data'=>$data,'row'=>$row));
 		else
 			$label=$this->label;
 		$options=$this->htmlOptions;

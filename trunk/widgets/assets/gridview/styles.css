@@ -1,4 +1,4 @@
-.grid-view table
+.grid-view table.grid
 {
 	background: white;
 	border-collapse: collapse;
@@ -6,21 +6,21 @@
 	border: 1px #D0E3EF solid;
 }
 
-.grid-view table th, .grid-view table td
+.grid-view table.grid th, .grid-view table.grid td
 {
 	font-size: 0.9em;
 	border: 1px white solid;
 	padding: 0.3em;
 }
 
-.grid-view table th
+.grid-view table.grid th
 {
 	color: white;
 	background: #6885A4;
 	text-align: center;
 }
 
-.grid-view table th a
+.grid-view table.grid th a
 {
 	color: #EEE;
 	font-weight: bold;
@@ -28,37 +28,37 @@
 	padding-right:20px;
 }
 
-.grid-view table th a:hover
+.grid-view table.grid th a:hover
 {
 	color: #FFF;
 }
 
-.grid-view table th a.asc
+.grid-view table.grid th a.asc
 {
 	background:url(up.gif) right center no-repeat;
 }
 
-.grid-view table th a.desc
+.grid-view table.grid th a.desc
 {
 	background:url(down.gif) right center no-repeat;
 }
 
-.grid-view table tr.even
+.grid-view table.grid tr.even
 {
 	background: #F8FBFC;
 }
 
-.grid-view table tr.odd
+.grid-view table.grid tr.odd
 {
 	background: #E5F1F4;
 }
 
-.grid-view table tr.selected
+.grid-view table.grid tr.selected
 {
 	background: #BCE774;
 }
 
-.grid-view table tr:hover
+.grid-view table.grid tr:hover
 {
 	background: #ECFBD4;
 }
