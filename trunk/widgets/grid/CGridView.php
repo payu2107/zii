@@ -411,7 +411,7 @@ class CGridView extends CWidget
 	{
 		echo "<thead>\n<tr>\n";
 		foreach($this->columns as $column)
-			$column->renderHeaderCell($this);
+			$column->renderHeaderCell();
 		echo "</tr>\n</thead>\n";
 	}
 
@@ -424,7 +424,7 @@ class CGridView extends CWidget
 		{
 			echo "<tfoot>\n<tr>\n";
 			foreach($this->columns as $column)
-				$column->renderFooterCell($this);
+				$column->renderFooterCell();
 			echo "</tr>\n</tfoot>\n";
 		}
 	}
@@ -455,7 +455,7 @@ class CGridView extends CWidget
 		else
 			echo '<tr>';
 		foreach($this->columns as $column)
-			$column->renderDataCell($this,$row);
+			$column->renderDataCell($row);
 		echo "</tr>\n";
 	}
 
