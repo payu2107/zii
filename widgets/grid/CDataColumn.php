@@ -36,8 +36,7 @@ class CDataColumn extends CGridColumn
 	/**
 	 * @var string a PHP expression that will be evaluated for every data cell and whose result will be rendered
 	 * as the content of the data cells. In this expression, the variable
-	 * <code>$grid</code> stands for the grid view instance; <code>$row</code>
-	 * the row number (zero-based); <code>$data</code> the data model for the row;
+	 * <code>$row</code> the row number (zero-based); <code>$data</code> the data model for the row;
 	 * and <code>$this</code> the column object.
 	 */
 	public $dataExpression;
@@ -56,9 +55,9 @@ class CDataColumn extends CGridColumn
 	/**
 	 * Initializes the column.
 	 */
-	public function init($grid)
+	public function init()
 	{
-		parent::init($grid);
+		parent::init();
 		if($this->dataField===null)
 			$this->sortable=false;
 	}
@@ -66,27 +65,25 @@ class CDataColumn extends CGridColumn
 	/**
 	 * Renders the header cell content.
 	 * This method will render a link that can trigger the sorting if the column is sortable.
-	 * @param CGridView the grid view instance
 	 */
-	protected function renderHeaderCellContent($grid)
+	protected function renderHeaderCellContent()
 	{
-		if($grid->enableSorting && $this->sortable && $this->dataField!==null)
-			echo $grid->dataProvider->getSort()->link($this->dataField,$this->header);
+		if($this->grid->enableSorting && $this->sortable && $this->dataField!==null)
+			echo $this->grid->dataProvider->getSort()->link($this->dataField,$this->header);
 		else
-			parent::renderHeaderCellContent($grid);
+			parent::renderHeaderCellContent();
 	}
 
 	/**
 	 * Renders the data cell content.
 	 * This method evaluates {@link dataExpression} or {@link dataField} and renders the result.
-	 * @param CGridView the grid view instance
 	 * @param integer the row number (zero-based)
 	 * @param mixed the data associated with the row
 	 */
-	protected function renderDataCellContent($grid,$row,$data)
+	protected function renderDataCellContent($row,$data)
 	{
 		if($this->dataExpression!==null)
-			echo $this->evaluateExpression($this->dataExpression,array('data'=>$data,'grid'=>$grid,'row'=>$row));
+			echo $this->evaluateExpression($this->dataExpression,array('data'=>$data,'row'=>$row));
 		else if($this->dataField!==null)
 		{
 			$value=CHtml::value($data,$this->dataField);
@@ -95,6 +92,6 @@ class CDataColumn extends CGridColumn
 			echo $value;
 		}
 		else
-			parent::renderDataCellContent($grid,$row,$data);
+			parent::renderDataCellContent($row,$data);
 	}
 }
