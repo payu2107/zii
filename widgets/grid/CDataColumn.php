@@ -17,7 +17,7 @@ Yii::import('zii.widgets.grid.CGridColumn');
  * a data attribute name, while the latter a PHP expression whose value should be rendered instead.
  *
  * The property {@link sortable} determines whether the grid view can be sorted according to this column.
- * Note that the {@link dataField} should always be set if the column is sortable. The {@link dataField}
+ * Note that the {@link dataField} should always be set if the column needs to be sortable. The {@link dataField}
  * value will be used by {@link CSort} to render a clickable link in the header cell to trigger the sorting.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
@@ -29,8 +29,10 @@ class CDataColumn extends CGridColumn
 {
 	/**
 	 * @var string the attribute name of the data model. The corresponding attribute value will be rendered
-	 * in each data cell. Note that if {@link dataExpression} is specified, this property will be ignored.
+	 * in each data cell. If {@link dataExpression} is specified, this property will be ignored
+	 * unless the column needs to be sortable.
 	 * @see dataExpression
+	 * @see sortable
 	 */
 	public $dataField;
 	/**
@@ -47,7 +49,8 @@ class CDataColumn extends CGridColumn
 	public $encodeData=true;
 	/**
 	 * @var boolean whether the column is sortable. If so, the header celll will contain a link that may trigger the sorting.
-	 * Defaults to true. Note that if {@link dataField} is not set, this property will always be treated as false.
+	 * Defaults to true. Note that if {@link dataField} is not set, or if {@link dataField} is not allowed by {@link CSort},
+	 * this property will be treated as false.
 	 * @see dataField
 	 */
 	public $sortable=true;
