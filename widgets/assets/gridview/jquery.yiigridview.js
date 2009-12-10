@@ -19,6 +19,7 @@
 	 * - updateSelector: string, the selector for choosing which elements can trigger ajax requests
 	 * - beforeUpdate: function, the function to be called before ajax request is sent
 	 * - afterUpdate: function, the function to be called after ajax response is received
+	 * - selectionChanged: function, the function to be called after the row selection is changed
 	 */
 	$.fn.yiiGridView = function(settings) {
 		var settings = $.extend({}, $.fn.yiiGridView.defaults, settings || {});
@@ -42,6 +43,8 @@
 					if(settings.selectableRows == 1)
 						$(this).siblings().removeClass('selected');
 					$(this).toggleClass('selected');
+					if(settings.selectionChanged != undefined)
+						settings.selectionChanged(id);
 				});
 			}
 		});
@@ -52,9 +55,10 @@
 		pagerClass: 'pager',
 		tableClass: 'table',
 		selectableRows: 1,
-		// updateSelector: '#id .pager a, '#id .table thead th a',
+		// updateSelector: '#id .pager a, '#id .grid thead th a',
 		// beforeUpdate: function(id) {},
 		// afterUpdate: function(id, data) {},
+		// selectionChanged: function(id) {},
 	};
 
 	$.fn.yiiGridView.settings = {};

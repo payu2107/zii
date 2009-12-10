@@ -168,12 +168,23 @@ class CGridView extends CWidget
 	public $ajaxUpdate;
 	/**
 	 * @var string a javascript function that will be invoked before an AJAX update occurs.
+	 * The function signature is <code>function(id)</code> where 'id' refers to the ID of the grid view.
 	 */
 	public $beforeAjaxUpdate;
 	/**
 	 * @var string a javascript function that will be invoked after a successful AJAX response is received.
+	 * The function signature is <code>function(id, data)</code> where 'id' refers to the ID of the grid view
+	 * 'data' the received ajax response data.
 	 */
 	public $afterAjaxUpdate;
+	/**
+	 * @var string a javascript function that will be invoked after the row selection is changed.
+	 * The function signature is <code>function(id)</code> where 'id' refers to the ID of the grid view.
+	 * In this function, you may use <code>$.fn.yiiGridView.getSelection(id)</code> to get the key values
+	 * of the currently selected rows.
+	 * @see selectableRows
+	 */
+	public $selectionChanged;
 	/**
 	 * @var integer the number of table body rows that can be selected. If 0, it means rows cannot be selected.
 	 * If 1, only one row can be selected. If 2 or any other number, it means multiple rows can be selected.
@@ -275,20 +286,21 @@ class CGridView extends CWidget
 			$ajaxUpdate=array();
 		else
 			$ajaxUpdate=array_unique(preg_split('/\s*,\s*/',$this->ajaxUpdate.','.$id,-1,PREG_SPLIT_NO_EMPTY));
-		if($this->beforeAjaxUpdate!==null && strpos($this->beforeAjaxUpdate,'js:')!==0)
-			$this->beforeAjaxUpdate='js:'.$this->beforeAjaxUpdate;
-		if($this->afterAjaxUpdate!==null && strpos($this->afterAjaxUpdate,'js:')!==0)
-			$this->afterAjaxUpdate='js:'.$this->afterAjaxUpdate;
-
-		$options=CJavaScript::encode(array(
+		$options=array(
 			'ajaxUpdate'=>$ajaxUpdate,
-			'beforeUpdate'=>$this->beforeAjaxUpdate,
-			'afterUpdate'=>$this->afterAjaxUpdate,
 			'pagerClass'=>$this->pagerCssClass,
 			'tableClass'=>$this->tableCssClass,
 			'selectableRows'=>$this->selectableRows,
-		));
-		$cs=Yii::app()->clientScript;
+		);
+		if($this->beforeAjaxUpdate!==null)
+			$options['beforeAjaxUpdate']=(strpos($this->beforeAjaxUpdate,'js:')!==0 ? 'js:' : '').$this->beforeAjaxUpdate;
+		if($this->afterAjaxUpdate!==null)
+			$options['afterAjaxUpdate']=(strpos($this->afterAjaxUpdate,'js:')!==0 ? 'js:' : '').$this->afterAjaxUpdate;
+		if($this->selectionChanged!==null)
+			$options['selectionChanged']=(strpos($this->selectionChanged,'js:')!==0 ? 'js:' : '').$this->selectionChanged;
+
+		$options=CJavaScript::encode($options);
+		$cs=Yii::app()->getClientScript();
 		$cs->registerCoreScript('jquery');
 		$cs->registerScriptFile($this->baseScriptUrl.'/jquery.yiigridview.js');
 		$cs->registerScript(__CLASS__.'#'.$id,"jQuery('#$id').yiiGridView($options);");
