@@ -42,22 +42,31 @@ Yii::import('zii.widgets.grid.CCheckBoxColumn');
  * In order to selectively display attributes with different formats, we may configure the
  * {@link CGridView::columns} property. For example, we may specify only the <code>title</code>
  * and <code>create_time</code> attributes to be displayed, and the <code>create_time</code>
- * should be properly formatted to show as a time.
+ * should be properly formatted to show as a time. We may also display the attributes of the related
+ * objects using the dot-syntax as shown below:
  *
  * <pre>
  * $this->widget('zii.widgets.grid.CGridView', array(
  *     'dataProvider'=>$dataProvider,
  *     'columns'=>array(
- *         'title',
- *         array(
+ *         'title',          // display the 'title' attribute
+ *         'category.name',  // display the 'name' attribute of the 'category' relation
+ *         array(            // display 'create_time' using an expression
  *             'dataField'=>'create_time',
- *             'dataExpression'=>'date("M j, Y", $data)',
- *         )
+ *             'dataExpression'=>'date("M j, Y", $data->create_time)',
+ *         ),
+ *         array(            // display 'author.username' using an expression
+ *             'dataField'=>'authorName',
+ *             'dataExpression'=>'$data->author->username',
+ *         ),
+ *         array(            // display a column with "view", "update" and "delete" buttons
+ *             'class'=>'CRudColumn',
+ *         ),
  *     ),
  * ));
  * </pre>
  *
- * Please refer to {@link columns} to see how to configure this property.
+ * Please refer to {@link columns} for more details about how to configure this property.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @version $Id$
