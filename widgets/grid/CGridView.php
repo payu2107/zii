@@ -141,6 +141,11 @@ class CGridView extends CWidget
 	 */
 	public $emptyText;
 	/**
+	 * @var boolean whether to display the table even when there is no data. Defaults to true.
+	 * The {@link emptyText} will be displayed to indicate there is no data.
+	 */
+	public $showTableOnEmpty=true;
+	/**
 	 * @var string the template to be used to control the layout of various components in the grid view.
 	 * These tokens are recognized: {summary}, {table} and {pager}. They will be replaced with the
 	 * summary text, the table, and the pager.
@@ -312,15 +317,9 @@ class CGridView extends CWidget
 	 */
 	public function renderGrid()
 	{
-		if($this->dataProvider->getItemCount()>0)
-		{
-			$tr=array();
-			ob_start();
-			echo preg_replace_callback('/{(summary|table|pager)}/',array($this,'renderSection'),$this->template);
-			ob_end_flush();
-		}
-		else
-			$this->renderEmptyText();
+		ob_start();
+		echo preg_replace_callback('/{(summary|table|pager)}/',array($this,'renderSection'),$this->template);
+		ob_end_flush();
 	}
 
 	/**
@@ -369,8 +368,10 @@ class CGridView extends CWidget
 	 */
 	public function renderSummary()
 	{
+		if(($count=$this->dataProvider->getItemCount())<=0)
+			return;
+
 		echo '<div class="'.$this->summaryCssClass.'">';
-		$count=count($this->dataProvider->getData());
 		if($this->enablePagination)
 		{
 			if(($summaryText=$this->summaryText)===null)
@@ -397,26 +398,26 @@ class CGridView extends CWidget
 	 */
 	public function renderPager()
 	{
-		if($this->enablePagination)
+		if($this->dataProvider->getItemCount()<=0 || !$this->enablePagination)
+			return;
+
+		$pager=array();
+		$class='CLinkPager';
+		if(is_string($this->pager))
+			$class=$this->pager;
+		else if(is_array($this->pager))
 		{
-			$pager=array();
-			$class='CLinkPager';
-			if(is_string($this->pager))
-				$class=$this->pager;
-			else if(is_array($this->pager))
+			$pager=$this->pager;
+			if(isset($pager['class']))
 			{
-				$pager=$this->pager;
-				if(isset($pager['class']))
-				{
-					$class=$pager['class'];
-					unset($pager);
-				}
+				$class=$pager['class'];
+				unset($pager);
 			}
-			$pager['pages']=$this->dataProvider->getPagination();
-			echo '<div class="'.$this->pagerCssClass.'">';
-			$this->widget($class,$pager);
-			echo '</div>';
 		}
+		$pager['pages']=$this->dataProvider->getPagination();
+		echo '<div class="'.$this->pagerCssClass.'">';
+		$this->widget($class,$pager);
+		echo '</div>';
 	}
 
 	/**
@@ -424,11 +425,16 @@ class CGridView extends CWidget
 	 */
 	public function renderTable()
 	{
-		echo "<table class=\"{$this->tableCssClass}\">\n";
-		$this->renderTableHeader();
-		$this->renderTableFooter();
-		$this->renderTableBody();
-		echo "</table>";
+		if($this->dataProvider->getItemCount()>0 || $this->showTableOnEmpty)
+		{
+			echo "<table class=\"{$this->tableCssClass}\">\n";
+			$this->renderTableHeader();
+			$this->renderTableFooter();
+			$this->renderTableBody();
+			echo "</table>";
+		}
+		else
+			$this->renderEmptyText();
 	}
 
 	/**
@@ -464,8 +470,17 @@ class CGridView extends CWidget
 		$data=$this->dataProvider->getData();
 		$n=count($data);
 		echo "<tbody>\n";
-		for($row=0;$row<$n;++$row)
-			$this->renderTableRow($row);
+		if($n>0)
+		{
+			for($row=0;$row<$n;++$row)
+				$this->renderTableRow($row);
+		}
+		else
+		{
+			echo '<tr><td colspan="'.count($this->columns).'">';
+			$this->renderEmptyText();
+			echo "</td></tr>\n";
+		}
 		echo "</tbody>\n";
 	}
 
