@@ -314,22 +314,28 @@ class CGridView extends CWidget
 	{
 		if($this->dataProvider->getItemCount()>0)
 		{
+			$tr=array();
 			ob_start();
-			foreach(array('summary','table','pager') as $section)
-			{
-				if(strpos($this->template,'{'.$section.'}')!==false)
-				{
-					$method='render'.$section;
-					$this->$method();
-					$tr['{'.$section.'}']=ob_get_contents();
-					ob_clean();
-				}
-			}
-			ob_end_clean();
-			echo strtr($this->template,$tr);
+			echo preg_replace_callback('/{(summary|table|pager)}/',array($this,'renderSection'),$this->template);
+			ob_end_flush();
 		}
 		else
 			$this->renderEmptyText();
+	}
+
+	/**
+	 * Renders a section.
+	 * This method is invoked to replace the token found in {@link template}.
+	 * @param array the matches, where $matches[1] contains the name of the matched token.
+	 * @return string the rendered result of the section
+	 */
+	protected function renderSection($matches)
+	{
+		$method='render'.$matches[1];
+		$this->$method();
+		$html=ob_get_contents();
+		ob_clean();
+		return $html;
 	}
 
 	/**

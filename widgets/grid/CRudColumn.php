@@ -23,6 +23,10 @@ Yii::import('zii.widgets.grid.CGridColumn');
  * the deletion is completed. For this reason, the deletion action should not render anything.
  * In case an error is detected on the server side, it should throw a {@link CHttpException}.
  *
+ * Besides the default view, update and delete buttons, it is also possible to render additional buttons
+ * by configuring the {@link buttons} property. Make sure the {@link template} property is also updated
+ * accordingly so that the extra buttons are displayed at the desired places.
+ *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @version $Id$
  * @package zii.widgets.grid
@@ -68,7 +72,7 @@ class CRudColumn extends CGridColumn
 	/**
 	 * @var array the HTML options for the view button tag.
 	 */
-	public $viewButtonHtmlOptions=array('class'=>'view');
+	public $viewButtonOptions=array('class'=>'view');
 
 	/**
 	 * @var string the label for the update button. Defaults to "Update".
@@ -90,7 +94,7 @@ class CRudColumn extends CGridColumn
 	/**
 	 * @var array the HTML options for the update button tag.
 	 */
-	public $updateButtonHtmlOptions=array('class'=>'update');
+	public $updateButtonOptions=array('class'=>'update');
 
 	/**
 	 * @var string the label for the delete button. Defaults to "Delete".
@@ -112,12 +116,28 @@ class CRudColumn extends CGridColumn
 	/**
 	 * @var array the HTML options for the view button tag.
 	 */
-	public $deleteButtonHtmlOptions=array('class'=>'delete');
+	public $deleteButtonOptions=array('class'=>'delete');
 	/**
 	 * @var string the confirmation message to be displayed when delete button is clicked.
 	 * By setting this property to be false, no confirmation message will be displayed.
 	 */
 	public $deleteConfirmation;
+	/**
+	 * @var array the configuration for additional buttons. Each array element specifies a single button
+	 * which has the following format:
+	 * <pre>
+	 * 'buttonID' => array(
+	 *     'label'=>'...',     // text label of the button
+	 *     'url'=>'...',       // the PHP expression for generating the URL of the button
+	 *     'imageUrl'=>'...',  // image URL of the button. If not set or false, a text link is used
+	 *     'options'=>array(...), // HTML options for the button tag
+	 *     'click'=>'...',     // a JS function to be invoked when the button is clicked
+	 * )
+	 * </pre>
+	 * Note that in order to display these additional buttons, the {@link template} property needs to
+	 * be configured so that the corresponding button IDs appear as tokens in the template.
+	 */
+	public $buttons=array();
 
 	/**
 	 * Initializes the column.
@@ -125,6 +145,29 @@ class CRudColumn extends CGridColumn
 	 * @param CGridView the grid view instance
 	 */
 	public function init()
+	{
+		$this->initDefaultButtons();
+
+		foreach($this->buttons as $id=>$button)
+		{
+			if(strpos($this->template,'{'.$id.'}')===false)
+				unset($this->buttons[$id]);
+			else if(isset($button['click']))
+			{
+				if(!isset($button['options']['class']))
+					$this->buttons[$id]['options']['class']=$id;
+				if(strpos($button['click'],'js:')!==0)
+					$this->buttons[$id]['click']='js:'.$button['click'];
+			}
+		}
+
+		$this->registerClientScript();
+	}
+
+	/**
+	 * Initializes the default buttons (view, update and delete).
+	 */
+	protected function initDefaultButtons()
 	{
 		if($this->viewButtonLabel===null)
 			$this->viewButtonLabel=Yii::t('yii','View');
@@ -141,20 +184,25 @@ class CRudColumn extends CGridColumn
 		if($this->deleteConfirmation===null)
 			$this->deleteConfirmation=Yii::t('yii','Are you sure to delete this item?');
 
-		$this->registerClientScript();
-	}
+		foreach(array('view','update','delete') as $id)
+		{
+			if(!isset($this->buttons[$id]))
+			{
+				$this->buttons[$id]=array(
+					'label'=>$this->{$id.'ButtonLabel'},
+					'url'=>$this->{$id.'ButtonUrl'},
+					'imageUrl'=>$this->{$id.'ButtonImageUrl'},
+					'options'=>$this->{$id.'ButtonOptions'},
+				);
+			}
+		}
 
-	/**
-	 * Registers the client scripts for the RUD column.
-	 */
-	protected function registerClientScript()
-	{
 		if(is_string($this->deleteConfirmation))
 			$confirmation="if(!confirm(".CJavaScript::encode($this->deleteConfirmation).")) return false;";
 		else
 			$confirmation='';
-		Yii::app()->getClientScript()->registerScript(__CLASS__.'#'.$this->id,"
-jQuery('a.{$this->deleteButtonHtmlOptions['class']}').live('click',function(){
+		$this->buttons['delete']['click']=<<<EOD
+function(){
 	$confirmation
 	$.ajax({
 		type: 'POST',
@@ -167,8 +215,27 @@ jQuery('a.{$this->deleteButtonHtmlOptions['class']}').live('click',function(){
 		},
 	});
 	return false;
-});
-");
+}
+EOD;
+	}
+
+	/**
+	 * Registers the client scripts for the RUD column.
+	 */
+	protected function registerClientScript()
+	{
+		$js=array();
+		foreach($this->buttons as $id=>$button)
+		{
+			if(isset($button['click']))
+			{
+				$function=CJavaScript::encode($button['click']);
+				$js[]="jQuery('a.{$button['options']['class']}').live('click',$function);";
+			}
+		}
+
+		if($js!==array())
+			Yii::app()->getClientScript()->registerScript(__CLASS__.'#'.$this->id, implode("\n",$js));
 	}
 
 	/**
@@ -181,15 +248,11 @@ jQuery('a.{$this->deleteButtonHtmlOptions['class']}').live('click',function(){
 	{
 		$tr=array();
 		ob_start();
-		foreach(array('view','update','delete') as $button)
+		foreach($this->buttons as $id=>$button)
 		{
-			if(strpos($this->template,'{'.$button.'}')!==false)
-			{
-				$method='render'.$button.'Button';
-				$this->$method($this->grid,$row,$data);
-				$tr['{'.$button.'}']=ob_get_contents();
-				ob_clean();
-			}
+			$this->renderButton($id,$button,$row,$data);
+			$tr['{'.$id.'}']=ob_get_contents();
+			ob_clean();
 		}
 		ob_end_clean();
 		echo strtr($this->template,$tr);
@@ -197,51 +260,22 @@ jQuery('a.{$this->deleteButtonHtmlOptions['class']}').live('click',function(){
 
 	/**
 	 * Renders a link button.
-	 * @param string the button label (will not be HTML-encoded)
-	 * @param string the button URL
-	 * @param string the image URL for the button. If not a string, a text link will be rendered.
-	 * @param array the HTML options for the hyperlink
+	 * @param string the ID of the button
+	 * @param array the button configuration which may contain 'label', 'url', 'imageUrl' and 'options' elements.
+	 * See {@link buttons} for more details.
+	 * @param integer the row number (zero-based)
+	 * @param mixed the data object associated with the row
 	 */
-	protected function renderButton($label,$url,$imageUrl,$htmlOptions)
+	protected function renderButton($id,$button,$row,$data)
 	{
-		if(!isset($htmlOptions['title']))
-			$htmlOptions['title']=$label;
-		if(is_string($imageUrl))
-			echo CHtml::link(CHtml::image($imageUrl,$label),$url,$htmlOptions);
+		$label=isset($button['label']) ? $button['label'] : $id;
+		$url=isset($button['url']) ? $this->evaluateExpression($button['url'],array('data'=>$data,'row'=>$row)) : '#';
+		$options=isset($button['options']) ? $button['options'] : array();
+		if(!isset($options['title']))
+			$options['title']=$label;
+		if(isset($button['imageUrl']) && is_string($button['imageUrl']))
+			echo CHtml::link(CHtml::image($button['imageUrl'],$label),$url,$options);
 		else
-			echo CHtml::link($label,$url,$htmlOptions);
-	}
-
-	/**
-	 * Renders the "view" button.
-	 * @param integer the row number (zero-based)
-	 * @param mixed the data object associated with the row
-	 */
-	protected function renderViewButton($row,$data)
-	{
-		$url=$this->evaluateExpression($this->viewButtonUrl,array('data'=>$data,'row'=>$row));
-		$this->renderButton($this->viewButtonLabel,$url,$this->viewButtonImageUrl,$this->viewButtonHtmlOptions);
-	}
-
-	/**
-	 * Renders the "update" button.
-	 * @param integer the row number (zero-based)
-	 * @param mixed the data object associated with the row
-	 */
-	protected function renderUpdateButton($row,$data)
-	{
-		$url=$this->evaluateExpression($this->updateButtonUrl,array('data'=>$data,'row'=>$row));
-		$this->renderButton($this->updateButtonLabel,$url,$this->updateButtonImageUrl,$this->updateButtonHtmlOptions);
-	}
-
-	/**
-	 * Renders the "delete" button.
-	 * @param integer the row number (zero-based)
-	 * @param mixed the data object associated with the row
-	 */
-	protected function renderDeleteButton($row,$data)
-	{
-		$url=$this->evaluateExpression($this->deleteButtonUrl,array('data'=>$data,'row'=>$row));
-		$this->renderButton($this->deleteButtonLabel,$url,$this->deleteButtonImageUrl,$this->deleteButtonHtmlOptions);
+			echo CHtml::link($label,$url,$options);
 	}
 }
