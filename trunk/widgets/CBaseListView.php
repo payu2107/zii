@@ -88,7 +88,7 @@ abstract class CBaseListView extends CWidget
 	public function init()
 	{
 		if($this->dataProvider===null)
-			throw new CException(Yii::t('yii','The "dataProvider" property cannot be empty.'));
+			throw new CException(Yii::t('zii','The "dataProvider" property cannot be empty.'));
 
 		$this->dataProvider->getData();
 
@@ -157,7 +157,7 @@ abstract class CBaseListView extends CWidget
 	 */
 	public function renderEmptyText()
 	{
-		$emptyText=$this->emptyText===null ? Yii::t('yii','No results found.') : $this->emptyText;
+		$emptyText=$this->emptyText===null ? Yii::t('zii','No results found.') : $this->emptyText;
 		echo CHtml::tag('span', array('class'=>'empty'), $emptyText);
 	}
 
@@ -188,7 +188,7 @@ abstract class CBaseListView extends CWidget
 		if($this->enablePagination)
 		{
 			if(($summaryText=$this->summaryText)===null)
-				$summaryText=Yii::t('yii','Displaying {start}-{end} of {count} result(s).');
+				$summaryText=Yii::t('zii','Displaying {start}-{end} of {count} result(s).');
 			$pagination=$this->dataProvider->getPagination();
 			$start=$pagination->currentPage*$pagination->pageSize+1;
 			echo strtr($summaryText,array(
@@ -200,7 +200,7 @@ abstract class CBaseListView extends CWidget
 		else
 		{
 			if(($summaryText=$this->summaryText)===null)
-				$summaryText=Yii::t('yii','Total {count} result(s).');
+				$summaryText=Yii::t('zii','Total {count} result(s).');
 			echo strtr($summaryText,array('{count}'=>$count));
 		}
 		echo '</div>';

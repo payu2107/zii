@@ -158,7 +158,7 @@ class CDetailView extends CWidget
 	public function init()
 	{
 		if($this->model===null)
-			throw new CException(Yii::t('yii','Please specify the "model" property.'));
+			throw new CException(Yii::t('zii','Please specify the "model" property.'));
 		if($this->attributes===null)
 		{
 			if($this->model instanceof CModel)
@@ -166,14 +166,14 @@ class CDetailView extends CWidget
 			else if(is_array($this->model))
 				$this->attributes=array_keys($this->model);
 			else
-				throw new CException(Yii::t('yii','Please specify the "attributes" property.'));
+				throw new CException(Yii::t('zii','Please specify the "attributes" property.'));
 		}
 		if($this->nullDisplay===null)
-			$this->nullDisplay='<span class="null">'.Yii::t('yii','Not set').'</span>';
+			$this->nullDisplay='<span class="null">'.Yii::t('zii','Not set').'</span>';
 		if($this->trueText===null)
-			$this->trueText=Yii::t('yii','Yes');
+			$this->trueText=Yii::t('zii','Yes');
 		if($this->falseText===null)
-			$this->falseText=Yii::t('yii','No');
+			$this->falseText=Yii::t('zii','No');
 		$this->htmlOptions['id']=$this->getId();
 
 		if($this->baseScriptUrl===null)
@@ -201,7 +201,7 @@ class CDetailView extends CWidget
 			if(is_string($attribute))
 			{
 				if(!preg_match('/^([\w\.]+)(:(\w*))?(:(.*))?$/',$attribute,$matches))
-					throw new CException(Yii::t('yii','The attribute must be specified in the format of "Name:Type:Label", where "Type" and "Label" are optional.'));
+					throw new CException(Yii::t('zii','The attribute must be specified in the format of "Name:Type:Label", where "Type" and "Label" are optional.'));
 				$attribute=array(
 					'name'=>$matches[1],
 					'type'=>isset($matches[3]) ? $matches[3] : 'text',
@@ -231,7 +231,7 @@ class CDetailView extends CWidget
 						$tr['{value}']=$this->$method($value);
 				}
 				else
-					throw new CException(Yii::t('yii','Unknown type "{type}".',array('{type}'=>$attribute['type'])));
+					throw new CException(Yii::t('zii','Unknown type "{type}".',array('{type}'=>$attribute['type'])));
 			}
 
 			if(!isset($tr['{value}']))
