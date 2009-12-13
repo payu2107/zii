@@ -53,7 +53,7 @@
 	$.fn.yiiGridView.defaults = {
 		ajaxUpdate: [],
 		pagerClass: 'pager',
-		tableClass: 'table',
+		tableClass: 'items',
 		selectableRows: 1,
 		// updateSelector: '#id .pager a, '#id .grid thead th a',
 		// beforeUpdate: function(id) {},
