@@ -170,11 +170,11 @@ class CRudColumn extends CGridColumn
 	protected function initDefaultButtons()
 	{
 		if($this->viewButtonLabel===null)
-			$this->viewButtonLabel=Yii::t('yii','View');
+			$this->viewButtonLabel=Yii::t('zii','View');
 		if($this->updateButtonLabel===null)
-			$this->updateButtonLabel=Yii::t('yii','Update');
+			$this->updateButtonLabel=Yii::t('zii','Update');
 		if($this->deleteButtonLabel===null)
-			$this->deleteButtonLabel=Yii::t('yii','Delete');
+			$this->deleteButtonLabel=Yii::t('zii','Delete');
 		if($this->viewButtonImageUrl===null)
 			$this->viewButtonImageUrl=$this->grid->baseScriptUrl.'/view.png';
 		if($this->updateButtonImageUrl===null)
@@ -182,7 +182,7 @@ class CRudColumn extends CGridColumn
 		if($this->deleteButtonImageUrl===null)
 			$this->deleteButtonImageUrl=$this->grid->baseScriptUrl.'/delete.png';
 		if($this->deleteConfirmation===null)
-			$this->deleteConfirmation=Yii::t('yii','Are you sure to delete this item?');
+			$this->deleteConfirmation=Yii::t('zii','Are you sure to delete this item?');
 
 		foreach(array('view','update','delete') as $id)
 		{

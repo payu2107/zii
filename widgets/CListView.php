@@ -136,7 +136,7 @@ class CListView extends CBaseListView
 	public function init()
 	{
 		if($this->itemView===null)
-			throw new CException(Yii::t('yii','The property "itemView" cannot be empty.'));
+			throw new CException(Yii::t('zii','The property "itemView" cannot be empty.'));
 		parent::init();
 
 		if(!isset($this->htmlOptions['class']))
@@ -214,7 +214,7 @@ class CListView extends CBaseListView
 		if($this->dataProvider->getItemCount()<=0 || !$this->enableSorting || empty($this->sortableAttributes))
 			return;
 		echo CHtml::openTag('div',array('class'=>$this->sorterCssClass))."\n";
-		echo $this->sorterHeader===null ? Yii::t('yii','Sort by: ') : $this->sorterHeader;
+		echo $this->sorterHeader===null ? Yii::t('zii','Sort by: ') : $this->sorterHeader;
 		echo "<ul>\n";
 		$sort=$this->dataProvider->getSort();
 		foreach($this->sortableAttributes as $name=>$label)
