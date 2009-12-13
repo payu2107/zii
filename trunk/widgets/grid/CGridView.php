@@ -8,19 +8,22 @@
  * @license http://www.yiiframework.com/license/
  */
 
+Yii::import('zii.widgets.CBaseListView');
 Yii::import('zii.widgets.grid.CDataColumn');
 Yii::import('zii.widgets.grid.CLinkColumn');
 Yii::import('zii.widgets.grid.CRudColumn');
 Yii::import('zii.widgets.grid.CCheckBoxColumn');
 
 /**
- * CGridView displays a list of data models in terms of a table.
+ * CGridView displays a list of data items in terms of a table.
  *
- * Each row of the table represents the data of a single data model, and the cells the attributes
- * of the model. CGridView supports both sorting and pagination of the data models. The sorting
- * and pagination can be done in AJAX mode or normal page request model. Unlike many other JavaScript-based
- * data grids, CGridView nicely degenerates to a normal HTML table with functioning sorting and pagination
- * even if the client does not support JavaScript.
+ * Each row of the table represents the data of a single data item, and a column usually represents
+ * an attribute of the item (some columns may correspond to complex expression of attributes or static text).
+ *
+ * CGridView supports both sorting and pagination of the data items. The sorting
+ * and pagination can be done in AJAX mode or normal page request. A benefit of using CGridView is that
+ * when the user browser disables JavaScript, the sorting and pagination automatically degenerate
+ * to normal page requests and are still functioning as expected.
  *
  * CGridView should be used together with a {@link IDataProvider data provider}, preferrably a
  * {@link CActiveDataProvider}.
@@ -73,16 +76,8 @@ Yii::import('zii.widgets.grid.CCheckBoxColumn');
  * @package zii.widgets.grid
  * @since 1.1
  */
-class CGridView extends CWidget
+class CGridView extends CBaseListView
 {
-	/**
-	 * @var string the tag name for the grid view container. Defaults to 'div'.
-	 */
-	public $tagName='div';
-	/**
-	 * @var IDataProvider the data provider for this grid view.
-	 */
-	public $dataProvider;
 	/**
 	 * @var array grid column configuration. Each array element represents the configuration
 	 * for one particular grid column which can be either a string or an array. If a string,
@@ -108,61 +103,10 @@ class CGridView extends CWidget
 	 */
 	public $rowCssClassExpression;
 	/**
-	 * @var array the HTML options for the grid view container tag.
-	 */
-	public $htmlOptions=array();
-	/**
-	 * @var boolean whether to enable sorting. Note that if the {@link IDataProvider::sort} property
-	 * of {@link dataProvider} is false, this will be treated as false as well. When sorting is enabled,
-	 * sortable columns will have their headers clickable to trigger sorting along that column.
-	 * Defaults to true.
-	 */
-	public $enableSorting=true;
-	/**
-	 * @var boolean whether to enable pagination. Note that if the {@link IDataProvider::pagination} property
-	 * of {@link dataProvider} is false, this will be treated as false as well. When pagination is enabled,
-	 * a pager will be displayed in the grid view so that it can trigger pagination of the data display.
-	 * Defaults to true.
-	 */
-	public $enablePagination=true;
-	/**
-	 * @var array the configuration for the pager. Defaults to <code>array('class'=>'CLinkPager')</code>.
-	 * @see enablePagination
-	 */
-	public $pager=array('class'=>'CLinkPager');
-	/**
-	 * @var string the summary text template for the grid view. These tokens are recognized:
-	 * {start}, {end} and {count}. They will be replaced with the starting row number, ending row number
-	 * and total number of data records.
-	 */
-	public $summaryText;
-	/**
-	 * @var string the message to be displayed when {@link dataProvider} does not have any data.
-	 */
-	public $emptyText;
-	/**
 	 * @var boolean whether to display the table even when there is no data. Defaults to true.
 	 * The {@link emptyText} will be displayed to indicate there is no data.
 	 */
 	public $showTableOnEmpty=true;
-	/**
-	 * @var string the template to be used to control the layout of various components in the grid view.
-	 * These tokens are recognized: {summary}, {table} and {pager}. They will be replaced with the
-	 * summary text, the table, and the pager.
-	 */
-	public $template="{summary}\n{table}\n{pager}";
-	/**
-	 * @var string the CSS class name for the summary text container. Defaults to 'summary'.
-	 */
-	public $summaryCssClass='summary';
-	/**
-	 * @var string the CSS class name for the table. Defaults to 'grid'.
-	 */
-	public $tableCssClass='grid';
-	/**
-	 * @var string the CSS class name for the pager container. Defaults to 'pager'.
-	 */
-	public $pagerCssClass='pager';
 	/**
 	 * @var mixed the ID of the container whose content may be updated with an AJAX response.
 	 * Defaults to null, meaning the container for this grid view instance.
@@ -214,19 +158,10 @@ class CGridView extends CWidget
 	 */
 	public function init()
 	{
-		if($this->dataProvider===null)
-			throw new CException(Yii::t('yii','The "dataProvider" property cannot be empty.'));
+		parent::init();
 
-		$this->dataProvider->getData();
-
-		$this->htmlOptions['id']=$this->getId();
 		if(!isset($this->htmlOptions['class']))
 			$this->htmlOptions['class']='grid-view';
-
-		if($this->enableSorting && $this->dataProvider->getSort()===false)
-			$this->enableSorting=false;
-		if($this->enablePagination && $this->dataProvider->getPagination()===false)
-			$this->enablePagination=false;
 
 		if($this->baseScriptUrl===null)
 			$this->baseScriptUrl=Yii::app()->getAssetManager()->publish(Yii::getPathOfAlias('zii.widgets.assets')).'/gridview';
@@ -265,22 +200,6 @@ class CGridView extends CWidget
 	}
 
 	/**
-	 * Renders the grid view.
-	 * This is the main entry of the whole grid view rendering.
-	 */
-	public function run()
-	{
-		$this->registerClientScript();
-
-		echo CHtml::openTag($this->tagName,$this->htmlOptions)."\n";
-
-		$this->renderKeys();
-		$this->renderGrid();
-
-		echo CHtml::closeTag($this->tagName);
-	}
-
-	/**
 	 * Registers necessary client scripts.
 	 */
 	public function registerClientScript()
@@ -294,7 +213,7 @@ class CGridView extends CWidget
 		$options=array(
 			'ajaxUpdate'=>$ajaxUpdate,
 			'pagerClass'=>$this->pagerCssClass,
-			'tableClass'=>$this->tableCssClass,
+			'tableClass'=>$this->itemsCssClass,
 			'selectableRows'=>$this->selectableRows,
 		);
 		if($this->beforeAjaxUpdate!==null)
@@ -312,122 +231,13 @@ class CGridView extends CWidget
 	}
 
 	/**
-	 * Renders the grid component.
-	 * It includes rendering the summary text, the table and the pager
+	 * Renders the data items for the grid view.
 	 */
-	public function renderGrid()
-	{
-		ob_start();
-		echo preg_replace_callback('/{(summary|table|pager)}/',array($this,'renderSection'),$this->template);
-		ob_end_flush();
-	}
-
-	/**
-	 * Renders a section.
-	 * This method is invoked to replace the token found in {@link template}.
-	 * @param array the matches, where $matches[1] contains the name of the matched token.
-	 * @return string the rendered result of the section
-	 */
-	protected function renderSection($matches)
-	{
-		$method='render'.$matches[1];
-		$this->$method();
-		$html=ob_get_contents();
-		ob_clean();
-		return $html;
-	}
-
-	/**
-	 * Renders the empty message when there is no data.
-	 */
-	public function renderEmptyText()
-	{
-		if($this->emptyText===null)
-			echo Yii::t('yii','No results found.');
-		else
-			echo $this->emptyText;
-	}
-
-	/**
-	 * Renders the key values of the data in a hidden tag.
-	 */
-	public function renderKeys()
-	{
-		echo CHtml::openTag('div',array(
-			'class'=>'keys',
-			'style'=>'display:none',
-			'title'=>Yii::app()->getRequest()->getUrl(),
-		));
-		foreach($this->dataProvider->getKeys() as $key)
-			echo "<span>$key</span>";
-		echo "</div>\n";
-	}
-
-	/**
-	 * Renders the summary text.
-	 */
-	public function renderSummary()
-	{
-		if(($count=$this->dataProvider->getItemCount())<=0)
-			return;
-
-		echo '<div class="'.$this->summaryCssClass.'">';
-		if($this->enablePagination)
-		{
-			if(($summaryText=$this->summaryText)===null)
-				$summaryText=Yii::t('yii','Displaying {start}-{end} of {count} result(s).');
-			$pagination=$this->dataProvider->getPagination();
-			$start=$pagination->currentPage*$pagination->pageSize+1;
-			echo strtr($summaryText,array(
-				'{start}'=>$start,
-				'{end}'=>$start+$count-1,
-				'{count}'=>$this->dataProvider->getTotalItemCount(),
-			));
-		}
-		else
-		{
-			if(($summaryText=$this->summaryText)===null)
-				$summaryText=Yii::t('yii','Total {count} result(s).');
-			echo strtr($summaryText,array('{count}'=>$count));
-		}
-		echo '</div>';
-	}
-
-	/**
-	 * Renders the pager.
-	 */
-	public function renderPager()
-	{
-		if($this->dataProvider->getItemCount()<=0 || !$this->enablePagination)
-			return;
-
-		$pager=array();
-		$class='CLinkPager';
-		if(is_string($this->pager))
-			$class=$this->pager;
-		else if(is_array($this->pager))
-		{
-			$pager=$this->pager;
-			if(isset($pager['class']))
-			{
-				$class=$pager['class'];
-				unset($pager);
-			}
-		}
-		$pager['pages']=$this->dataProvider->getPagination();
-		echo '<div class="'.$this->pagerCssClass.'">';
-		$this->widget($class,$pager);
-		echo '</div>';
-	}
-
-	/**
-	 * Renders the table.
-	 */
-	public function renderTable()
+	public function renderItems()
 	{
 		if($this->dataProvider->getItemCount()>0 || $this->showTableOnEmpty)
 		{
-			echo "<table class=\"{$this->tableCssClass}\">\n";
+			echo "<table class=\"{$this->itemsCssClass}\">\n";
 			$this->renderTableHeader();
 			$this->renderTableFooter();
 			$this->renderTableBody();
