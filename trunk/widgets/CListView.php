@@ -83,8 +83,8 @@ class CListView extends CBaseListView
 	public $sortableAttributes;
 	/**
 	 * @var string the template to be used to control the layout of various components in the list view.
-	 * These tokens are recognized: {summary}, {list} and {pager}. They will be replaced with the
-	 * summary text, the list, and the pager.
+	 * These tokens are recognized: {summary}, {sorter}, {items} and {pager}. They will be replaced with the
+	 * summary text, the sort links, the data item list, and the pager.
 	 */
 	public $template="{summary}\n{sorter}\n{items}\n{pager}";
 	/**
