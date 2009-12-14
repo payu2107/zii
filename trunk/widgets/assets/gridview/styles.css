@@ -25,7 +25,6 @@
 	color: #EEE;
 	font-weight: bold;
 	text-decoration: none;
-	padding-right:10px;
 }
 
 .grid-view table.items th a:hover
@@ -36,11 +35,13 @@
 .grid-view table.items th a.asc
 {
 	background:url(up.gif) right center no-repeat;
+	padding-right: 10px;
 }
 
 .grid-view table.items th a.desc
 {
 	background:url(down.gif) right center no-repeat;
+	padding-right: 10px;
 }
 
 .grid-view table.items tr.even
