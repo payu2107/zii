@@ -126,7 +126,7 @@ abstract class CGridColumn extends CComponent
 	 */
 	public function renderFooterCell()
 	{
-		echo CHtml::openTag('th',$this->footerHtmlOptions);
+		echo CHtml::openTag('td',$this->footerHtmlOptions);
 		$this->renderFooterCellContent();
 		echo '</td>';
 	}
