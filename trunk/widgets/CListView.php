@@ -13,7 +13,7 @@ Yii::import('zii.widgets.CBaseListView');
 /**
  * CListView displays a list of data items in terms of a list.
  *
- * Unlike {@link CListView} which displays the data items in a table, CListView allows one to use
+ * Unlike {@link CGridView} which displays the data items in a table, CListView allows one to use
  * a view template to render each data item. As a result, CListView could generate more flexible
  * rendering result.
  *
