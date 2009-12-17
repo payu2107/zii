@@ -9,10 +9,11 @@
  */
 
 /**
- * CDetailView displays the detail of a single model instance.
+ * CDetailView displays the detail of a single data model.
  *
  * CDetailView is best used for displaying a model in a regular format (e.g. each model attribute
- * is displayed as a row in a table.)
+ * is displayed as a row in a table.) The model can be either an instance of {@link CModel}
+ * or an associative array.
  *
  * CDetailView uses the {@link attributes} property to determines which model attributes
  * should be displayed and how they should be formatted.
@@ -20,7 +21,7 @@
  * A typical usage of CDetailView is as follows:
  * <pre>
  * $this->widget('zii.widgets.CDetailView', array(
- *     'model'=>$model,
+ *     'data'=>$model,
  *     'attributes'=>array(
  *         'title',             // title attribute (in plain text)
  *         'owner.name',        // an attribute of the related object "owner"
@@ -45,7 +46,7 @@ class CDetailView extends CWidget
 	 * @var mixed the data model whose details are to be displayed. This can be either a {@link CModel} instance
 	 * (e.g. a {@link CActiveRecord} object or a {@link CFormModel} object) or an associative array.
 	 */
-	public $model;
+	public $data;
 	/**
 	 * @var array a list of attributes to be displayed in the detail view. Each array element
 	 * represents the specification for displaying one particular attribute.
@@ -157,14 +158,14 @@ class CDetailView extends CWidget
 	 */
 	public function init()
 	{
-		if($this->model===null)
+		if($this->data===null)
 			throw new CException(Yii::t('zii','Please specify the "model" property.'));
 		if($this->attributes===null)
 		{
-			if($this->model instanceof CModel)
-				$this->attributes=$this->model->attributeNames();
-			else if(is_array($this->model))
-				$this->attributes=array_keys($this->model);
+			if($this->data instanceof CModel)
+				$this->attributes=$this->data->attributeNames();
+			else if(is_array($this->data))
+				$this->attributes=array_keys($this->data);
 			else
 				throw new CException(Yii::t('zii','Please specify the "attributes" property.'));
 		}
@@ -214,8 +215,8 @@ class CDetailView extends CWidget
 
 			if(isset($attribute['label']))
 				$tr['{label}']=$attribute['label'];
-			else if(isset($attribute['name']) && $this->model instanceof CModel)
-				$tr['{label}']=$this->model->getAttributeLabel($attribute['name']);
+			else if(isset($attribute['name']) && $this->data instanceof CModel)
+				$tr['{label}']=$this->data->getAttributeLabel($attribute['name']);
 
 			if(!isset($attribute['type']))
 				$attribute['type']='text';
@@ -223,7 +224,7 @@ class CDetailView extends CWidget
 				$tr['{value}']=$attribute['value'];
 			else if(isset($attribute['name']))
 			{
-				$value=CHtml::value($this->model,$attribute['name']);
+				$value=CHtml::value($this->data,$attribute['name']);
 				$method='format'.$attribute['type'];
 				if(method_exists($this,$method))
 				{
