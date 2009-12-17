@@ -54,7 +54,7 @@
 		ajaxUpdate: [],
 		pagerClass: 'pager',
 		tableClass: 'items',
-		selectableRows: 1,
+		selectableRows: 1
 		// updateSelector: '#id .pager a, '#id .grid thead th a',
 		// beforeUpdate: function(id) {},
 		// afterUpdate: function(id, data) {},
@@ -124,7 +124,7 @@
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
 				alert(XMLHttpRequest.responseText);
-			},
+			}
 		}, options || {});
 
 		if(settings.beforeUpdate != undefined)
