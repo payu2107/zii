@@ -55,12 +55,12 @@ Yii::import('zii.widgets.grid.CCheckBoxColumn');
  *         'title',          // display the 'title' attribute
  *         'category.name',  // display the 'name' attribute of the 'category' relation
  *         array(            // display 'create_time' using an expression
- *             'dataField'=>'create_time',
- *             'dataExpression'=>'date("M j, Y", $data->create_time)',
+ *             'name'=>'create_time',
+ *             'value'=>'date("M j, Y", $data->create_time)',
  *         ),
  *         array(            // display 'author.username' using an expression
- *             'dataField'=>'authorName',
- *             'dataExpression'=>'$data->author->username',
+ *             'name'=>'authorName',
+ *             'value'=>'$data->author->username',
  *         ),
  *         array(            // display a column with "view", "update" and "delete" buttons
  *             'class'=>'CRudColumn',
@@ -81,7 +81,7 @@ class CGridView extends CBaseListView
 	/**
 	 * @var array grid column configuration. Each array element represents the configuration
 	 * for one particular grid column which can be either a string or an array. If a string,
-	 * it means the column is a {@link CDataColumn} whose {@link CDataColumn::dataField dataField}
+	 * it means the column is a {@link CDataColumn} whose {@link CDataColumn::name name}
 	 * is the string value. If an array, it will be used to create a grid column instance, where
 	 * the 'class' element specifies the column class name (defaults to {@link CDataColumn} if absent).
 	 * Currently, these official column classes are provided: {@link CDataColumn},
@@ -187,7 +187,7 @@ class CGridView extends CBaseListView
 		foreach($this->columns as $i=>$column)
 		{
 			if(is_string($column))
-				$column=array('class'=>'CDataColumn','dataField'=>$column);
+				$column=array('class'=>'CDataColumn','name'=>$column);
 			else if(!isset($column['class']))
 				$column['class']='CDataColumn';
 			$this->columns[$i]=$column=Yii::createComponent($column, $this);
