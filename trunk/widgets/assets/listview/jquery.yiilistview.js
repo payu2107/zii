@@ -41,7 +41,7 @@
 	$.fn.yiiListView.defaults = {
 		ajaxUpdate: [],
 		pagerClass: 'pager',
-		sorterClass: 'sorter',
+		sorterClass: 'sorter'
 		// updateSelector: '#id .pager a, '#id .sort a',
 		// beforeUpdate: function(id) {},
 		// afterUpdate: function(id, data) {},
@@ -88,7 +88,7 @@
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
 				alert(XMLHttpRequest.responseText);
-			},
+			}
 		}, options || {});
 
 		if(settings.beforeUpdate != undefined)
