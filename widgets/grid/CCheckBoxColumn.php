@@ -14,8 +14,8 @@ Yii::import('zii.widgets.grid.CGridColumn');
  * CCheckBoxColumn represents a grid view column of checkboxes.
  *
  * By default, the checkboxes rendered in data cells will have the key values associated with
- * the data models in the corresponding rows. One may change this by setting either {@link dataField}
- * {@link dataExpression}.
+ * the data models in the corresponding rows. One may change this by setting either {@link name}
+ * {@link value}.
  *
  * CCheckBoxColumn supports single selection and multiple selection. The mode is determined according
  * to {@link CGridView::selectableRows}. When in multiple selection mode, the header cell will display
@@ -30,17 +30,17 @@ class CCheckBoxColumn extends CGridColumn
 {
 	/**
 	 * @var string the attribute name of the data model. The corresponding attribute value will be rendered
-	 * in each data cell as the checkbox value. Note that if {@link dataExpression} is specified, this property will be ignored.
-	 * @see dataExpression
+	 * in each data cell as the checkbox value. Note that if {@link value} is specified, this property will be ignored.
+	 * @see value
 	 */
-	public $dataField;
+	public $name;
 	/**
 	 * @var string a PHP expression that will be evaluated for every data cell and whose result will be rendered
 	 * in each data cell as the checkbox value. In this expression, the variable
 	 * <code>$row</code> the row number (zero-based); <code>$data</code> the data model for the row;
 	 * and <code>$this</code> the column object.
 	 */
-	public $dataExpression;
+	public $value;
 	/**
 	 * @var array the HTML options for the data cell tags.
 	 */
@@ -103,10 +103,10 @@ EOD;
 	 */
 	protected function renderDataCellContent($row,$data)
 	{
-		if($this->dataExpression!==null)
-			$value=$this->evaluateExpression($this->dataExpression,array('data'=>$data,'row'=>$row));
-		else if($this->dataField!==null)
-			$value=CHtml::value($data,$this->dataField);
+		if($this->value!==null)
+			$value=$this->evaluateExpression($this->value,array('data'=>$data,'row'=>$row));
+		else if($this->name!==null)
+			$value=CHtml::value($data,$this->name);
 		else
 			$value=$this->grid->dataProvider->keys[$row];
 		$options=$this->checkBoxHtmlOptions;

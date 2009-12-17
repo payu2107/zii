@@ -13,11 +13,11 @@ Yii::import('zii.widgets.grid.CGridColumn');
 /**
  * CDataColumn represents a grid view column that is associated with a data attribute or expression.
  *
- * Either {@link dataField} or {@link dataExpression} should be specified. The former specifies
+ * Either {@link name} or {@link value} should be specified. The former specifies
  * a data attribute name, while the latter a PHP expression whose value should be rendered instead.
  *
  * The property {@link sortable} determines whether the grid view can be sorted according to this column.
- * Note that the {@link dataField} should always be set if the column needs to be sortable. The {@link dataField}
+ * Note that the {@link name} should always be set if the column needs to be sortable. The {@link name}
  * value will be used by {@link CSort} to render a clickable link in the header cell to trigger the sorting.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
@@ -29,29 +29,29 @@ class CDataColumn extends CGridColumn
 {
 	/**
 	 * @var string the attribute name of the data model. The corresponding attribute value will be rendered
-	 * in each data cell. If {@link dataExpression} is specified, this property will be ignored
+	 * in each data cell. If {@link value} is specified, this property will be ignored
 	 * unless the column needs to be sortable.
-	 * @see dataExpression
+	 * @see value
 	 * @see sortable
 	 */
-	public $dataField;
+	public $name;
 	/**
 	 * @var string a PHP expression that will be evaluated for every data cell and whose result will be rendered
 	 * as the content of the data cells. In this expression, the variable
 	 * <code>$row</code> the row number (zero-based); <code>$data</code> the data model for the row;
 	 * and <code>$this</code> the column object.
 	 */
-	public $dataExpression;
+	public $value;
 	/**
-	 * @var boolean whether the attribute value corresponding to {@link dataField} should be HTML-encoded
-	 * before rendering. Defaults to true. Note that this property does not apply to the values evaluated with {@link dataExpression}.
+	 * @var boolean whether the attribute value corresponding to {@link name} should be HTML-encoded
+	 * before rendering. Defaults to true. Note that this property does not apply to the values evaluated with {@link value}.
 	 */
 	public $encodeData=true;
 	/**
 	 * @var boolean whether the column is sortable. If so, the header celll will contain a link that may trigger the sorting.
-	 * Defaults to true. Note that if {@link dataField} is not set, or if {@link dataField} is not allowed by {@link CSort},
+	 * Defaults to true. Note that if {@link name} is not set, or if {@link name} is not allowed by {@link CSort},
 	 * this property will be treated as false.
-	 * @see dataField
+	 * @see name
 	 */
 	public $sortable=true;
 
@@ -61,7 +61,7 @@ class CDataColumn extends CGridColumn
 	public function init()
 	{
 		parent::init();
-		if($this->dataField===null)
+		if($this->name===null)
 			$this->sortable=false;
 	}
 
@@ -71,25 +71,25 @@ class CDataColumn extends CGridColumn
 	 */
 	protected function renderHeaderCellContent()
 	{
-		if($this->grid->enableSorting && $this->sortable && $this->dataField!==null)
-			echo $this->grid->dataProvider->getSort()->link($this->dataField,$this->header);
+		if($this->grid->enableSorting && $this->sortable && $this->name!==null)
+			echo $this->grid->dataProvider->getSort()->link($this->name,$this->header);
 		else
 			parent::renderHeaderCellContent();
 	}
 
 	/**
 	 * Renders the data cell content.
-	 * This method evaluates {@link dataExpression} or {@link dataField} and renders the result.
+	 * This method evaluates {@link value} or {@link name} and renders the result.
 	 * @param integer the row number (zero-based)
 	 * @param mixed the data associated with the row
 	 */
 	protected function renderDataCellContent($row,$data)
 	{
-		if($this->dataExpression!==null)
-			echo $this->evaluateExpression($this->dataExpression,array('data'=>$data,'row'=>$row));
-		else if($this->dataField!==null)
+		if($this->value!==null)
+			echo $this->evaluateExpression($this->value,array('data'=>$data,'row'=>$row));
+		else if($this->name!==null)
 		{
-			$value=CHtml::value($data,$this->dataField);
+			$value=CHtml::value($data,$this->name);
 			if($this->encodeData===true)
 				$value=CHtml::encode($value);
 			echo $value;
