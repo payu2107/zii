@@ -30,7 +30,7 @@ Yii::import('zii.widgets.CBaseListView');
  * <pre>
  * $dataProvider=new CActiveDataProvider('Post');
  *
- * $this->widget('zii.widgets.grid.CListView', array(
+ * $this->widget('zii.widgets.CListView', array(
  *     'dataProvider'=>$dataProvider,
  *     'itemView'=>'_post',   // refers to the partial view named '_post'
  *     'sortableAttributes'=>array(
