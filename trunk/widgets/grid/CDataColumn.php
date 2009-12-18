@@ -43,10 +43,12 @@ class CDataColumn extends CGridColumn
 	 */
 	public $value;
 	/**
-	 * @var boolean whether the attribute value corresponding to {@link name} should be HTML-encoded
-	 * before rendering. Defaults to true. Note that this property does not apply to the values evaluated with {@link value}.
+	 * @var string the type of the attribute value. This determines how the attribute value is formatted for display.
+	 * Valid values include those recognizable by {@link CGridView::formatter}, such as: raw, text, ntext, html, date, time,
+	 * datetime, boolean, number, email, image, url. For more details, please refer to {@link CFormatter}.
+	 * Defaults to 'text' which means the attribute value will be HTML-encoded.
 	 */
-	public $encodeData=true;
+	public $type='text';
 	/**
 	 * @var boolean whether the column is sortable. If so, the header celll will contain a link that may trigger the sorting.
 	 * Defaults to true. Note that if {@link name} is not set, or if {@link name} is not allowed by {@link CSort},
@@ -63,6 +65,8 @@ class CDataColumn extends CGridColumn
 		parent::init();
 		if($this->name===null)
 			$this->sortable=false;
+		if($this->name===null && $this->value===null)
+			throw new CException(Yii::t('zii','Either "name" or "value" must be specified for CDataColumn.'));
 	}
 
 	/**
@@ -86,15 +90,9 @@ class CDataColumn extends CGridColumn
 	protected function renderDataCellContent($row,$data)
 	{
 		if($this->value!==null)
-			echo $this->evaluateExpression($this->value,array('data'=>$data,'row'=>$row));
+			$value=$this->evaluateExpression($this->value,array('data'=>$data,'row'=>$row));
 		else if($this->name!==null)
-		{
 			$value=CHtml::value($data,$this->name);
-			if($this->encodeData===true)
-				$value=CHtml::encode($value);
-			echo $value;
-		}
-		else
-			parent::renderDataCellContent($row,$data);
+		echo $value===null ? $this->grid->nullDisplay : $this->getFormatter()->format($value,$this->type);
 	}
 }

@@ -54,6 +54,7 @@ Yii::import('zii.widgets.grid.CCheckBoxColumn');
  *     'columns'=>array(
  *         'title',          // display the 'title' attribute
  *         'category.name',  // display the 'name' attribute of the 'category' relation
+ *         'content:html',   // display the 'content' attribute as purified HTML
  *         array(            // display 'create_time' using an expression
  *             'name'=>'create_time',
  *             'value'=>'date("M j, Y", $data->create_time)',
@@ -78,11 +79,17 @@ Yii::import('zii.widgets.grid.CCheckBoxColumn');
  */
 class CGridView extends CBaseListView
 {
+	private $_formatter;
 	/**
 	 * @var array grid column configuration. Each array element represents the configuration
-	 * for one particular grid column which can be either a string or an array. If a string,
-	 * it means the column is a {@link CDataColumn} whose {@link CDataColumn::name name}
-	 * is the string value. If an array, it will be used to create a grid column instance, where
+	 * for one particular grid column which can be either a string or an array.
+	 *
+	 * When a column is specified as a string, it should be in the format of "name:type:header",
+	 * where "type" and "header" are optional. A {@link CDataColumn} instance will be created in this case,
+	 * whose {@link CDataColumn::name}, {@link CDataColumn::type} and {@link CDataColumn::header}
+	 * properties will be initialized accordingly.
+	 *
+	 * When a column is specified as an array, it will be used to create a grid column instance, where
 	 * the 'class' element specifies the column class name (defaults to {@link CDataColumn} if absent).
 	 * Currently, these official column classes are provided: {@link CDataColumn},
 	 * {@link CLinkColumn}, {@link CRudColumn} and {@link CCheckBoxColumn}.
@@ -151,6 +158,11 @@ class CGridView extends CBaseListView
 	 * CSS file. If this is set false, you are responsible to explicitly include the necessary CSS file in your page.
 	 */
 	public $cssFile;
+	/**
+	 * @var string the text to be displayed in a data cell when a data value is null. This property will NOT be HTML-encoded
+	 * when rendering. Defaults to an HTML blank.
+	 */
+	public $nullDisplay='&nbsp;';
 
 	/**
 	 * Initializes the grid view.
@@ -187,16 +199,37 @@ class CGridView extends CBaseListView
 		foreach($this->columns as $i=>$column)
 		{
 			if(is_string($column))
-				$column=array('class'=>'CDataColumn','name'=>$column);
-			else if(!isset($column['class']))
-				$column['class']='CDataColumn';
-			$this->columns[$i]=$column=Yii::createComponent($column, $this);
+				$this->columns[$i]=$column=$this->createDataColumn($column);
+			else
+			{
+				if(!isset($column['class']))
+					$column['class']='CDataColumn';
+				$this->columns[$i]=$column=Yii::createComponent($column, $this);
+			}
 			if($column->id===null)
 				$column->id=$id.'_c'.$i;
 		}
 
 		foreach($this->columns as $column)
 			$column->init();
+	}
+
+	/**
+	 * Creates a {@link CDataColumn} based on a shortcut column specification string.
+	 * @param string the column specification string
+	 * @return CDataColumn the column instance
+	 */
+	protected function createDataColumn($text)
+	{
+		if(!preg_match('/^([\w\.]+)(:(\w*))?(:(.*))?$/',$text,$matches))
+			throw new CException(Yii::t('zii','The column must be specified in the format of "Name:Type:Label", where "Type" and "Label" are optional.'));
+		$column=new CDataColumn($this);
+		$column->name=$matches[1];
+		if(isset($matches[3]))
+			$column->type=$matches[3];
+		if(isset($matches[5]))
+			$column->header=$matches[5];
+		return $column;
 	}
 
 	/**
@@ -321,5 +354,23 @@ class CGridView extends CBaseListView
 			if($column->getHasFooter())
 				return true;
 		return false;
+	}
+
+	/**
+	 * @return CFormatter the formatter instance. Defaults to the 'format' application component.
+	 */
+	public function getFormatter()
+	{
+		if($this->_formatter===null)
+			$this->_formatter=Yii::app()->format;
+		return $this->_formatter;
+	}
+
+	/**
+	 * @param CFormatter the formatter instance
+	 */
+	public function setFormatter($value)
+	{
+		$this->_formatter=$value;
 	}
 }
