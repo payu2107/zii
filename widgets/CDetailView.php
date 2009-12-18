@@ -138,10 +138,6 @@ class CDetailView extends CWidget
 		}
 		if($this->nullDisplay===null)
 			$this->nullDisplay='<span class="null">'.Yii::t('zii','Not set').'</span>';
-		if($this->trueText===null)
-			$this->trueText=Yii::t('zii','Yes');
-		if($this->falseText===null)
-			$this->falseText=Yii::t('zii','No');
 		$this->htmlOptions['id']=$this->getId();
 
 		if($this->baseScriptUrl===null)
