@@ -51,11 +51,11 @@ class CPortlet extends CWidget
 	/**
 	 * @var string the CSS class for the decoration container tag. Defaults to 'portlet-decoration'.
 	 */
-	public $decorationCssClass='decoration';
+	public $decorationCssClass='portlet-decoration';
 	/**
 	 * @var string the CSS class for the content container tag. Defaults to 'portlet-content'.
 	 */
-	public $contentCssClass='content';
+	public $contentCssClass='portlet-content';
 
 	/**
 	 * Initializes the widget.
