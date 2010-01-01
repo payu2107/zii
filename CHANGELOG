@@ -25,3 +25,4 @@ Version 1.1.0 to be released
 - New: Added CDetailView (Qiang)
 - New: Added CListView (Qiang)
 - New: Added CPortlet (Qiang)
+- New: Added CBreadcrumbs (Qiang)
