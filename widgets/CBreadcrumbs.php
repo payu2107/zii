@@ -105,7 +105,7 @@ class CBreadcrumbs extends CWidget
 			$links[]=$this->homeLink;
 		foreach($this->links as $label=>$url)
 		{
-			if(is_string($label))
+			if(is_string($label) || is_array($url))
 				$links[]=CHtml::link($this->encodeLabel ? CHtml::encode($label) : $label, $url);
 			else
 				$links[]='<span>'.($this->encodeLabel ? CHtml::encode($url) : $url).'</span>';
