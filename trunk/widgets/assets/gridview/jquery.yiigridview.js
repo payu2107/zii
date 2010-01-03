@@ -111,7 +111,6 @@
 	 * @param string the ID of the grid view container
 	 * @param map the AJAX request options (see jQuery.ajax API manual). By default,
 	 * the URL to be requested is the one that generates the current content of the grid view.
-	 * @return jQuery the jQuery collection of the cells in the specified column.
 	 */
 	$.fn.yiiGridView.update = function(id, options) {
 		var settings = $.fn.yiiGridView.settings[id];
