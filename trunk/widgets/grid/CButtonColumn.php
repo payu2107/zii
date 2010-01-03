@@ -1,6 +1,6 @@
 <?php
 /**
- * CRudColumn class file.
+ * CButtonColumn class file.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @link http://www.yiiframework.com/
@@ -11,45 +11,38 @@
 Yii::import('zii.widgets.grid.CGridColumn');
 
 /**
- * CRudColumn represents a grid view column that renders "view", "update" and "delete" buttons in each data cell.
+ * CButtonColumn represents a grid view column that renders one or several buttons.
  *
- * The name "rud" stands for "read" (view), "update" and "delete".
+ * By default, it will display three buttons, "view", "update" and "delete", which triggers the corresponding
+ * actions on the model of the row.
  *
- * By configuring {@link template}, one may choose not to display all of the three buttons.
- * For example, setting this property to be "{view} {update}" will only show the "view" and "update" buttons.
- *
- * Note that when clicking on a delete button, a confirmation dialog may be displayed. If confirmed,
- * the server side will receive a deletion request. The content of the grid view will be refreshed automatically after
- * the deletion is completed. For this reason, the deletion action should not render anything.
- * In case an error is detected on the server side, it should throw a {@link CHttpException}.
- *
- * Besides the default view, update and delete buttons, it is also possible to render additional buttons
- * by configuring the {@link buttons} property. Make sure the {@link template} property is also updated
- * accordingly so that the extra buttons are displayed at the desired places.
+ * By configuring {@link buttons} and {@link template} properties, the column can display other buttons
+ * and customize the display order of the buttons.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @version $Id$
  * @package zii.widgets.grid
  * @since 1.1
  */
-class CRudColumn extends CGridColumn
+class CButtonColumn extends CGridColumn
 {
 	/**
 	 * @var array the HTML options for the data cell tags.
 	 */
-	public $htmlOptions=array('class'=>'rud-column');
+	public $htmlOptions=array('class'=>'button-column');
 	/**
 	 * @var array the HTML options for the header cell tag.
 	 */
-	public $headerHtmlOptions=array('class'=>'rud-column');
+	public $headerHtmlOptions=array('class'=>'button-column');
 	/**
 	 * @var array the HTML options for the footer cell tag.
 	 */
-	public $footerHtmlOptions=array('class'=>'rud-column');
+	public $footerHtmlOptions=array('class'=>'button-column');
 	/**
 	 * @var string the template that is used to render the content in each data cell.
-	 * These tokens are recognized: {view}, {update} and {delete}. They will be replaced
-	 * with the "view" button, "update" button and "delete" button, respectively.
+	 * These default tokens are recognized: {view}, {update} and {delete}. If the {@link buttons} property
+	 * defines additional buttons, their IDs are also recognized here. For example, if a button named 'preview'
+	 * is declared in {@link buttons}, we can use the token '{preview}' here to specify where to display the button.
 	 */
 	public $template='{view} {update} {delete}';
 	/**
@@ -141,7 +134,7 @@ class CRudColumn extends CGridColumn
 
 	/**
 	 * Initializes the column.
-	 * This method registers necessary client script for the RUD column.
+	 * This method registers necessary client script for the button column.
 	 * @param CGridView the grid view instance
 	 */
 	public function init()
@@ -220,7 +213,7 @@ EOD;
 	}
 
 	/**
-	 * Registers the client scripts for the RUD column.
+	 * Registers the client scripts for the button column.
 	 */
 	protected function registerClientScript()
 	{
