@@ -13,6 +13,7 @@
 	 * yiiListView set function.
 	 * @param map settings for the list view. Availablel options are as follows:
 	 * - ajaxUpdate: array, IDs of the containers whose content may be updated by ajax response
+	 * - ajaxVar: string, the name of the GET variable indicating the ID of the element triggering the AJAX request
 	 * - pagerClass: string, the CSS class for the pager container
 	 * - sorterClass: string, the CSS class for the sorter container
 	 * - updateSelector: string, the selector for choosing which elements can trigger ajax requests
@@ -40,6 +41,7 @@
 
 	$.fn.yiiListView.defaults = {
 		ajaxUpdate: [],
+		ajaxVar: 'ajax',
 		pagerClass: 'pager',
 		sorterClass: 'sorter'
 		// updateSelector: '#id .pager a, '#id .sort a',
@@ -77,8 +79,11 @@
 	 */
 	$.fn.yiiListView.update = function(id, options) {
 		var settings = $.fn.yiiListView.settings[id];
+		var data = {};
+		data[settings.ajaxVar] = id;
 		options = $.extend({
 			url: $.fn.yiiListView.getUrl(id),
+			data: data,
 			success: function(data,status) {
 				$.each(settings.ajaxUpdate, function() {
 					$('#'+this).html($(data).find('#'+this));

@@ -123,6 +123,11 @@ class CGridView extends CBaseListView
 	 */
 	public $ajaxUpdate;
 	/**
+	 * @var string the name of the GET variable that indicates the request is an AJAX request triggered
+	 * by this widget. Defaults to 'ajax'. This is effective only when {@link ajaxUpdate} is not false.
+	 */
+	public $ajaxVar='ajax';
+	/**
 	 * @var string a javascript function that will be invoked before an AJAX update occurs.
 	 * The function signature is <code>function(id)</code> where 'id' refers to the ID of the grid view.
 	 */
@@ -245,6 +250,7 @@ class CGridView extends CBaseListView
 			$ajaxUpdate=array_unique(preg_split('/\s*,\s*/',$this->ajaxUpdate.','.$id,-1,PREG_SPLIT_NO_EMPTY));
 		$options=array(
 			'ajaxUpdate'=>$ajaxUpdate,
+			'ajaxVar'=>$this->ajaxVar,
 			'pagerClass'=>$this->pagerCssClass,
 			'tableClass'=>$this->itemsCssClass,
 			'selectableRows'=>$this->selectableRows,
