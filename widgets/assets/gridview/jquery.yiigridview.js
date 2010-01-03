@@ -13,6 +13,7 @@
 	 * yiiGridView set function.
 	 * @param map settings for the grid view. Availablel options are as follows:
 	 * - ajaxUpdate: array, IDs of the containers whose content may be updated by ajax response
+	 * - ajaxVar: string, the name of the GET variable indicating the ID of the element triggering the AJAX request
 	 * - pagerClass: string, the CSS class for the pager container
 	 * - tableClass: string, the CSS class for the table
 	 * - selectableRows: integer, the number of rows that can be selected
@@ -52,6 +53,7 @@
 
 	$.fn.yiiGridView.defaults = {
 		ajaxUpdate: [],
+		ajaxVar: 'ajax',
 		pagerClass: 'pager',
 		tableClass: 'items',
 		selectableRows: 1
@@ -113,8 +115,11 @@
 	 */
 	$.fn.yiiGridView.update = function(id, options) {
 		var settings = $.fn.yiiGridView.settings[id];
+		var data = {};
+		data[settings.ajaxVar] = id;
 		options = $.extend({
 			url: $.fn.yiiGridView.getUrl(id),
+			data: data,
 			success: function(data,status) {
 				$.each(settings.ajaxUpdate, function() {
 					$('#'+this).html($(data).find('#'+this));
