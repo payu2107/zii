@@ -69,13 +69,13 @@
 	border: 0;
 }
 
-.grid-view .rud-column
+.grid-view .button-column
 {
 	text-align: center;
 	width: 60px;
 }
 
-.grid-view .rud-column img
+.grid-view .button-column img
 {
 	border: 0;
 }

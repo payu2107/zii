@@ -11,7 +11,7 @@
 Yii::import('zii.widgets.CBaseListView');
 Yii::import('zii.widgets.grid.CDataColumn');
 Yii::import('zii.widgets.grid.CLinkColumn');
-Yii::import('zii.widgets.grid.CRudColumn');
+Yii::import('zii.widgets.grid.CButtonColumn');
 Yii::import('zii.widgets.grid.CCheckBoxColumn');
 
 /**
@@ -64,7 +64,7 @@ Yii::import('zii.widgets.grid.CCheckBoxColumn');
  *             'value'=>'$data->author->username',
  *         ),
  *         array(            // display a column with "view", "update" and "delete" buttons
- *             'class'=>'CRudColumn',
+ *             'class'=>'CButtonColumn',
  *         ),
  *     ),
  * ));
@@ -92,7 +92,7 @@ class CGridView extends CBaseListView
 	 * When a column is specified as an array, it will be used to create a grid column instance, where
 	 * the 'class' element specifies the column class name (defaults to {@link CDataColumn} if absent).
 	 * Currently, these official column classes are provided: {@link CDataColumn},
-	 * {@link CLinkColumn}, {@link CRudColumn} and {@link CCheckBoxColumn}.
+	 * {@link CLinkColumn}, {@link CButtonColumn} and {@link CCheckBoxColumn}.
 	 */
 	public $columns=array();
 	/**
