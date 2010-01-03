@@ -194,19 +194,17 @@ class CButtonColumn extends CGridColumn
 			$confirmation="if(!confirm(".CJavaScript::encode($this->deleteConfirmation).")) return false;";
 		else
 			$confirmation='';
+
 		$this->buttons['delete']['click']=<<<EOD
-function(){
+function() {
 	$confirmation
-	$.ajax({
-		type: 'POST',
-		url: $(this).attr('href'),
-		success: function() {
+	$.fn.yiiGridView.update('{$this->grid->id}', {
+		type:'POST',
+		url:$(this).attr('href'),
+		success:function() {
 			$.fn.yiiGridView.update('{$this->grid->id}');
-		},
-		error: function(XMLHttpRequest, textStatus, errorThrown) {
-			alert(XMLHttpRequest.responseText);
-		},
-	});
+		}
+	}, $confirmation);
 	return false;
 }
 EOD;
