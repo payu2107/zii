@@ -204,7 +204,7 @@ function() {
 		success:function() {
 			$.fn.yiiGridView.update('{$this->grid->id}');
 		}
-	}, $confirmation);
+	});
 	return false;
 }
 EOD;
