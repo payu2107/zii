@@ -53,6 +53,10 @@ class CPortlet extends CWidget
 	 */
 	public $decorationCssClass='portlet-decoration';
 	/**
+	 * @var string the CSS class for the portlet title tag. Defaults to 'portlet-title'.
+	 */
+	public $titleCssClass='portlet-title';
+	/**
 	 * @var string the CSS class for the content container tag. Defaults to 'portlet-content'.
 	 */
 	public $contentCssClass='portlet-content';
@@ -89,7 +93,7 @@ class CPortlet extends CWidget
 		if($this->title!==null)
 		{
 			echo "<div class=\"{$this->decorationCssClass}\">\n";
-			echo "<h2>{$this->title}</h2>\n";
+			echo "<div class=\"{$this->titleClass}\">{$this->title}</div>\n";
 			echo "</div>\n";
 		}
 	}
