@@ -204,15 +204,18 @@ class CGridView extends CBaseListView
 		foreach($this->columns as $i=>$column)
 		{
 			if(is_string($column))
-				$this->columns[$i]=$column=$this->createDataColumn($column);
+				$column=$this->createDataColumn($column);
 			else
 			{
 				if(!isset($column['class']))
 					$column['class']='CDataColumn';
-				$this->columns[$i]=$column=Yii::createComponent($column, $this);
+				$column=Yii::createComponent($column, $this);
 			}
+			if(!$column->visible)
+				continue;
 			if($column->id===null)
 				$column->id=$id.'_c'.$i;
+			$this->columns[$i]=$column;
 		}
 
 		foreach($this->columns as $column)

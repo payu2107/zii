@@ -43,6 +43,10 @@ abstract class CGridColumn extends CComponent
 	 */
 	public $footer;
 	/**
+	 * @var boolean whether this column is visible. Defaults to true.
+	 */
+	public $visible=true;
+	/**
 	 * @var string a PHP expression that is evaluated for every data cell and whose result
 	 * is used as the CSS class name for the data cell. In this expression, the variable
 	 * <code>$row</code> the row number (zero-based); <code>$data</code> the data model for the row;
