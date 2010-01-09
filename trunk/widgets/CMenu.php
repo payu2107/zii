@@ -115,9 +115,12 @@ class CMenu extends CWidget
 	 */
 	protected function renderMenu($items)
 	{
-		echo CHtml::openTag('ul',$this->htmlOptions)."\n";
-		$this->renderMenuRecursive($items);
-		echo CHtml::closeTag('ul');
+		if(count($items))
+		{
+			echo CHtml::openTag('ul',$this->htmlOptions)."\n";
+			$this->renderMenuRecursive($items);
+			echo CHtml::closeTag('ul');
+		}
 	}
 
 	/**
@@ -133,7 +136,7 @@ class CMenu extends CWidget
 				echo CHtml::link($item['label'],$item['url'],isset($item['linkOptions']) ? $item['linkOptions'] : array());
 			else
 				echo CHtml::tag('span',isset($item['linkOptions']) ? $item['linkOptions'] : array(), $item['label']);
-			if(isset($item['items']))
+			if(isset($item['items']) && count($item['items']))
 			{
 				echo "\n".CHtml::openTag('ul',$this->submenuHtmlOptions)."\n";
 				$this->renderMenuRecursive($item['items']);
