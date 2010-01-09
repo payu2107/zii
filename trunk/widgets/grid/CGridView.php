@@ -212,7 +212,10 @@ class CGridView extends CBaseListView
 				$column=Yii::createComponent($column, $this);
 			}
 			if(!$column->visible)
+			{
+				unset($this->columns[$i]);
 				continue;
+			}
 			if($column->id===null)
 				$column->id=$id.'_c'.$i;
 			$this->columns[$i]=$column;
