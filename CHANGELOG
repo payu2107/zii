@@ -3,8 +3,8 @@
                    ========================================
 
 
-Version 1.1.0 to be released
-----------------------------
+Version 1.1.0 January 10, 2010
+------------------------------
 - New: Added CTimestampBehavior to automatically set timestamps in AR (Jonah)
 - New: Added CBaseMenu and CListMenu to aid in creating menus (Jonah)
 - New: Added CJuiWidget (sebas, Qiang)
