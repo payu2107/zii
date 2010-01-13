@@ -87,7 +87,7 @@ class CLinkColumn extends CGridColumn
 			$label=$this->evaluateExpression($this->labelExpression,array('data'=>$data,'row'=>$row));
 		else
 			$label=$this->label;
-		$options=$this->htmlOptions;
+		$options=$this->linkHtmlOptions;
 		if(!isset($options['title']))
 			$options['title']=$label;
 		if(is_string($this->imageUrl))
