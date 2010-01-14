@@ -35,6 +35,9 @@ Yii::import('zii.widgets.jui.CJuiWidget');
  * that need to be passed to the JUI Sortable plugin. Please refer to
  * the {@link http://jqueryui.com/demos/sortable/ JUI Sortable} documentation
  * for possible options (name-value pairs).
+ * 
+ * If you are using javascript code anywhere in the code, please add "js:" at the 
+ * start of the js code definition and Yii will use this string as js code.
  *
  * @author Sebastian Thierer <sebathi@gmail.com>
  * @version $Id$
