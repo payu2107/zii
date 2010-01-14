@@ -77,11 +77,12 @@ class CJuiDatePicker extends CJuiInputWidget
 
 		$options=CJavaScript::encode($this->options);
 
+
 		$js = "jQuery('#{$id}').datepicker($options);";
 
 		if (isset($this->language)){
 			$this->registerScriptFile($this->i18nScriptFile);
-			$js .= "\njQuery('#{$id}').datepicker('option', jQuery.datepicker.regional['{$this->language}']);";
+			$js = "jQuery('#{$id}').datepicker(jQuery.extend($options, jQuery.datepicker.regional['{$this->language}']));";
 		}
 
 		Yii::app()->getClientScript()->registerScript(__CLASS__.'#'.$id, $js);
