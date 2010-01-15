@@ -75,8 +75,8 @@ class CJuiDatePicker extends CJuiInputWidget
 		else
 			echo CHtml::textField($name,$this->value,$this->htmlOptions);
 
-		$options=CJavaScript::encode($this->options);
 
+		$options=CJavaScript::encode(isset($this->language)?CMap::mergeArray(array('showMonthAfterYear'=>false), $this->options):$this->options);
 
 		$js = "jQuery('#{$id}').datepicker($options);";
 
