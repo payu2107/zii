@@ -54,6 +54,11 @@ class CJuiDatePicker extends CJuiInputWidget
 	public $i18nScriptFile = 'jquery-ui-i18n.js';
 
 	/**
+	 * @var array The default options called just one time per request
+	 */
+	public $defaultOptions;
+
+	/**
 	 * Run this widget.
 	 * This method registers necessary javascript and renders the needed HTML code.
 	 */
@@ -76,7 +81,7 @@ class CJuiDatePicker extends CJuiInputWidget
 			echo CHtml::textField($name,$this->value,$this->htmlOptions);
 
 
-		$options=CJavaScript::encode(isset($this->language)?CMap::mergeArray(array('showMonthAfterYear'=>false), $this->options):$this->options);
+		$options=CJavaScript::encode(isset($this->language)?array_merge(array('showMonthAfterYear'=>false), $this->options):$this->options);
 
 		$js = "jQuery('#{$id}').datepicker($options);";
 
@@ -85,6 +90,9 @@ class CJuiDatePicker extends CJuiInputWidget
 			$js = "jQuery('#{$id}').datepicker(jQuery.extend($options, jQuery.datepicker.regional['{$this->language}']));";
 		}
 
-		Yii::app()->getClientScript()->registerScript(__CLASS__.'#'.$id, $js);
+		$cs = Yii::app()->getClientScript();
+		$cs->registerScript(__CLASS__.'#'.$id, $js);
+		$cs->registerScript(__CLASS__, 	$this->defaultOptions?'jQuery.datepicker.setDefaults('.CJavaScript::encode($this->defaultOptions).');':'');
+		
 	}
 }
