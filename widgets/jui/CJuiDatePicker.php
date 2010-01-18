@@ -54,7 +54,8 @@ class CJuiDatePicker extends CJuiInputWidget
 	public $i18nScriptFile = 'jquery-ui-i18n.js';
 
 	/**
-	 * @var array The default options called just one time per request
+	 * @var array The default options called just one time per request. This options will alter every other CJuiDatePicker instance in the page.
+	 * It has to be set at the first call of CJuiDatePicker widget in the request.
 	 */
 	public $defaultOptions;
 
@@ -91,8 +92,8 @@ class CJuiDatePicker extends CJuiInputWidget
 		}
 
 		$cs = Yii::app()->getClientScript();
-		$cs->registerScript(__CLASS__.'#'.$id, $js);
 		$cs->registerScript(__CLASS__, 	$this->defaultOptions?'jQuery.datepicker.setDefaults('.CJavaScript::encode($this->defaultOptions).');':'');
+		$cs->registerScript(__CLASS__.'#'.$id, $js);
 		
 	}
 }
