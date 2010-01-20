@@ -43,6 +43,7 @@
 		ajaxUpdate: [],
 		ajaxVar: 'ajax',
 		pagerClass: 'pager',
+		loadingClass: 'loading',
 		sorterClass: 'sorter'
 		// updateSelector: '#id .pager a, '#id .sort a',
 		// beforeUpdate: function(id) {},
@@ -78,6 +79,7 @@
 	 */
 	$.fn.yiiListView.update = function(id, options) {
 		var settings = $.fn.yiiListView.settings[id];
+		$('#'+id).addClass(settings.loadingClass);
 		var data = {};
 		data[settings.ajaxVar] = id;
 		options = $.extend({
@@ -89,8 +91,10 @@
 				});
 				if(settings.afterUpdate != undefined)
 					settings.afterUpdate(id, data);
+				$('#'+id).removeClass(settings.loadingClass);
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				$('#'+id).removeClass(settings.loadingClass);
 				alert(XMLHttpRequest.responseText);
 			}
 		}, options || {});
