@@ -173,6 +173,7 @@ class CListView extends CBaseListView
 			'ajaxUpdate'=>$ajaxUpdate,
 			'ajaxVar'=>$this->ajaxVar,
 			'pagerClass'=>$this->pagerCssClass,
+			'loadingClass'=>$this->loadingCssClass,
 			'sorterClass'=>$this->sorterCssClass,
 		);
 		if($this->beforeAjaxUpdate!==null)

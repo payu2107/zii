@@ -79,6 +79,10 @@ Yii::import('zii.widgets.grid.CCheckBoxColumn');
  */
 class CGridView extends CBaseListView
 {
+	const FILTER_POS_HEADER='header';
+	const FILTER_POS_FOOTER='footer';
+	const FILTER_POS_BODY='body';
+
 	private $_formatter;
 	/**
 	 * @var array grid column configuration. Each array element represents the configuration
@@ -168,6 +172,30 @@ class CGridView extends CBaseListView
 	 * when rendering. Defaults to an HTML blank.
 	 */
 	public $nullDisplay='&nbsp;';
+	/**
+	 * @var string the CSS class name for the table row element containing all filter input fields. Defaults to 'filters'.
+	 * @see filter
+	 * @since 1.1.1
+	 */
+	public $filterCssClass='filters';
+	/**
+	 * @var string whether the filters should be displayed in the grid view. Valid values include:
+	 * <ul>
+	 *    <li>header: the filters will be displayed on top of each column's header cell.</li>
+	 *    <li>body: the filters will be displayed right below each column's header cell.</li>
+	 *    <li>footer: the filters will be displayed below each column's footer cell.</li>
+	 * </ul>
+	 * @see filter
+	 * @since 1.1.1
+	 */
+	public $filterPosition='body';
+	/**
+	 * @var CModel the model instance that keeps the user-entered filter data. When this property is set,
+	 * the grid view will enable column-based filtering. Each data column by default will display a text field
+	 * at the top that users can fill in to filter the data.
+	 * @since 1.1.1
+	 */
+	public $filter;
 
 	/**
 	 * Initializes the grid view.
@@ -258,6 +286,8 @@ class CGridView extends CBaseListView
 			'ajaxUpdate'=>$ajaxUpdate,
 			'ajaxVar'=>$this->ajaxVar,
 			'pagerClass'=>$this->pagerCssClass,
+			'loadingClass'=>$this->loadingCssClass,
+			'filterClass'=>$this->filterCssClass,
 			'tableClass'=>$this->itemsCssClass,
 			'selectableRows'=>$this->selectableRows,
 		);
@@ -297,10 +327,35 @@ class CGridView extends CBaseListView
 	 */
 	public function renderTableHeader()
 	{
-		echo "<thead>\n<tr>\n";
+		echo "<thead>\n";
+
+		if($this->filterPosition===self::FILTER_POS_HEADER)
+			$this->renderFilter();
+
+		echo "<tr>\n";
 		foreach($this->columns as $column)
 			$column->renderHeaderCell();
-		echo "</tr>\n</thead>\n";
+		echo "</tr>\n";
+
+		if($this->filterPosition===self::FILTER_POS_BODY)
+			$this->renderFilter();
+
+		echo "</thead>\n";
+	}
+
+	/**
+	 * Renders the filter.
+	 * @since 1.1.1
+	 */
+	public function renderFilter()
+	{
+		if($this->filter!==null)
+		{
+			echo "<tr class=\"{$this->filterCssClass}\">\n";
+			foreach($this->columns as $column)
+				$column->renderFilterCell();
+			echo "</tr>\n";
+		}
 	}
 
 	/**
@@ -308,12 +363,21 @@ class CGridView extends CBaseListView
 	 */
 	public function renderTableFooter()
 	{
-		if($this->getHasFooter())
+		$hasFilter=$this->filter!==null && $this->filterPosition===self::FILTER_POS_FOOTER;
+		$hasFooter=$this->getHasFooter();
+		if($hasFilter || $hasFooter)
 		{
-			echo "<tfoot>\n<tr>\n";
-			foreach($this->columns as $column)
-				$column->renderFooterCell();
-			echo "</tr>\n</tfoot>\n";
+			echo "<tfoot>\n";
+			if($hasFooter)
+			{
+				echo "<tr>\n";
+				foreach($this->columns as $column)
+					$column->renderFooterCell();
+				echo "</tr>\n";
+			}
+			if($hasFilter)
+				$this->renderFilter();
+			echo "</tfoot>\n";
 		}
 	}
 
@@ -325,6 +389,7 @@ class CGridView extends CBaseListView
 		$data=$this->dataProvider->getData();
 		$n=count($data);
 		echo "<tbody>\n";
+
 		if($n>0)
 		{
 			for($row=0;$row<$n;++$row)

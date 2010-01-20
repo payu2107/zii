@@ -39,6 +39,12 @@
 				});
 			}
 
+			var inputSelector='#'+id+' .'+settings.filterClass+' input, '+'#'+id+' .'+settings.filterClass+' select';
+			$(inputSelector).live('change',function(){
+				var data = $.param($(inputSelector))+'&'+settings.ajaxVar+'='+id;
+				$.fn.yiiGridView.update(id, {url: location.href, data: data});
+			});
+
 			if(settings.selectableRows > 0) {
 				$('#'+id+' .'+settings.tableClass+' > tbody > tr').live('click',function(){
 					if(settings.selectableRows == 1)
@@ -55,6 +61,8 @@
 		ajaxUpdate: [],
 		ajaxVar: 'ajax',
 		pagerClass: 'pager',
+		loadingClass: 'loading',
+		filterClass: 'filters',
 		tableClass: 'items',
 		selectableRows: 1
 		// updateSelector: '#id .pager a, '#id .grid thead th a',
@@ -114,6 +122,7 @@
 	 */
 	$.fn.yiiGridView.update = function(id, options) {
 		var settings = $.fn.yiiGridView.settings[id];
+		$('#'+id).addClass(settings.loadingClass);
 		var data = {};
 		data[settings.ajaxVar] = id;
 		options = $.extend({
@@ -125,8 +134,10 @@
 				});
 				if(settings.afterUpdate != undefined)
 					settings.afterUpdate(id, data);
+				$('#'+id).removeClass(settings.loadingClass);
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				$('#'+id).removeClass(settings.loadingClass);
 				alert(XMLHttpRequest.responseText);
 			}
 		}, options || {});
