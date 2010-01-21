@@ -4,6 +4,7 @@
 
 Version 1.1.1 to be released
 ----------------------------
+- Bug: CGridView and CListView may not register the needed CSS file for the pager (Qiang)
 - Bug #823: typo in CLinkColumn about linkHtmlOptions (Qiang)
 - Bug #18: Change the way CJuiDatePicker sets its language option (sebas)
 - Bug #14: Added documentation about the "js:" prefix in CJuiSortable (sebas)
