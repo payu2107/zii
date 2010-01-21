@@ -90,10 +90,11 @@ class CDataColumn extends CGridColumn
 	{
 		if($this->filter!==false && $this->grid->filter!==null)
 		{
+			$id=CHtml::activeId($this->filter,$this->name).'_search_';
 			if(is_array($this->filter))
-				echo CHtml::activeDropDownList($this->grid->filter, $this->name, $this->filter, array('prompt'=>''));
+				echo CHtml::activeDropDownList($this->grid->filter, $this->name, $this->filter, array('id'=>$id,'prompt'=>''));
 			else if($this->filter===null)
-				echo CHtml::activeTextField($this->grid->filter, $this->name);
+				echo CHtml::activeTextField($this->grid->filter, $this->name, array('id'=>$id));
 			else
 				echo $this->filter;
 		}
