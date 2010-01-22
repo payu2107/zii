@@ -88,6 +88,12 @@ class CListView extends CBaseListView
 	 */
 	public $template="{summary}\n{sorter}\n{items}\n{pager}";
 	/**
+	 * @var string the CSS class name that will be assigned to the widget container element
+	 * when the widget is updating its content via AJAX. Defaults to 'list-view-loading'.
+	 * @since 1.1.1
+	 */
+	public $loadingCssClass='list-view-loading';
+	/**
 	 * @var string the CSS class name for the sorter container. Defaults to 'sorter'.
 	 */
 	public $sorterCssClass='sorter';

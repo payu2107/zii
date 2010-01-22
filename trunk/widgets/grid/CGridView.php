@@ -173,6 +173,12 @@ class CGridView extends CBaseListView
 	 */
 	public $nullDisplay='&nbsp;';
 	/**
+	 * @var string the CSS class name that will be assigned to the widget container element
+	 * when the widget is updating its content via AJAX. Defaults to 'grid-view-loading'.
+	 * @since 1.1.1
+	 */
+	public $loadingCssClass='grid-view-loading';
+	/**
 	 * @var string the CSS class name for the table row element containing all filter input fields. Defaults to 'filters'.
 	 * @see filter
 	 * @since 1.1.1
