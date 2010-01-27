@@ -25,7 +25,7 @@
 	$.fn.yiiGridView = function(settings) {
 		var settings = $.extend({}, $.fn.yiiGridView.defaults, settings || {});
 		return this.each(function(){
-			$this = $(this);
+			var $this = $(this);
 			var id = $this.attr('id');
 			if(settings.updateSelector == undefined) {
 				settings.updateSelector = '#'+id+' .'+settings.pagerClass+' a, #'+id+' .'+settings.tableClass+' thead th a';
