@@ -23,7 +23,7 @@
 	$.fn.yiiListView = function(settings) {
 		var settings = $.extend({}, $.fn.yiiListView.defaults, settings || {});
 		return this.each(function(){
-			$this = $(this);
+			var $this = $(this);
 			var id = $this.attr('id');
 			if(settings.updateSelector == undefined) {
 				settings.updateSelector = '#'+id+' .'+settings.pagerClass+' a, #'+id+' .'+settings.sorterClass+' a';
