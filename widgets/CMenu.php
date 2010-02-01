@@ -182,10 +182,10 @@ class CMenu extends CWidget
 				$active=true;
 			if($items[$i]['active'] && $this->activeCssClass!='')
 			{
-				if(isset($item['linkOptions']['class']))
-					$items[$i]['linkOptions']['class'].=' '.$this->activeCssClass;
+				if(isset($item['itemOptions']['class']))
+					$items[$i]['itemOptions']['class'].=' '.$this->activeCssClass;
 				else
-					$items[$i]['linkOptions']['class']=$this->activeCssClass;
+					$items[$i]['itemOptions']['class']=$this->activeCssClass;
 			}
 		}
 		return array_values($items);
