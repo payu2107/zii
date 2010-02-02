@@ -190,6 +190,7 @@ class CListView extends CBaseListView
 		$options=CJavaScript::encode($options);
 		$cs=Yii::app()->getClientScript();
 		$cs->registerCoreScript('jquery');
+		$cs->registerCoreScript('bbq');
 		$cs->registerScriptFile($this->baseScriptUrl.'/jquery.yiilistview.js');
 		$cs->registerScript(__CLASS__.'#'.$id,"jQuery('#$id').yiiListView($options);");
 	}
