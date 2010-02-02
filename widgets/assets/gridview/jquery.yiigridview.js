@@ -42,7 +42,7 @@
 			var inputSelector='#'+id+' .'+settings.filterClass+' input, '+'#'+id+' .'+settings.filterClass+' select';
 			$(inputSelector).live('change',function(){
 				var data = $.param($(inputSelector))+'&'+settings.ajaxVar+'='+id;
-				$.fn.yiiGridView.update(id, {url: location.href, data: data});
+				$.fn.yiiGridView.update(id, {data: data});
 			});
 
 			if(settings.selectableRows > 0) {
@@ -123,11 +123,8 @@
 	$.fn.yiiGridView.update = function(id, options) {
 		var settings = $.fn.yiiGridView.settings[id];
 		$('#'+id).addClass(settings.loadingClass);
-		var data = {};
-		data[settings.ajaxVar] = id;
 		options = $.extend({
 			url: $.fn.yiiGridView.getUrl(id),
-			data: data,
 			success: function(data,status) {
 				$.each(settings.ajaxUpdate, function() {
 					$('#'+this).html($(data).find('#'+this));
@@ -141,6 +138,11 @@
 				alert(XMLHttpRequest.responseText);
 			}
 		}, options || {});
+		if(options.data!=undefined) {
+			options.url = $.param.querystring(options.url, options.data);
+			options.data = undefined;
+		}
+		options.url = $.param.querystring(options.url, settings.ajaxVar+'='+id)
 
 		if(settings.beforeUpdate != undefined)
 			settings.beforeUpdate(id);

@@ -307,6 +307,7 @@ class CGridView extends CBaseListView
 		$options=CJavaScript::encode($options);
 		$cs=Yii::app()->getClientScript();
 		$cs->registerCoreScript('jquery');
+		$cs->registerCoreScript('bbq');
 		$cs->registerScriptFile($this->baseScriptUrl.'/jquery.yiigridview.js');
 		$cs->registerScript(__CLASS__.'#'.$id,"jQuery('#$id').yiiGridView($options);");
 	}
