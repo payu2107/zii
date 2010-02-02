@@ -221,7 +221,7 @@ EOD;
 			if(isset($button['click']))
 			{
 				$function=CJavaScript::encode($button['click']);
-				$js[]="jQuery('a.{$button['options']['class']}').live('click',$function);";
+				$js[]="jQuery('#{$this->grid->id} a.{$button['options']['class']}').live('click',$function);";
 			}
 		}
 
