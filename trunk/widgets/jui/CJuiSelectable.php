@@ -66,10 +66,10 @@ class CJuiSelectable extends CJuiWidget
 	public function run()
 	{
 		parent::init();
-		if (!isset($this->htmlOptions['id'])){
-			$this->htmlOptions['id'] = $this->getId();
-		}
-		$id = $this->htmlOptions['id'];
+		
+		$id=$this->getId();
+		$this->htmlOptions['id']=$id;
+		
 		$options=empty($this->options) ? '' : CJavaScript::encode($this->options);
 		Yii::app()->getClientScript()->registerScript(__CLASS__.'#'.$id,"jQuery('#{$id}').selectable({$options});");
 

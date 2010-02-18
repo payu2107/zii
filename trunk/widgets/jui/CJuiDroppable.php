@@ -54,10 +54,8 @@ class CJuiDroppable extends CJuiWidget
 	public function init()
 	{
 		parent::init();
-		if (!isset($this->htmlOptions['id'])){
-			$this->htmlOptions['id'] = $this->getId();
-		}
-		$id = $this->htmlOptions['id'];
+		$id=$this->getId();
+		$this->htmlOptions['id']=$id;
 		$options=empty($this->options) ? '' : CJavaScript::encode($this->options);
 		Yii::app()->getClientScript()->registerScript(__CLASS__.'#'.$id,"jQuery('#{$id}').droppable($options);");
 		echo CHtml::openTag($this->tagName,$this->htmlOptions)."\n";
