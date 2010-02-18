@@ -11,3 +11,4 @@ for both A and B.
 
 Upgrading from v1.1.0
 ---------------------
+The JUI widgets change the way that take its id. You can now set them by setting "$htmlOptions['id']".
