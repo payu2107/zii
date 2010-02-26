@@ -109,7 +109,7 @@ class CGridView extends CBaseListView
 	/**
 	 * @var string a PHP expression that is evaluated for every table body row and whose result
 	 * is used as the CSS class name for the row. In this expression, the variable <code>$row</code>
-	 * stands for the row number (zero-based) and <code>$this</code> the column object.
+	 * stands for the row number (zero-based) and <code>$this</code> the grid object.
 	 * @see rowCssClass
 	 */
 	public $rowCssClassExpression;
