@@ -203,6 +203,13 @@ class CGridView extends CBaseListView
 	 * @since 1.1.1
 	 */
 	public $filter;
+	/**
+	 * @var boolean whether to hide the header cells of the grid. When this is true, header cells
+	 * will not be rendered, which means the grid cannot be sorted anymore since the sort links are located
+	 * in the header. Defaults to false.
+	 * @since 1.1.1
+	 */
+	public $hideHeader=false;
 
 	/**
 	 * Initializes the grid view.
@@ -335,20 +342,29 @@ class CGridView extends CBaseListView
 	 */
 	public function renderTableHeader()
 	{
-		echo "<thead>\n";
+		if(!$this->hideHeader)
+		{
+			echo "<thead>\n";
 
-		if($this->filterPosition===self::FILTER_POS_HEADER)
+			if($this->filterPosition===self::FILTER_POS_HEADER)
+				$this->renderFilter();
+
+			echo "<tr>\n";
+			foreach($this->columns as $column)
+				$column->renderHeaderCell();
+			echo "</tr>\n";
+
+			if($this->filterPosition===self::FILTER_POS_BODY)
+				$this->renderFilter();
+
+			echo "</thead>\n";
+		}
+		else if($this->filter!==null && ($this->filterPosition===self::FILTER_POS_HEADER || $this->filterPosition===self::FILTER_POS_BODY))
+		{
+			echo "<thead>\n";
 			$this->renderFilter();
-
-		echo "<tr>\n";
-		foreach($this->columns as $column)
-			$column->renderHeaderCell();
-		echo "</tr>\n";
-
-		if($this->filterPosition===self::FILTER_POS_BODY)
-			$this->renderFilter();
-
-		echo "</thead>\n";
+			echo "</thead>\n";
+		}
 	}
 
 	/**
