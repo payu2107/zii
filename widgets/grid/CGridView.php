@@ -109,7 +109,8 @@ class CGridView extends CBaseListView
 	/**
 	 * @var string a PHP expression that is evaluated for every table body row and whose result
 	 * is used as the CSS class name for the row. In this expression, the variable <code>$row</code>
-	 * stands for the row number (zero-based) and <code>$this</code> the grid object.
+	 * stands for the row number (zero-based), <code>$data</code> is the data model associated with
+	 * the row, and <code>$this</code> is the grid object.
 	 * @see rowCssClass
 	 */
 	public $rowCssClassExpression;
@@ -418,7 +419,10 @@ class CGridView extends CBaseListView
 	public function renderTableRow($row)
 	{
 		if($this->rowCssClassExpression!==null)
-			echo '<tr class="'.$this->evaluateExpression($this->rowCssClassExpression,array('row'=>$row)).'">';
+		{
+			$data=$this->dataProvider->data[$row];
+			echo '<tr class="'.$this->evaluateExpression($this->rowCssClassExpression,array('row'=>$row,'data'=>$data)).'">';
+		}
 		else if(is_array($this->rowCssClass) && ($n=count($this->rowCssClass))>0)
 			echo '<tr class="'.$this->rowCssClass[$row%$n].'">';
 		else
