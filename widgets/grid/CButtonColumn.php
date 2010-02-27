@@ -121,12 +121,17 @@ class CButtonColumn extends CGridColumn
 	 * <pre>
 	 * 'buttonID' => array(
 	 *     'label'=>'...',     // text label of the button
-	 *     'url'=>'...',       // the PHP expression for generating the URL of the button
+	 *     'url'=>'...',       // a PHP expression for generating the URL of the button
 	 *     'imageUrl'=>'...',  // image URL of the button. If not set or false, a text link is used
 	 *     'options'=>array(...), // HTML options for the button tag
 	 *     'click'=>'...',     // a JS function to be invoked when the button is clicked
+	 *     'visible'=>'...',   // a PHP expression for determining whether the button is visible
 	 * )
 	 * </pre>
+	 * In the PHP expression for the 'url' option and/or 'visible' option, the variable <code>$row</code>
+	 * refers to the current row number (zero-based), and <code>$data</code> refers to the data model for
+	 * the row.
+	 *
 	 * Note that in order to display these additional buttons, the {@link template} property needs to
 	 * be configured so that the corresponding button IDs appear as tokens in the template.
 	 */
@@ -179,15 +184,16 @@ class CButtonColumn extends CGridColumn
 
 		foreach(array('view','update','delete') as $id)
 		{
-			if(!isset($this->buttons[$id]))
-			{
-				$this->buttons[$id]=array(
-					'label'=>$this->{$id.'ButtonLabel'},
-					'url'=>$this->{$id.'ButtonUrl'},
-					'imageUrl'=>$this->{$id.'ButtonImageUrl'},
-					'options'=>$this->{$id.'ButtonOptions'},
-				);
-			}
+			$button=array(
+				'label'=>$this->{$id.'ButtonLabel'},
+				'url'=>$this->{$id.'ButtonUrl'},
+				'imageUrl'=>$this->{$id.'ButtonImageUrl'},
+				'options'=>$this->{$id.'ButtonOptions'},
+			);
+			if(isset($this->buttons[$id]))
+				$this->buttons[$id]=array_merge($this->buttons[$id],$button);
+			else
+				$this->buttons[$id]=$button;
 		}
 
 		if(is_string($this->deleteConfirmation))
@@ -259,6 +265,8 @@ EOD;
 	 */
 	protected function renderButton($id,$button,$row,$data)
 	{
+		if (isset($button['visible']) && !$this->evaluateExpression($button['visible'],array('row'=>$row,'data'=>$data)))
+  			return;
 		$label=isset($button['label']) ? $button['label'] : $id;
 		$url=isset($button['url']) ? $this->evaluateExpression($button['url'],array('data'=>$data,'row'=>$row)) : '#';
 		$options=isset($button['options']) ? $button['options'] : array();
