@@ -181,7 +181,7 @@ class CDetailView extends CWidget
 				$tr['{label}']=$attribute['label'];
 			else if(isset($attribute['name']))
 			{
-				if($this->data instanceof CModel))
+				if($this->data instanceof CModel)
 					$tr['{label}']=$this->data->getAttributeLabel($attribute['name']);
 				else
 					$tr['{label}']=$attribute['name'];
