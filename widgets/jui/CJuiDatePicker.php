@@ -82,13 +82,14 @@ class CJuiDatePicker extends CJuiInputWidget
 			echo CHtml::textField($name,$this->value,$this->htmlOptions);
 
 
-		$options=CJavaScript::encode(isset($this->language)?array_merge(array('showMonthAfterYear'=>false), $this->options):$this->options);
+		$options=CJavaScript::encode($this->options);
+		echo 'yes';
 
 		$js = "jQuery('#{$id}').datepicker($options);";
 
 		if (isset($this->language)){
 			$this->registerScriptFile($this->i18nScriptFile);
-			$js = "jQuery('#{$id}').datepicker(jQuery.extend($options, jQuery.datepicker.regional['{$this->language}']));";
+			$js = "jQuery('#{$id}').datepicker(jQuery.extend({showMonthAfterYear:false}, jQuery.datepicker.regional['{$this->language}'], {$options}));";
 		}
 
 		$cs = Yii::app()->getClientScript();
