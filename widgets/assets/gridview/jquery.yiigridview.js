@@ -18,8 +18,8 @@
 	 * - tableClass: string, the CSS class for the table
 	 * - selectableRows: integer, the number of rows that can be selected
 	 * - updateSelector: string, the selector for choosing which elements can trigger ajax requests
-	 * - beforeUpdate: function, the function to be called before ajax request is sent
-	 * - afterUpdate: function, the function to be called after ajax response is received
+	 * - beforeAjaxUpdate: function, the function to be called before ajax request is sent
+	 * - afterAjaxUpdate: function, the function to be called after ajax response is received
 	 * - selectionChanged: function, the function to be called after the row selection is changed
 	 */
 	$.fn.yiiGridView = function(settings) {
@@ -66,8 +66,8 @@
 		tableClass: 'items',
 		selectableRows: 1
 		// updateSelector: '#id .pager a, '#id .grid thead th a',
-		// beforeUpdate: function(id) {},
-		// afterUpdate: function(id, data) {},
+		// beforeAjaxUpdate: function(id) {},
+		// afterAjaxUpdate: function(id, data) {},
 		// selectionChanged: function(id) {},
 	};
 
@@ -129,8 +129,8 @@
 				$.each(settings.ajaxUpdate, function() {
 					$('#'+this).html($(data).find('#'+this));
 				});
-				if(settings.afterUpdate != undefined)
-					settings.afterUpdate(id, data);
+				if(settings.afterAjaxUpdate != undefined)
+					settings.afterAjaxUpdate(id, data);
 				$('#'+id).removeClass(settings.loadingClass);
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -144,8 +144,8 @@
 		}
 		options.url = $.param.querystring(options.url, settings.ajaxVar+'='+id)
 
-		if(settings.beforeUpdate != undefined)
-			settings.beforeUpdate(id);
+		if(settings.beforeAjaxUpdate != undefined)
+			settings.beforeAjaxUpdate(id);
 		$.ajax(options);
 	};
 
