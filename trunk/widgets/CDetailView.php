@@ -129,7 +129,7 @@ class CDetailView extends CWidget
 	public function init()
 	{
 		if($this->data===null)
-			throw new CException(Yii::t('zii','Please specify the "model" property.'));
+			throw new CException(Yii::t('zii','Please specify the "data" property.'));
 		if($this->attributes===null)
 		{
 			if($this->data instanceof CModel)
