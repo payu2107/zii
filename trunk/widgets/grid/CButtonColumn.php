@@ -201,12 +201,21 @@ class CButtonColumn extends CGridColumn
 		else
 			$confirmation='';
 
+		if(Yii::app()->request->enableCsrfValidation)
+		{
+	        $csrfTokenName = Yii::app()->request->csrfTokenName;
+	        $csrfToken = Yii::app()->request->csrfToken;
+	        $csrf = "\n\t\tdata:{ '$csrfTokenName':'$csrfToken' },";
+		}
+		else
+			$csrf = '';
+
 		$this->buttons['delete']['click']=<<<EOD
 function() {
 	$confirmation
 	$.fn.yiiGridView.update('{$this->grid->id}', {
 		type:'POST',
-		url:$(this).attr('href'),
+		url:$(this).attr('href'),$csrf
 		success:function() {
 			$.fn.yiiGridView.update('{$this->grid->id}');
 		}
