@@ -124,6 +124,7 @@
 		var settings = $.fn.yiiGridView.settings[id];
 		$('#'+id).addClass(settings.loadingClass);
 		options = $.extend({
+			type: 'GET',
 			url: $.fn.yiiGridView.getUrl(id),
 			success: function(data,status) {
 				$.each(settings.ajaxUpdate, function() {
@@ -138,9 +139,9 @@
 				alert(XMLHttpRequest.responseText);
 			}
 		}, options || {});
-		if(options.data!=undefined) {
+		if(options.data!=undefined && options.type=='GET') {
 			options.url = $.param.querystring(options.url, options.data);
-			options.data = undefined;
+			options.data = {};
 		}
 		options.url = $.param.querystring(options.url, settings.ajaxVar+'='+id)
 
