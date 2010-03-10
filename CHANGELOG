@@ -7,6 +7,7 @@ Version 1.1.1 to be released
 - Bug: CGridView and CListView may not register the needed CSS file for the pager (Qiang)
 - Bug #18: Change the way CJuiDatePicker sets its language option (sebas)
 - Bug #14: Added documentation about the "js:" prefix in CJuiSortable (sebas)
+- Bug #27: Fixed the issue that when CSRF is turned on, delete button doesn't work for CGridView (Qiang)
 - Enh: Added CListView.loadingCssClass and CGridView.loadingCssClass (Qiang)
 - Enh: Added filtering support for CGridView (Qiang)
 - Enh: Added 'template' option to each attribute specification in CDetailView (Qiang)
