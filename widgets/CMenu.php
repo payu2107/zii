@@ -54,11 +54,22 @@ class CMenu extends CWidget
 	 * If a menu item is active and {@link activeClass} is not empty, its CSS class will be appended with {@link activeClass}.
 	 * If this option is not set, the menu item will be set active automatically when the current request
 	 * is triggered by {@link url}.</li>
+	 * <li>template: string, optional, the template used to render this menu item.
+	 * In this template, the token "{menu}" will be replaced with the corresponding menu link or text.
+	 * Please see {@link itemTemplate} for more details. This option has been available since version 1.1.1.</li>
 	 * <li>linkOptions: array, optional, additional HTML attributes to be rendered for the link or span tag of the menu item.</li>
 	 * <li>itemOptions: array, optional, additional HTML attributes to be rendered for the container tag of the menu item.</li>
 	 * </ul>
 	 */
 	public $items=array();
+	/**
+	 * @var string the template used to render an individual menu item. In this template,
+	 * the token "{menu}" will be replaced with the corresponding menu link or text.
+	 * If this property is not set, each menu will be rendered without any decoration.
+	 * This property will be overridden by the 'template' option set in individual menu items via {@items}.
+	 * @since 1.1.1
+	 */
+	public $itemTemplate;
 	/**
 	 * @var boolean whether the labels for menu items should be HTML-encoded. Defaults to true.
 	 */
@@ -133,9 +144,16 @@ class CMenu extends CWidget
 		{
 			echo CHtml::openTag('li', isset($item['itemOptions']) ? $item['itemOptions'] : array());
 			if(isset($item['url']))
-				echo CHtml::link($item['label'],$item['url'],isset($item['linkOptions']) ? $item['linkOptions'] : array());
+				$menu=CHtml::link($item['label'],$item['url'],isset($item['linkOptions']) ? $item['linkOptions'] : array());
 			else
-				echo CHtml::tag('span',isset($item['linkOptions']) ? $item['linkOptions'] : array(), $item['label']);
+				$menu=CHtml::tag('span',isset($item['linkOptions']) ? $item['linkOptions'] : array(), $item['label']);
+			if(isset($this->itemTemplate) || isset($item['template']))
+			{
+				$template=isset($item['template']) ? $item['template'] : $this->itemTemplate;
+				echo strtr($menu,array('{menu}'=>$menu));
+			}
+			else
+				echo $menu;
 			if(isset($item['items']) && count($item['items']))
 			{
 				echo "\n".CHtml::openTag('ul',$this->submenuHtmlOptions)."\n";
