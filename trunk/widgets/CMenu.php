@@ -150,7 +150,7 @@ class CMenu extends CWidget
 			if(isset($this->itemTemplate) || isset($item['template']))
 			{
 				$template=isset($item['template']) ? $item['template'] : $this->itemTemplate;
-				echo strtr($menu,array('{menu}'=>$menu));
+				echo strtr($template,array('{menu}'=>$menu));
 			}
 			else
 				echo $menu;
