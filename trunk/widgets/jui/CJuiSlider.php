@@ -58,11 +58,9 @@ class CJuiSlider extends CJuiWidget
 	 */
 	public function run()
 	{
-		parent::init();
-		
 		$id=$this->getId();
 		$this->htmlOptions['id']=$id;
-		
+
 		echo CHtml::openTag($this->tagName,$this->htmlOptions);
 		echo CHtml::closeTag($this->tagName);
 

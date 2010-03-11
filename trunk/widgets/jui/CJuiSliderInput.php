@@ -67,7 +67,6 @@ class CJuiSliderInput extends CJuiInputWidget
 	 */
 	public function run()
 	{
-
 		list($name,$id)=$this->resolveNameID();
 
 		if(isset($this->htmlOptions['id']))
