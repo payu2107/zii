@@ -20,9 +20,9 @@
 	 * - beforeAjaxUpdate: function, the function to be called before ajax request is sent
 	 * - afterAjaxUpdate: function, the function to be called after ajax response is received
 	 */
-	$.fn.yiiListView = function(settings) {
-		var settings = $.extend({}, $.fn.yiiListView.defaults, settings || {});
+	$.fn.yiiListView = function(options) {
 		return this.each(function(){
+			var settings = $.extend({}, $.fn.yiiListView.defaults, options || {});
 			var $this = $(this);
 			var id = $this.attr('id');
 			if(settings.updateSelector == undefined) {
