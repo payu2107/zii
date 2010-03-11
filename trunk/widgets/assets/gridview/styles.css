@@ -21,7 +21,7 @@
 .grid-view table.items th
 {
 	color: white;
-	background: #6885A4;
+	background: #6BAACE;
 	text-align: center;
 }
 
@@ -51,7 +51,7 @@
 
 .grid-view table.items tr.even
 {
-	background: #F8FBFC;
+	background: #F8F8F8;
 }
 
 .grid-view table.items tr.odd
