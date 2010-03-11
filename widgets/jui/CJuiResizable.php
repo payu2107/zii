@@ -25,9 +25,9 @@ Yii::import('zii.widgets.jui.CJuiWidget');
  *     ),
  * ));
  *     echo 'Your Resizable content here';
- *     
+ *
  * $this->endWidget();
- * 
+ *
  * </pre>
  *
  * By configuring the {@link options} property, you may specify the options
@@ -53,6 +53,7 @@ class CJuiResizable extends CJuiWidget
 	 */
 	public function init()
 	{
+		parent::init();
 		$id=$this->getId();
 		$this->htmlOptions['id']=$id;
 		$options=empty($this->options) ? '' : CJavaScript::encode($this->options);
@@ -67,7 +68,7 @@ class CJuiResizable extends CJuiWidget
 	{
 		echo CHtml::closeTag($this->tagName);
 	}
-	
+
 }
 
 
