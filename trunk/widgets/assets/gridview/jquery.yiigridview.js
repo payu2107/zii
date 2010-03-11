@@ -22,9 +22,9 @@
 	 * - afterAjaxUpdate: function, the function to be called after ajax response is received
 	 * - selectionChanged: function, the function to be called after the row selection is changed
 	 */
-	$.fn.yiiGridView = function(settings) {
-		var settings = $.extend({}, $.fn.yiiGridView.defaults, settings || {});
+	$.fn.yiiGridView = function(options) {
 		return this.each(function(){
+			var settings = $.extend({}, $.fn.yiiGridView.defaults, options || {});
 			var $this = $(this);
 			var id = $this.attr('id');
 			if(settings.updateSelector == undefined) {
