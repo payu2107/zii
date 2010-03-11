@@ -21,7 +21,7 @@
 .grid-view table.items th
 {
 	color: white;
-	background: #6BAACE;
+	background: url("bg.gif") repeat-x scroll left top white
 	text-align: center;
 }
 
