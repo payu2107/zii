@@ -12,6 +12,7 @@ Version 1.1.1 to be released
 - Enh: Added filtering support for CGridView (Qiang)
 - Enh: Added 'template' option to each attribute specification in CDetailView (Qiang)
 - Chg: CMenu will render the 'active' CSS class in the container tag of the link (Qiang)
+- New: Upgraded JQuery UI to 1.8rc3 (Qiang)
 
 Version 1.1.0 January 10, 2010
 ------------------------------
