@@ -2,7 +2,7 @@
                    Zii Extension Library for Yii Change Log
                    ========================================
 
-Version 1.1.1 to be released
+Version 1.1.1 March 14, 2010
 ----------------------------
 - Bug: CGridView and CListView may not register the needed CSS file for the pager (Qiang)
 - Bug #18: Change the way CJuiDatePicker sets its language option (sebas)
