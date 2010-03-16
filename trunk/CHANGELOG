@@ -1,6 +1,10 @@
 
                    Zii Extension Library for Yii Change Log
                    ========================================
+Version 1.1.2 to be released
+----------------------------
+- Enh #1013: Added CJuiAutoComplete (sebas)
+
 
 Version 1.1.1 March 14, 2010
 ----------------------------
