@@ -33,31 +33,37 @@ Yii::import('zii.widgets.jui.CJuiInputWidget');
  *
  * By configuring the {@link options} property, you may specify the options
  * that need to be passed to the JUI datepicker plugin. Please refer to
- * the {@link http://jqueryui.com/demos/datepicker/ JUI datepicker} documentation
- * for possible options (name-value pairs).
- * 
+ * the {@link http://jqueryui.com/demos/autocomplete/ JUI
+ * autocomplete} documentation for possible options (name-value pairs).
+ *
  * By configuring the {@link source} property, you may specify where to search
- * the autocomplete options for each item. If source is an array, the list is 
- * used for autocomplete. If it's an URL (string), the component will do an 
- * ajax request to this page.
+ * the autocomplete options for each item. If source is an array, the list is
+ * used for autocomplete. You may also configure {@link sourceUrl} to retrieve
+ * autocomplete items from an ajax response.
  *
  * @author Sebastian Thierer <sebathi@gmail.com>
  * @version $Id
  * @package zii.widgets.jui
- * @since 1.1
+ * @since 1.1.2
  */
 class CJuiAutoComplete extends CJuiInputWidget
 {
 	/**
-	 * @var array the source of the autoComplete. List of items for the autocomplete.
+	 * @var mixed the entries that the autocomplete should choose from. This can be
+	 * <ul>
+	 * <li>an Array with local data</li>
+     * <li>a String, specifying a URL that returns JSON data as the entries.</li>
+     * <li>a javascript callback. Please make sure you prefix the callback name with "js:" in this case.</li>
+     * </ul>
 	 */
 	public $source = array();
-
 	/**
-	 * @var string the remote source URL for ajax loading. If this is set, the {link source} 
-	 * property is ignored.
+	 * @var mixed the URL that will return JSON data as the autocomplete items.
+	 * CHtml::normalizeUrl() will be applied to this property to convert the property
+	 * into a proper URL. When this property is set, the {@link source} property will be ignored.
 	 */
-	public $remoteSource;
+	public $sourceUrl;
+
 	/**
 	 * Run this widget.
 	 * This method registers necessary javascript and renders the needed HTML code.
@@ -81,17 +87,10 @@ class CJuiAutoComplete extends CJuiInputWidget
 		else
 			echo CHtml::textField($name,$this->value,$this->htmlOptions);
 
-		
-		if(isset($this->remoteSource)){
-			if (is_array($this->remoteSource)){
-				$route=isset($this->remoteSource[0]) ? $this->remoteSource[0] : '';
-				$this->options['source']=$this->controller->createUrl($route,array_splice($this->remoteSource,1));
-			}else{
-				$this->options['source']=$this->remoteSource;
-			}
-		}else{
-			$this->options['source'] = $this->source;
-		}	
+		if($this->sourceUrl!==null)
+			$this->options['source']=CHtml::normalizeUrl($this->sourceUrl);
+		else
+			$this->options['source']=$this->source;
 
 		$options=CJavaScript::encode($this->options);
 
