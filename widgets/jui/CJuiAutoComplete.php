@@ -42,7 +42,7 @@ Yii::import('zii.widgets.jui.CJuiInputWidget');
  * autocomplete items from an ajax response.
  *
  * @author Sebastian Thierer <sebathi@gmail.com>
- * @version $Id $
+ * @version $Id$
  * @package zii.widgets.jui
  * @since 1.1.2
  */
