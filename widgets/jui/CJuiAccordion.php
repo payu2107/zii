@@ -2,7 +2,7 @@
 /**
  * CJuiAccordion class file.
  *
- * @author Sebastian Thierer <sebas@artfos.com>
+ * @author Sebastian Thierer <sebathi@gmail.com>
  * @author Qiang XUe <qiang.xue@gmail.com>
  * @link http://www.yiiframework.com/
  * @copyright Copyright &copy; 2008-2010 Yii Software LLC
