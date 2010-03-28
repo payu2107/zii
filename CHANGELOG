@@ -4,6 +4,7 @@
 Version 1.1.2 to be released
 ----------------------------
 - Enh #1013: Added CJuiAutoComplete (sebas)
+- New: Upgraded JQuery UI to 1.8 (Qiang)
 
 
 Version 1.1.1 March 14, 2010
