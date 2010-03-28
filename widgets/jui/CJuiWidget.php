@@ -44,7 +44,7 @@ abstract class CJuiWidget extends CWidget
 	 */
 	public $theme='base';
 	/**
-	 * @var mixed the main JUI JavaScript file. Defaults to 'jquery-ui.min.js'.
+	 * @var mixed the main JUI JavaScript file. Defaults to 'jquery.ui.min.js'.
 	 * Note the file must exist under the URL specified by {@link scriptUrl}.
 	 * If you need to include multiple script files (e.g. during development, you want to include individual
 	 * plugin script files rather than the minized JUI script file), you may set this property
@@ -52,7 +52,7 @@ abstract class CJuiWidget extends CWidget
 	 * This property can also be set as false, which means the widget will not include any script file,
 	 * and it is your responsibility to explicitly include it somewhere else.
 	 */
-	public $scriptFile='jquery-ui.min.js';
+	public $scriptFile='jquery.ui.min.js';
 	/**
 	 * @var mixed the theme CSS file name. Defaults to 'jquery-ui.all.css'.
 	 * Note the file must exist under the URL specified by {@link themeUrl}/{@link theme}.
