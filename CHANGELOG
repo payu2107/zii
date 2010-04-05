@@ -3,6 +3,7 @@
                    ========================================
 Version 1.1.2 to be released
 ----------------------------
+- Bug #1031: Added a temporary fix for dropdown filter in CGridView not working in IE (Qiang)
 - Enh #1013: Added CJuiAutoComplete (sebas)
 - New: Upgraded JQuery UI to 1.8 (Qiang)
 
