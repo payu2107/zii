@@ -40,7 +40,8 @@
 			}
 
 			var inputSelector='#'+id+' .'+settings.filterClass+' input, '+'#'+id+' .'+settings.filterClass+' select';
-			$(inputSelector).live('change',function(){
+			// temporary fix for the bug of supporting live change in IE
+			$(inputSelector).live($.browser.msie ? 'click keyup' : 'change', function(){
 				var data = $.param($(inputSelector))+'&'+settings.ajaxVar+'='+id;
 				$.fn.yiiGridView.update(id, {data: data});
 			});
