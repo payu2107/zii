@@ -128,8 +128,11 @@
 			type: 'GET',
 			url: $.fn.yiiGridView.getUrl(id),
 			success: function(data,status) {
-				$.each(settings.ajaxUpdate, function() {
-					$('#'+this).html($(data).find('#'+this));
+				$.each(settings.ajaxUpdate, function(i,v) {
+					var id='#'+v,
+						$d=$(data)
+						$filtered=$d.filter(id);
+					$(id).html( $filtered.size() ? $filtered : $d.find(id));
 				});
 				if(settings.afterAjaxUpdate != undefined)
 					settings.afterAjaxUpdate(id, data);
