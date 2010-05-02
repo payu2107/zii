@@ -54,14 +54,14 @@ abstract class CJuiWidget extends CWidget
 	 */
 	public $scriptFile='jquery-ui.min.js';
 	/**
-	 * @var mixed the theme CSS file name. Defaults to 'jquery.ui.css'.
+	 * @var mixed the theme CSS file name. Defaults to 'jquery-ui.css'.
 	 * Note the file must exist under the URL specified by {@link themeUrl}/{@link theme}.
 	 * If you need to include multiple theme CSS files (e.g. during development, you want to include individual
 	 * plugin CSS files), you may set this property as an array of the CSS file names.
 	 * This property can also be set as false, which means the widget will not include any theme CSS file,
 	 * and it is your responsibility to explicitly include it somewhere else.
 	 */
-	public $cssFile='jquery.ui.css';
+	public $cssFile='jquery-ui.css';
 	/**
 	 * @var array the initial JavaScript options that should be passed to the JUI plugin.
 	 */
