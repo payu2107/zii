@@ -1,6 +1,11 @@
 
                    Zii Extension Library for Yii Change Log
                    ========================================
+
+Version 1.1.3 to be released
+----------------------------
+
+
 Version 1.1.2 May 2, 2010
 -------------------------
 - Bug #1031: Added a temporary fix for dropdown filter in CGridView not working in IE (Qiang)
