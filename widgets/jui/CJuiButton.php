@@ -13,7 +13,7 @@ Yii::import('zii.widgets.jui.CJuiInputWidget');
 /**
  * CJuiButton displays a button widget.
  *
- * CJuiButton encapsulates the {@link http://jqueryui.com/demos/button/ JUI Dialog}
+ * CJuiButton encapsulates the {@link http://jqueryui.com/demos/button/ JUI Button}
  * plugin.
  *
  * To use this widget as a submit button, you may insert the following code in a view:
@@ -33,33 +33,33 @@ Yii::import('zii.widgets.jui.CJuiInputWidget');
  *			'name'=>'button',
  *			'value'=>'asd',
  *			'onclick'=>'js:function(){alert("clicked"); this.blur(); return false;}',
- * 		) 
+ * 		)
  * );
  * </pre>
- * 
+ *
  * By configuring the {@link options} property, you may specify the options
- * that need to be passed to the JUI dialog plugin. Please refer to
- * the {@link http://jqueryui.com/demos/dilog/ JUI Dialog} documentation
+ * that need to be passed to the JUI button plugin. Please refer to
+ * the {@link http://jqueryui.com/demos/button/ JUI Button} documentation
  * for possible options (name-value pairs).
  *
  * @author Sebastian Thierer <sebathi@gmail.com>
- * @version $Id: CJuiDialog.php 127 2010-02-18 14:03:04Z sebathi $
+ * @version $Id$
  * @package zii.widgets.jui
  * @since 1.1
  */
 class CJuiButton extends CJuiInputWidget
 {
 	/**
-	 * @var string The button type (possible types: submit, button, anchor, radio, checkbox).
-	 * For radio and checkbox you could add 
+	 * @var string The button type (possible types: submit, button, link, radio, checkbox).
+	 * For radio and checkbox you could add
 	 */
 	public $buttonType = 'submit';
 
 	/**
-	 * @var string The url used when a buttonType "anchor" is selected.
+	 * @var string The url used when a buttonType "link" is selected.
 	 */
 	public $url = null;
-	
+
 	/**
 	 * @var mixed The value of the current item. Used only for "submit", "button", "radio" and "checkbox"
 	 */
@@ -70,73 +70,56 @@ class CJuiButton extends CJuiInputWidget
 	 */
 	public $caption="";
 	/**
-	 * @var string The function to be raise when this item is clicked (client event).
+	 * @var string The javascript function to be raised when this item is clicked (client event).
 	 */
 	public $onclick;
-	
+
 	public function run()
 	{
 		list($name, $id) = $this->resolveNameID();
-		
+
 		if (!isset($this->htmlOptions['name']))
 			$this->htmlOptions['name'] = $name;
 		if (!isset($this->htmlOptions['id']))
 			$this->htmlOptions['id'] = $id;
-			
-		$id = $this->htmlOptions['id'];
-		$name = $this->htmlOptions['name'];
 
-
-		$options=empty($this->options) ? '' : CJavaScript::encode($this->options);
-
-		$cs = Yii::app()->getClientScript();
-		switch($this->buttonType){
+		switch($this->buttonType)
+		{
 			case 'submit':
 				echo CHtml::submitButton($this->caption, $this->htmlOptions);
-				if (isset($this->onclick)){
-					$click = CJavaScript::encode($this->onclick);
-					$cs->registerScript(__CLASS__.'#'.$id,"jQuery('#{$id}').button($options).click($click);");
-				}else{
-					$cs->registerScript(__CLASS__.'#'.$id,"jQuery('#{$id}').button($options);");
-				}
 				break;
 			case 'button':
 				echo CHtml::button($this->caption, $this->htmlOptions);
-				if (isset($this->onclick)){
-					$click = CJavaScript::encode($this->onclick);
-					$cs->registerScript(__CLASS__.'#'.$id,"jQuery('#{$id}').button($options).click($click);");
-				}else{
-					$cs->registerScript(__CLASS__.'#'.$id,"jQuery('#{$id}').button($options);");
-				}
 				break;
-			case 'anchor':
+			case 'link':
 				echo CHtml::link($this->caption, $this->url, $this->htmlOptions);
-				if (isset($this->onclick)){
-					$click = CJavaScript::encode($this->onclick);
-					$cs->registerScript(__CLASS__.'#'.$id,"jQuery('#{$id}').button($options).click($click);");
-				}else{
-					$cs->registerScript(__CLASS__.'#'.$id,"jQuery('#{$id}').button($options);");
-				}
 				break;
 			case 'radio':
-				if ($this->hasModel()){
+				if ($this->hasModel())
 					echo CHtml::activeRadioButton($this->model, $this->attribute, $this->htmlOptions);
-				}else{
+				else
 					echo CHtml::radioButton($name, $this->value, $this->htmlOptions);
-				}
-				$cs->registerScript(__CLASS__.'#'.$id,"jQuery('#{$id}').button($options);");
 				break;
 			case 'checkbox':
-				if ($this->hasModel()){
+				if ($this->hasModel())
 					echo CHtml::activeCheckbox($this->model, $this->attribute, $this->htmlOptions);
-				}else{
+				else
 					echo CHtml::checkbox($name, $this->value, $this->htmlOptions);
-				}
-				$cs->registerScript(__CLASS__.'#'.$id,"jQuery('#{$id}').button($options);");
 				break;
 			default:
-				throw new CHttpException('zii', 'The button type "' . $this->buttonType . '" is unrecognized. ');
+				throw new CException(Yii::t('zii','The button type "{type}" is not supported.',array('{type}'=>$this->buttonType)));
 		}
-		
+
+		$cs = Yii::app()->getClientScript();
+		$options=empty($this->options) ? '' : CJavaScript::encode($this->options);
+		if (isset($this->onclick))
+		{
+			if(strpos($this->onclick,'js:')!==0)
+				$this->onclick='js:'.$this->onclick;
+			$click = CJavaScript::encode($this->onclick);
+			$cs->registerScript(__CLASS__.'#'.$id,"jQuery('#{$id}').button($options).click($click);");
+		}
+		else
+			$cs->registerScript(__CLASS__.'#'.$id,"jQuery('#{$id}').button($options);");
 	}
 }
