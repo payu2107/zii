@@ -95,7 +95,7 @@ abstract class CJuiWidget extends CWidget
 		if($this->scriptUrl===null || $this->themeUrl===null)
 		{
 			$basePath=Yii::getPathOfAlias('zii.vendors.jui');
-			$baseUrl=Yii::app()->getAssetManager()->publish($basePath,true);
+			$baseUrl=Yii::app()->getAssetManager()->publish($basePath);
 			if($this->scriptUrl===null)
 				$this->scriptUrl=$baseUrl.'/js';
 			if($this->themeUrl===null)
