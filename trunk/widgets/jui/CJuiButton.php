@@ -45,7 +45,7 @@ Yii::import('zii.widgets.jui.CJuiInputWidget');
  * @author Sebastian Thierer <sebathi@gmail.com>
  * @version $Id$
  * @package zii.widgets.jui
- * @since 1.1
+ * @since 1.1.3
  */
 class CJuiButton extends CJuiInputWidget
 {
