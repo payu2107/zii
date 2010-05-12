@@ -4,6 +4,8 @@
 
 Version 1.1.3 to be released
 ----------------------------
+- Enh #1210: Added support to generate proper labels for relational properties in CDetailView (Qiang)
+- Enh #1049: Enhanced label generation when using CDetailView with associative arrays (Qiang)
 - New: Added CJuiButton (sebas)
 
 Version 1.1.2 May 2, 2010
