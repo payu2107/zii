@@ -191,7 +191,7 @@ class CButtonColumn extends CGridColumn
 				'options'=>$this->{$id.'ButtonOptions'},
 			);
 			if(isset($this->buttons[$id]))
-				$this->buttons[$id]=array_merge($this->buttons[$id],$button);
+				$this->buttons[$id]=array_merge($button,$this->buttons[$id]);
 			else
 				$this->buttons[$id]=$button;
 		}
