@@ -190,7 +190,7 @@ class CDetailView extends CWidget
 					if(strpos($attribute['name'],'.')!==false)
 					{
 						$segs=explode('.',$attribute['name']);
-						$name=array_pop($path);
+						$name=array_pop($segs);
 						foreach($segs as $seg)
 						{
 							$relations=$model->getMetaData()->relations;
