@@ -77,7 +77,7 @@ jQuery('#{$this->id}_all').live('click',function() {
 	});
 });
 jQuery("input[name='$name']").live('click', function() {
-	jQuery('#{$this->id}_all').attr('checked', jQuery("input[name='$name']").length==jQuery("input[name='$name'][checked]").length);{$one}
+	jQuery('#{$this->id}_all').attr('checked', jQuery("input[name='$name']").length==jQuery("input[name='$name']:checked").length);{$one}
 });
 EOD;
 		Yii::app()->getClientScript()->registerScript(__CLASS__.'#'.$this->id,$js);
