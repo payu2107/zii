@@ -79,6 +79,7 @@ class CDetailView extends CWidget
 	 * to the "type" option as described below.</li>
 	 * <li>type: the type of the attribute that determines how the attribute value would be formatted.
 	 * Please see above for possible values.
+	 * <li>cssClass: the CSS class to be used for this item. This option is available since version 1.1.3.</li>
 	 * <li>template: the template used to render the attribute. If this is not specified, {@link itemTemplate}
 	 * will be used instead. For more details on how to set this option, please refer to {@link itemTemplate}.
 	 * This option is available since version 1.1.1.</li>
@@ -179,6 +180,8 @@ class CDetailView extends CWidget
 			}
 
 			$tr=array('{label}'=>'', '{class}'=>$n ? $this->itemCssClass[$i%$n] : '');
+			if(isset($attribute['cssClass']))
+				$tr['{class}']=$attribute['cssClass'].' '.($n ? $tr['{class}'] : '');
 
 			if(isset($attribute['label']))
 				$tr['{label}']=$attribute['label'];
