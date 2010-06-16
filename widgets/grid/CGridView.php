@@ -240,8 +240,18 @@ class CGridView extends CBaseListView
 	 */
 	protected function initColumns()
 	{
-		if($this->columns===array() && $this->dataProvider instanceof CActiveDataProvider)
-			$this->columns=CActiveRecord::model($this->dataProvider->modelClass)->attributeNames();
+		if($this->columns===array()
+		{
+			if($this->dataProvider instanceof CActiveDataProvider)
+				$this->columns=$this->dataProvider->model->attributeNames();
+			else if($this->dataProvider instanceof IDataProvider)
+			{
+				// use the keys of the first row of data as the default columns
+				$data=$this->dataProvider->getData();
+				if(isset($data[0]) && is_array($data[0]))
+					$this->columns=array_keys($data[0]);
+			}
+		}
 		$id=$this->getId();
 		foreach($this->columns as $i=>$column)
 		{
