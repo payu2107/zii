@@ -80,6 +80,12 @@ class CMenu extends CWidget
 	 */
 	public $activeCssClass='active';
 	/**
+	 * @var boolean whether to automatically activate items according to whether their route setting
+	 * matches the currently requested route. Defaults to true.
+	 * @since 1.1.3
+	 */
+	public $activateItems=true;
+	/**
 	 * @var boolean whether to activate parent menu items when one of the corresponding child menu items is active.
 	 * The activated parent menu items will also have its CSS classes appended with {@link activeCssClass}.
 	 * Defaults to false.
@@ -191,7 +197,7 @@ class CMenu extends CWidget
 			}
 			if(!isset($item['active']))
 			{
-				if($this->activateParents && $hasActiveChild || $this->isItemActive($item,$route))
+				if($this->activateParents && $hasActiveChild || $this->activateItems && $this->isItemActive($item,$route))
 					$active=$items[$i]['active']=true;
 				else
 					$items[$i]['active']=false;
