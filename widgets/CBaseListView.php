@@ -217,6 +217,9 @@ abstract class CBaseListView extends CWidget
 	 */
 	public function renderPager()
 	{
+		if(!$this->enablePagination)
+			return;
+
 		$pager=array();
 		$class='CLinkPager';
 		if(is_string($this->pager))
@@ -230,22 +233,16 @@ abstract class CBaseListView extends CWidget
 				unset($pager['class']);
 			}
 		}
-
-		if($this->enablePagination && $class==='CLinkPager')
-		{
-			if(!isset($pager['cssFile']))
-				CLinkPager::registerCssFile();
-			else if($pager['cssFile']!==false)
-				CLinkPager::registerCssFile($pager['cssFile']);
-		}
-
-		if($this->dataProvider->getItemCount()<=0 || !$this->enablePagination)
-			return;
-
 		$pager['pages']=$this->dataProvider->getPagination();
-		echo '<div class="'.$this->pagerCssClass.'">';
-		$this->widget($class,$pager);
-		echo '</div>';
+
+		if($this->dataProvider->getItemCount()>0)
+		{
+			echo '<div class="'.$this->pagerCssClass.'">';
+			$this->widget($class,$pager);
+			echo '</div>';
+		}
+		else
+			$this->widget($class,$pager);
 	}
 
 	/**
