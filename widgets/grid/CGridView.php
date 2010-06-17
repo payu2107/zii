@@ -240,7 +240,7 @@ class CGridView extends CBaseListView
 	 */
 	protected function initColumns()
 	{
-		if($this->columns===array()
+		if($this->columns===array())
 		{
 			if($this->dataProvider instanceof CActiveDataProvider)
 				$this->columns=$this->dataProvider->model->attributeNames();
