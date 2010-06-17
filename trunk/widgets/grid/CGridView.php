@@ -303,7 +303,7 @@ class CGridView extends CBaseListView
 		$id=$this->getId();
 
 		if($this->ajaxUpdate===false)
-			$ajaxUpdate=array();
+			$ajaxUpdate=false;
 		else
 			$ajaxUpdate=array_unique(preg_split('/\s*,\s*/',$this->ajaxUpdate.','.$id,-1,PREG_SPLIT_NO_EMPTY));
 		$options=array(
