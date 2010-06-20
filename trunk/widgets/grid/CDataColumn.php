@@ -116,7 +116,8 @@ class CDataColumn extends CGridColumn
 			else
 				echo CHtml::encode($this->name);
 		}
-		parent::renderHeaderCellContent();
+		else
+			parent::renderHeaderCellContent();
 	}
 
 	/**
