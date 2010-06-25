@@ -88,7 +88,7 @@ class CDataColumn extends CGridColumn
 	 */
 	protected function renderFilterCellContent()
 	{
-		if($this->filter!==false && $this->grid->filter!==null && strpos($this->name,'.')===false)
+		if($this->filter!==false && $this->grid->filter!==null && $this->name!==null && strpos($this->name,'.')===false)
 		{
 			if(is_array($this->filter))
 				echo CHtml::activeDropDownList($this->grid->filter, $this->name, $this->filter, array('id'=>false,'prompt'=>''));
