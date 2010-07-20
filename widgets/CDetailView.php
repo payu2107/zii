@@ -188,25 +188,7 @@ class CDetailView extends CWidget
 			else if(isset($attribute['name']))
 			{
 				if($this->data instanceof CModel)
-				{
-					$model=$this->data;
-					if(strpos($attribute['name'],'.')!==false)
-					{
-						$segs=explode('.',$attribute['name']);
-						$name=array_pop($segs);
-						foreach($segs as $seg)
-						{
-							$relations=$model->getMetaData()->relations;
-							if(isset($relations[$seg]))
-								$model=CActiveRecord::model($relations[$seg]->className);
-							else
-								break;
-						}
-					}
-					else
-						$name=$attribute['name'];
-					$tr['{label}']=$model->getAttributeLabel($name);
-				}
+					$tr['{label}']=$this->data->getAttributeLabel($attribute['name']);
 				else
 					$tr['{label}']=ucwords(trim(strtolower(str_replace(array('-','_','.'),' ',preg_replace('/(?<![A-Z])[A-Z]/', ' \0', $attribute['name'])))));
 			}
