@@ -139,6 +139,11 @@ class CListView extends CBaseListView
 	 * CSS file. If this is set false, you are responsible to explicitly include the necessary CSS file in your page.
 	 */
 	public $cssFile;
+	/**
+	 * @var string the HTML tag name for the container of all data item display. Defaults to 'div'.
+	 * @since 1.1.4
+	 */
+	public $itemsTagName='div';
 
 	/**
 	 * Initializes the list view.
@@ -200,7 +205,7 @@ class CListView extends CBaseListView
 	 */
 	public function renderItems()
 	{
-		echo CHtml::openTag('div',array('class'=>$this->itemsCssClass))."\n";
+		echo CHtml::openTag($this->itemsTagName,array('class'=>$this->itemsCssClass))."\n";
 		$data=$this->dataProvider->getData();
 		if(count($data)>0)
 		{
@@ -217,7 +222,7 @@ class CListView extends CBaseListView
 		}
 		else
 			$this->renderEmptyText();
-		echo CHtml::closeTag('div');
+		echo CHtml::closeTag($this->itemsTagName);
 	}
 
 	/**
