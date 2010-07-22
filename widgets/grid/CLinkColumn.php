@@ -88,8 +88,6 @@ class CLinkColumn extends CGridColumn
 		else
 			$label=$this->label;
 		$options=$this->linkHtmlOptions;
-		if(!isset($options['title']))
-			$options['title']=$label;
 		if(is_string($this->imageUrl))
 			echo CHtml::link(CHtml::image($this->imageUrl,$label),$url,$options);
 		else
