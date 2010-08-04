@@ -4,6 +4,7 @@
 
 Version 1.1.4 to be released
 ----------------------------
+- Enh: Added CPortlet::hideOnEmpty property (Qiang)
 
 Version 1.1.3 July 4, 2010
 --------------------------
