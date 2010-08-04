@@ -66,6 +66,8 @@ class CPortlet extends CWidget
 	 */
 	public $hideOnEmpty=true;
 
+	private $_openTag;
+
 	/**
 	 * Initializes the widget.
 	 * This renders the open tags needed by the portlet.
@@ -80,6 +82,9 @@ class CPortlet extends CWidget
 		echo CHtml::openTag($this->tagName,$this->htmlOptions)."\n";
 		$this->renderDecoration();
 		echo "<div class=\"{$this->contentCssClass}\">\n";
+
+		$this->_openTag=ob_get_contents();
+		ob_clean();
 	}
 
 	/**
@@ -87,13 +92,11 @@ class CPortlet extends CWidget
 	 */
 	public function run()
 	{
-		$openTag=ob_get_contents();
-		ob_clean();
 		$this->renderContent();
 		$content=ob_get_clean();
 		if($this->hideOnEmpty && trim($content)==='')
 			return;
-		echo $openTag;
+		echo $this->_openTag;
 		echo $content;
 		echo "</div>\n";
 		echo CHtml::closeTag($this->tagName);
