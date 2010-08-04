@@ -60,6 +60,11 @@ class CPortlet extends CWidget
 	 * @var string the CSS class for the content container tag. Defaults to 'portlet-content'.
 	 */
 	public $contentCssClass='portlet-content';
+	/**
+	 * @var boolean whether to hide the portlet when the body content is empty. Defaults to true.
+	 * @since 1.1.4
+	 */
+	public $hideOnEmpty=true;
 
 	/**
 	 * Initializes the widget.
@@ -68,6 +73,9 @@ class CPortlet extends CWidget
 	 */
 	public function init()
 	{
+		ob_start();
+		ob_implicit_flush(false);
+
 		$this->htmlOptions['id']=$this->getId();
 		echo CHtml::openTag($this->tagName,$this->htmlOptions)."\n";
 		$this->renderDecoration();
@@ -79,7 +87,14 @@ class CPortlet extends CWidget
 	 */
 	public function run()
 	{
+		$openTag=ob_get_contents();
+		ob_clean();
 		$this->renderContent();
+		$content=ob_get_clean();
+		if($this->hideOnEmpty && trim($content)==='')
+			return;
+		echo $openTag;
+		echo $content;
 		echo "</div>\n";
 		echo CHtml::closeTag($this->tagName);
 	}
