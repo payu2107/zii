@@ -118,6 +118,7 @@ EOD;
 		else
 			$value=$this->grid->dataProvider->keys[$row];
 
+		$checked = false;
 		if($this->checked!==null)
 			$checked=$this->evaluateExpression($this->checked,array('data'=>$data,'row'=>$row));
 
