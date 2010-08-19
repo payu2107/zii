@@ -42,6 +42,14 @@ class CCheckBoxColumn extends CGridColumn
 	 */
 	public $value;
 	/**
+	 * @var string a PHP expression that will be evaluated for every data cell and whose result will
+	 * determine is checkbox for each data cell is checked. In this expression, the variable
+	 * <code>$row</code> the row number (zero-based); <code>$data</code> the data model for the row;
+	 * and <code>$this</code> the column object.
+	 * @since 1.1.4
+	 */
+	public $checked;
+	/**
 	 * @var array the HTML options for the data cell tags.
 	 */
 	public $htmlOptions=array('class'=>'checkbox-column');
@@ -109,9 +117,13 @@ EOD;
 			$value=CHtml::value($data,$this->name);
 		else
 			$value=$this->grid->dataProvider->keys[$row];
+
+		if($this->checked!==null)
+			$checked=$this->evaluateExpression($this->checked,array('data'=>$data,'row'=>$row));
+
 		$options=$this->checkBoxHtmlOptions;
 		$options['value']=$value;
 		$options['id']=$this->id.'_'.$row;
-		echo CHtml::checkBox($this->id.'[]',false,$options);
+		echo CHtml::checkBox($this->id.'[]',$checked,$options);
 	}
 }
